@@ -1,23 +1,62 @@
-import React, { Component, useEffect , useState } from 'react';
+import React, { useEffect , useState } from 'react';
+import { useNavigate , useParams} from 'react-router-dom';
+import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
-import {useImage} from 'react-image'
+import ClienteService from '../services/ClienteService';
 
-function ImagemExist(){
-    
 
-    
-        return(
-        <div>
-                <h1>Teste</h1>
-                <img src={'imagens/produtos/semImagem'}></img>
-        </div>
-        )
-    
-}
+
 function HomeComponent() {
     const [produtos, setProdutos] = useState([]);
+    const navigate = useNavigate();
+   
+    async function addItem( produtoId ){
+        var carrinho;
+        if( !localStorage.getItem( "isLogged" ) ) {
+            if( !localStorage.getItem( "carrinhoId" ) ) {
+                console.log("Não possue carrinho") 
+                const carrinhoNovo = { 
+                    itens : [], 
+                    endereco : null
+                }
+                carrinho = await CarrinhoService.createCarrinho( carrinhoNovo ).then( res => {
+                    return res.data
+                });
+                localStorage.setItem( "carrinhoId" , carrinho.id )
+            }
+            else {
+                console.log("Possue carrinho") 
+                carrinho = await CarrinhoService.getCarrinhoById( localStorage.getItem( "carrinhoId" ) ).then( res => {
+                    return res.data
+                })
+            }
+        } 
+        else{
+            if( localStorage.getItem( "tipo" ) === "CLIENTE" )
+            var cliente = await ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
+                return res.data
+            })
+            carrinho = cliente.carrinho
+        }        
+        var porduto = await ProdutoService.getProdutoById( produtoId ).then( res => {
+            return res.data
+        })
+        var item =  {
+            produto : porduto, 
+            quantidade : 1,
+            preco : porduto.preco,
+            frete : 0.2
+        }        
+                carrinho.itens.push(item);
+        
+        carrinho = await CarrinhoService.updateCarrinho( carrinho, localStorage.getItem( "carrinhoId" ) ).then( res => {
+            return res.data});
+        console.log("Item adicionado") 
+        navigate( "/carrinho" )
+    }
 
     useEffect(() => {
+        //localStorage.clear()
         ProdutoService.getProdutos().then((res) => {
             setProdutos(res.data);
         })
@@ -41,8 +80,10 @@ function HomeComponent() {
                             <div>
                                 <img src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto" width='100' height="auto"></img>
                             </div>
+                            <p>id: {produto.id}</p>
                             <p>Nome: {produto.nome}</p>
                             <p>Descrição: {produto.descricao}</p>
+                            <button type="button" className='btn btn-success' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
                         </div>
                     )}
                 </div>

@@ -8,6 +8,7 @@ import CreateClienteComponet from './components/CreateClienteComponet';
 import UpdateClienteComponent from './components/UpdateClienteComponent';
 import HomeComponent from './components/HomeComponent';
 import ProdutoAutoCreate from './components/ProdutoAutoCreate';
+import CarrinhoComponet from './components/CarrinhoComponent';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <div className="container">
                     <Routes>
                         <Route path = "/" element = {<HomeComponent/>}></Route>
+                        <Route path = "/carrinho" element = {<CarrinhoComponet/>}></Route>
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
                         <Route path = "/cadastrar-cliente" element = {<CreateClienteComponet/>}></Route>
                         <Route path = "/update-cliente/:id" element = {<UpdateClienteComponent/>}></Route>

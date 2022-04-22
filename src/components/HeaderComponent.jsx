@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 function LoginImage (props){
-    if( !props.isLogged ){
+    const isLogged = localStorage.getItem( "isLogged" )
+    if( !isLogged ){
         return (
             <a href="http://localhost:3000/login" className='nav-item'>
                 <img src='imagens/icones/login.png'></img>
@@ -19,7 +20,6 @@ function LoginImage (props){
 }
 
 function HeaderComponent (){
-    const [isLogged,setIsLogged] = useState();
     return (
         <div>
             <header>
@@ -33,7 +33,7 @@ function HeaderComponent (){
                         <a href="http://localhost:3000/carrinho" className='nav-item' style={{marginLeft:200}}>
                             <img src='imagens/icones/carrinho.png' width={30} height='auto'></img>
                         </a>
-                        <LoginImage isLogged={isLogged}/>
+                        <LoginImage />
                     </div>
                 </nav>
             </header>
