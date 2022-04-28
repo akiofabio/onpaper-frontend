@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function LoginImage (props){
     const isLogged = localStorage.getItem( "isLogged" )
+    const navigate = useNavigate()
+    function sair(){
+        localStorage.clear()
+        navigate(0)
+    }
+
     if( !isLogged ){
         return (
             <a href="http://localhost:3000/login" className='nav-item'>
@@ -11,9 +18,7 @@ function LoginImage (props){
     }
     else{
         return (
-            <a href="http://localhost:3000/login" className='nav-item'>
-                Teste
-            </a>
+            <button className='btn btn-dark' onClick={() => sair()}>Sair</button>
         );
     }
 

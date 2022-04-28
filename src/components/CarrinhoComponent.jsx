@@ -6,13 +6,13 @@ import ClienteService from '../services/ClienteService';
 
 function CarrinhoComponent() {
     const navegate = useNavigate()
-    const [ subtotal , setSubtotal ] = useState(false)
+    const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
-    const [ mostrarEnderecos , setMostrarEnderecos ] = useState(0)
+    const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
     const [ carrinho , setCarrinho ] = useState({
         itens : [], 
         endereco : {
-            cep: "1"
+            cep: " "
         }
     })
     
@@ -70,7 +70,7 @@ function CarrinhoComponent() {
             event.target.value = cepNumero;
             event.target.selectionStart = posicao;
             event.target.selectionEnd = posicao;
-            setCarrinho({...carrinho, endereco : { ...carrinho.endereco , cep : event.target.value }})
+            setCarrinho({...carrinho, endereco : { ...carrinho.endereco , cep : event.target.value.replace(/\D/g, "") }})
         }
     }
     
@@ -80,12 +80,12 @@ function CarrinhoComponent() {
         carrinho.itens.forEach(item => {
             subtotalSoma +=  item.quantidade * item.produto.preco
         })
-        setSubtotal(subtotalSoma.toFixed(2));
+        setSubtotal(subtotalSoma);
     }
 
     function calculoFreteTotal(){
         var fretetotalSoma = 0
-        if(carrinho.endereco && carrinho.endereco.cep.length==9){
+        if(carrinho.endereco && carrinho.endereco.cep.length==8){
             carrinho.itens.forEach(item => {
                 fretetotalSoma +=  0.1 * item.quantidade
             })
@@ -134,8 +134,10 @@ function CarrinhoComponent() {
     }
 
     function MostrarFinalizarCompra(){
-        if( carrinho.endereco.cep && ( carrinho.endereco.cep.length == 9 ) ){
-                <button type="button" className="btn btn-dark" onClick={() => finalizarCompra}>Finalizar Compra</button>
+        if( ( carrinho.endereco.cep ) && ( carrinho.endereco.cep.length == 8 ) && ( carrinho.itens.length!=0 )){
+            return(
+                <button type="button" className="btn btn-dark" onClick={() => finalizarCompra()}>Finalizar Compra</button>
+            )
         }
         else{
             return(
@@ -257,7 +259,7 @@ function CarrinhoComponent() {
                             </div>
                         </div>
                     )}
-                    <h2>Subtotal: R$ {subtotal} + {freteTotal.toFixed(2)}</h2>
+                    <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
                     <MostrarFinalizarCompra/>
                 </div>
             </div>

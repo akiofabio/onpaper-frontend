@@ -10,39 +10,15 @@ function LoginComponent(){
     const [ senha , setSenha ] = useState("")
 
     function confimarLogin(){
-        let usuario = {
-            "email": "cliente1@mail.com",
-            "senha": "senha1"
-        }
-
-        /* var myHeaders = new Headers();
-        myHeaders.set("Content-Type", "application/json");
-        var myInit = { method: 'GET',
-            headers: myHeaders,
-            mode: 'cors',
-            cache: 'default',
-        };
-
-        fetch( "http://localhost:8080/api/v1/usuario/login" , myInit )
-            .then(res => {
-                if(res.ok){
-                    return res.json()
-                }
-                throw res;
-            })
-            .then(data => {
-                localStorage.setItem( "id" , data.id )
-                localStorage.setItem( "tipo" , data.tipo )
-                localStorage.setItem( "isLogged" , true )
-                navegate(-1)
-            }) */
+        
         UserService.getUserLogin( email , senha ).then(res => {
-            usuario = res.data
+            var usuario = res.data
             localStorage.setItem( "id" , usuario.id )
             localStorage.setItem( "tipo" , usuario.tipo )
             localStorage.setItem( "isLogged" , true )
+            localStorage.setItem( "user" , res.data )
             if(localStorage.getItem("carrinhoId")){
-                
+
             }
             localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
             navegate(-1)
