@@ -9,7 +9,7 @@ import UpdateClienteComponent from './components/UpdateClienteComponent';
 import HomeComponent from './components/HomeComponent';
 import ProdutoAutoCreate from './components/ProdutoAutoCreate';
 import CarrinhoComponet from './components/CarrinhoComponent';
-
+import LoginComponent from './components/LoginComponent';
 function App() {
     return (
         <div>
@@ -19,6 +19,7 @@ function App() {
                     <Routes>
                         <Route path = "/" element = {<HomeComponent/>}></Route>
                         <Route path = "/carrinho" element = {<CarrinhoComponet/>}></Route>
+                        <Route path = "/login" element = {<LoginComponent/>}></Route>
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
                         <Route path = "/cadastrar-cliente" element = {<CreateClienteComponet/>}></Route>
                         <Route path = "/update-cliente/:id" element = {<UpdateClienteComponent/>}></Route>

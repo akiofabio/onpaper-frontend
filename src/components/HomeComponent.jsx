@@ -15,6 +15,7 @@ function HomeComponent() {
         if( !localStorage.getItem( "isLogged" ) ) {
             if( !localStorage.getItem( "carrinhoId" ) ) {
                 console.log("Não possue carrinho") 
+                
                 const carrinhoNovo = { 
                     itens : [], 
                     endereco : null
@@ -37,6 +38,7 @@ function HomeComponent() {
                 return res.data
             })
             carrinho = cliente.carrinho
+            console.log("cliente.carrinho" + JSON.stringify(cliente.carrinho))
         }        
         var porduto = await ProdutoService.getProdutoById( produtoId ).then( res => {
             return res.data
@@ -45,13 +47,9 @@ function HomeComponent() {
             produto : porduto, 
             quantidade : 1,
             preco : porduto.preco,
-            frete : 0.2
         }        
-                carrinho.itens.push(item);
-        
-        carrinho = await CarrinhoService.updateCarrinho( carrinho, localStorage.getItem( "carrinhoId" ) ).then( res => {
-            return res.data});
-        console.log("Item adicionado") 
+                
+        await CarrinhoService.addItemCarrinho( item , localStorage.getItem( "carrinhoId" ) )
         navigate( "/carrinho" )
     }
 
