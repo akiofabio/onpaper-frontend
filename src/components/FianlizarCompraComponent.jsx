@@ -55,8 +55,6 @@ function FianlizarCompraComponent (){
 
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
                 setCliente(res.data)
-                
-                
                 if(pedido.id==null){
                     var meioPag;
                     if( res.data.cartoes && res.data.cartoes.length!=0){
@@ -75,9 +73,10 @@ function FianlizarCompraComponent (){
                         meioDePagamentos: [{meioPag}]
                     }                    
                     PedidoService.createPedido(pedidoTemp).then(res => {
-                        alert("res: " + JSON.stringify())
-                        PedidoService.getPedidoById(res.id).then(res2 => {
+                        PedidoService.getPedidoById(res.data.id).then(res2 => {
                             setPedido(res2.data)
+                        }).catch(error => {
+                            alert("erro: " + error.response.data)
                         })
                     }).catch(error => {
                         alert("erro: " + error.response.data)
@@ -154,6 +153,7 @@ function FianlizarCompraComponent (){
         setMostrarEnderecos(false)
         setPedido({ ...pedido , endereco : cliente.enderecos.find(endereco => endereco.id == id)})
     }
+
     function selecionarCartao(cartao,meioPagamento){
         setMostrarCartoes(false)
         meioPagamento={...meioPagamento, detalhes: "Nome: " + cartao.nome + " Numero: " + cartao.numero + " Bandira: " + cartao.bandeira
@@ -220,7 +220,7 @@ function FianlizarCompraComponent (){
 
             </div>
         </div>
-    </div>
+        </div>
     )
 }
 export default FianlizarCompraComponent
