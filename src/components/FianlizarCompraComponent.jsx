@@ -3,32 +3,128 @@ import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
+import {cepMask} from '../etc/Mask'
 
-function finalizarCompraComponent (){
+function FianlizarCompraComponent (){
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
-    const [ carrinho , setCarrinho ] = useState({
+    const [ mostrarCartao , setmostrarCartao ] = useState(false)
+    const [ pedido , setPedido ] = useState({
         itens : [], 
         endereco : {
             cep: " "
-        }
+        },
+        meioDePagamentos: [],
     })
+    const [ cliente , setCliente ] = useState( {
+        enderecos : []
+    } )
 
+    useEffect(() => {
+        if(localStorage.getItem( "isLogged" )){
+
+            ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
+                setCliente(res.data)
+                setPedido(res.data.carrinho)
+            })
+        }
+    }, []);
+
+    function calculoSubtotal(){
+        var subtotalSoma =0
+        
+        pedido.itens.forEach(item => {
+            subtotalSoma +=  item.quantidade * item.produto.preco
+        })
+        setSubtotal(subtotalSoma);
+    }
+
+    function calculoFreteTotal(){
+        var fretetotalSoma = 0
+        if(pedido.endereco && pedido.endereco.cep.length==8){
+            pedido.itens.forEach(item => {
+                fretetotalSoma +=  0.1 * item.quantidade
+            })
+            var cepNumero = pedido.endereco.cep;
+            cepNumero = cepNumero.replace(/\D/g, "");
+            fretetotalSoma *= (parseFloat(cepNumero))/1000000
+        }
+        setFreteTotal(fretetotalSoma);
+    }
+
+    useEffect(() => {
+        calculoSubtotal()
+        calculoFreteTotal()
+    }, [pedido]);
+
+    function MostrarEndereco(){
+        if( !mostrarEnderecos ){
+            return (
+                <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
+                    <p style={{ margin:0, padding:0}}>{pedido.endereco.nome}</p>
+                    <p style={{ margin:0, padding:0}}>{pedido.endereco.tipoLogradouro} {pedido.endereco.logradouro}, nº {pedido.endereco.numero}</p>
+                    <p style={{ margin:0, padding:0}}>{cepMask(pedido.endereco.cep)} - {pedido.endereco.bairro} - {pedido.endereco.cidade} - {pedido.endereco.estado}</p>
+                </button>
+            )
+        }
+        else{
+            return (
+                <div>
+                    {cliente.enderecos.map(endereco => 
+                        <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
+
+                        </button>
+                    )}
+                </div>
+                                    
+            )
+        }
+    }
+
+    function MostrarCartao(){
+        if( !mostrarCartao ){
+            return (
+                <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
+                    <p style={{ margin:0, padding:0}}>{pedido.endereco.nome}</p>
+                    <p style={{ margin:0, padding:0}}>{pedido.endereco.tipoLogradouro} {pedido.endereco.logradouro}, nº {pedido.endereco.numero}</p>
+                    <p style={{ margin:0, padding:0}}>{cepMask(pedido.endereco.cep)} - {pedido.endereco.bairro} - {pedido.endereco.cidade} - {pedido.endereco.estado}</p>
+                </button>
+            )
+        }
+        else{
+            return (
+                <div>
+                    {cliente.enderecos.map(endereco => 
+                        <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
+
+                        </button>
+                    )}
+                </div>
+                                    
+            )
+        }
+    }
+
+    function selecionarEndereco(id){
+        setMostrarEnderecos(false)
+        setPedido({ ...pedido , endereco : cliente.enderecos.find(endereco => endereco.id == id)})
+    }
     return(
         <div>
-            <h3 style={{ marginTop: 40 }}>Meu Carrinho de Compra</h3>
+            <h3 style={{ marginTop: 40 }}>Finalizar Pedido</h3>
             <div>
                 <div className='row justify-content-end'>
-                    <div className='col-3 align-content-center' style={{ marginBottom:10 }} >
-                        <label>CEP</label>
-                        <input value={cepMask(carrinho.endereco.cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
-                        <MostrarEndereco/>
-                    </div>
                 </div>
-                <ItensCarrinho/>
+                <h4>Pedido:</h4>
                 <div>
-                    {carrinho.itens.map( item => 
+                    {pedido.itens.map( item => 
                         <div key = {item.id} className='card '>
                             <div className="container" style={{margin: 0,padding :0}}>
                                 <div className='card-body'>
@@ -44,14 +140,12 @@ function finalizarCompraComponent (){
                                                     <label>Quantidade:</label>
                                                 </div>
                                                 <div className="col-auto">
-                                                    <input className='form-control' value={ item.quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item.id ) } type={"number"} min="1"></input>
+                                                    <label>{ item.quantidade } </label>
                                                 </div>
                                                 <div className="col-auto">
                                                     <label>{ item.status }</label>
                                                 </div>
-                                                <div className="col-auto">
-                                                    <button className='btn' onClick={() => removeItem( item )}> Remover</button>
-                                                </div>
+                                                
                                             </div>
                                             
                                         </div>
@@ -64,12 +158,24 @@ function finalizarCompraComponent (){
                             </div>
                         </div>
                     )}
-                    <h2>Subtotal: R$ {subtotal} + {freteTotal.toFixed(2)}</h2>
-                    <MostrarFinalizarCompra/>
+                <h3>Endereco de Entrega: </h3>
+                <div className='card'>
+                    <MostrarEndereco/>
                 </div>
+                <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
+                
+                    <h3>Meio de Pagamento: </h3>
+                
+                <div className='card'>
+                    <h4>Cartao de Credito: </h4>
+                    <div className='card'>
+                        <MostrarCartao/>
+                    </div>
+                </div>
+
             </div>
         </div>
-    
+    </div>
     )
 }
-export default finalizarCompraComponent
+export default FianlizarCompraComponent
