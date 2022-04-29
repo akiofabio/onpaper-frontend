@@ -73,15 +73,15 @@ function FianlizarCompraComponent (){
                         itens : res.data.carrinho.itens, 
                         endereco : res.data.carrinho.endereco,
                         meioDePagamentos: [{meioPag}]
-                    }
+                    }                    
                     PedidoService.createPedido(pedidoTemp).then(res => {
-                        alert(JSON.stringify(res))
+                        alert("res: " + JSON.stringify())
                         PedidoService.getPedidoById(res.id).then(res2 => {
                             setPedido(res2.data)
                         })
                     }).catch(error => {
-                        alert(error.response.data)
-                    })
+                        alert("erro: " + error.response.data)
+                    }) 
                     
                 }
                 
