@@ -3,33 +3,31 @@ import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
+import PedidoService from '../services/PedidoService';
 import {cepMask} from '../etc/Mask'
 
 function FianlizarCompraComponent (){
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
-    const [ mostrarCartao , setmostrarCartao ] = useState(false)
+    const [ mostrarCartao , setMostrarCartoes ] = useState(false)
     const [ pedido , setPedido ] = useState({
+        id:null,
         itens : [], 
         endereco : {
             cep: " "
         },
-        meioDePagamentos: [],
+        meioDePagamentos: [{
+            tipo: " ",
+            detalhes: " ",
+            valor: " "
+        }],
     })
     const [ cliente , setCliente ] = useState( {
         enderecos : []
     } )
 
-    useEffect(() => {
-        if(localStorage.getItem( "isLogged" )){
-
-            ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
-                setCliente(res.data)
-                setPedido(res.data.carrinho)
-            })
-        }
-    }, []);
+   
 
     function calculoSubtotal(){
         var subtotalSoma =0
@@ -52,6 +50,45 @@ function FianlizarCompraComponent (){
         }
         setFreteTotal(fretetotalSoma);
     }
+    useEffect(() => {
+        if(localStorage.getItem( "isLogged" )){
+
+            ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
+                setCliente(res.data)
+                
+                
+                if(pedido.id==null){
+                    var meioPag;
+                    if( res.data.cartoes && res.data.cartoes.length!=0){
+                        res.data.cartoes.forEach(cartao => {
+                            if(cartao.preferencial){
+                                meioPag = {
+                                    tipo: "Cartão de Credito",
+                                    detalhes: "Nome: " + cartao.nome + " Numero: " + cartao.numero 
+                                }
+                            }
+                        })
+                    }
+                    var pedidoTemp = {
+                        itens : res.data.carrinho.itens, 
+                        endereco : res.data.carrinho.endereco,
+                        meioDePagamentos: [{meioPag}]
+                    }
+                    PedidoService.createPedido(pedidoTemp).then(res => {
+                        alert(JSON.stringify(res))
+                        PedidoService.getPedidoById(res.id).then(res2 => {
+                            setPedido(res2.data)
+                        })
+                    }).catch(error => {
+                        alert(error.response.data)
+                    })
+                    
+                }
+                
+
+            })
+        }
+    }, []);
 
     useEffect(() => {
         calculoSubtotal()
@@ -85,25 +122,26 @@ function FianlizarCompraComponent (){
         }
     }
 
-    function MostrarCartao(){
+    function MostrarCartao(meioDePagamento){
         if( !mostrarCartao ){
             return (
-                <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                    <p style={{ margin:0, padding:0}}>{pedido.endereco.nome}</p>
-                    <p style={{ margin:0, padding:0}}>{pedido.endereco.tipoLogradouro} {pedido.endereco.logradouro}, nº {pedido.endereco.numero}</p>
-                    <p style={{ margin:0, padding:0}}>{cepMask(pedido.endereco.cep)} - {pedido.endereco.bairro} - {pedido.endereco.cidade} - {pedido.endereco.estado}</p>
-                </button>
+                <div>
+                    <button key={meioDePagamento.id} className='btn btn-outline-dark' onClick={() => setMostrarCartoes(true)} style={{ margin:2}}>
+                        <p>Tipo:{meioDePagamento.tipo}</p>
+                        <p>{meioDePagamento.detalhes}</p>
+                        <p>Valor {meioDePagamento.valor}</p>
+                    </button>
+                </div>
             )
         }
         else{
             return (
                 <div>
-                    {cliente.enderecos.map(endereco => 
-                        <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
-
+                    {cliente.cartoes.map(cartao => 
+                        <button key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao.id,meioDePagamento.id)  }>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira}</p>
                         </button>
                     )}
                 </div>
@@ -115,6 +153,13 @@ function FianlizarCompraComponent (){
     function selecionarEndereco(id){
         setMostrarEnderecos(false)
         setPedido({ ...pedido , endereco : cliente.enderecos.find(endereco => endereco.id == id)})
+    }
+    function selecionarCartao(cartao,meioPagamento){
+        setMostrarCartoes(false)
+        meioPagamento={...meioPagamento, detalhes: "Nome: " + cartao.nome + " Numero: " + cartao.numero + " Bandira: " + cartao.bandeira
+        }
+        //var meioDePagamentosTemp = pedido.meioDePagamentos.map(meio => {meio})
+        //setPedido({ ...pedido , meioDePagamentos : meioDePagamentosTemp})
     }
     return(
         <div>
@@ -164,7 +209,7 @@ function FianlizarCompraComponent (){
                 </div>
                 <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
                 
-                    <h3>Meio de Pagamento: </h3>
+                <h3>Meio de Pagamento: </h3>
                 
                 <div className='card'>
                     <h4>Cartao de Credito: </h4>

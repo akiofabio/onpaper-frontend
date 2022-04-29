@@ -160,17 +160,10 @@ function CarrinhoComponent() {
         })
     }
     useEffect(() => {
-        //console.log("Carrinho")
-        //console.log("carrinhoID = " + localStorage.getItem("carrinhoId"))
         if(localStorage.getItem( "isLogged" )){
-            //console.log(localStorage.getItem( "isLogged" ))
-            //console.log(localStorage.getItem( "id" ))
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
-                //console.log(JSON.stringify(res.data.carrinho.endereco))
-                
                 if(res.data.carrinho.endereco==null){
                     res.data.carrinho.endereco=res.data.enderecos[0]
-                    
                     CarrinhoService.updateCarrinho(res.data.carrinho,res.data.carrinho.id)
                 }
                 setCliente(res.data)

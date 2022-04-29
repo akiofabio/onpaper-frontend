@@ -3,6 +3,7 @@ import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
+import AutoCreateComponet from './AutoCreateComponent';
 
 
 
@@ -66,7 +67,7 @@ function HomeComponent() {
     return (
         <div>
             <h1>Onpaper, a melhor papelaria online de LES deste 2022</h1>
-            &nbsp;
+            <AutoCreateComponet/>
             
             
             <div style={{marginTop:100}}>
