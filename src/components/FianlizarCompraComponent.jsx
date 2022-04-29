@@ -72,9 +72,9 @@ function FianlizarCompraComponent (){
                         endereco : res.data.carrinho.endereco,
                         meioDePagamentos: [{meioPag}]
                     }                    
-                    PedidoService.createPedido(pedidoTemp).then(res => {
-                        PedidoService.getPedidoById(res.data.id).then(res2 => {
-                            setPedido(res2.data)
+                    PedidoService.createPedido(pedidoTemp).then(res2 => {
+                        PedidoService.getPedidoById(res2.data.id).then(res3 => {
+                            setPedido(res3.data)
                         }).catch(error => {
                             alert("erro: " + error.response.data)
                         })
@@ -214,7 +214,11 @@ function FianlizarCompraComponent (){
                 <div className='card'>
                     <h4>Cartao de Credito: </h4>
                     <div className='card'>
-                        <MostrarCartao/>
+                        {pedido.meioDePagamentos.map( meioDePagamento =>
+                            <div key={meioDePagamento.id}>
+                                <MostrarCartao meioDePagamento={meioDePagamento}/>
+                            </div>
+                        )}
                     </div>
                 </div>
 
