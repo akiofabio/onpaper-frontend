@@ -62,7 +62,7 @@ function FianlizarCompraComponent (){
                                 if(cartao.preferencial){
                                     meioPag = {
                                         tipo: "Cartão de Credito",
-                                        detalhes: "Nome: " + cartao.nome + " Numero: " + cartao.numero 
+                                        detalhes: "Nome: " + cartao.nome + "\n Numero: " + cartao.numero 
                                     }
                                 }
                             })
@@ -120,6 +120,18 @@ function FianlizarCompraComponent (){
         setMostrarEnderecos(false)
         setPedido({ ...pedido , endereco : cliente.enderecos.find(endereco => endereco.id == id)})
     }
+    function separarParagrafo(texto){
+        return texto.split("\n").map(txt => <p>{txt}</p>)
+    }
+
+    function valorHandler(event,meio){
+        setPedido({
+            ...pedido,
+            meioDePagamentos: pedido.meioDePagamentos.map(meioTemp => 
+                meioTemp.index === meio.index ? {...meioTemp, valor:event.targent.value} : meioTemp
+            )
+        })
+    }
 
     function MostrarCartao(props){
         if( !mostrarCartao ){
@@ -127,9 +139,16 @@ function FianlizarCompraComponent (){
                 <div key={props.meio.id}>
                     <button  className='btn btn-outline-dark' onClick={() => setMostrarCartoes(true)} style={{ margin:2}}>
                         <p>Tipo:{props.meio.tipo}</p>
-                        <text><p>{props.meio.detalhes}</p></text>
+                        <p>{separarParagrafo(props.meio.detalhes)}</p>
                     </button>
-                    <p>Valor {props.meio.valor}</p>
+                    <div className='row'>
+                        <div className="col-auto">
+                            <label>Valor:</label>
+                        </div>
+                    </div>
+                    <div className="col-auto">
+                        <input className='form-control' value={ props.meio.valor } style={{width:80}} onChange={ ( event ) => valorHandler( event, props.meio ) } type={"number"} min="1"></input>
+                    </div>
                 </div>
             )
         }
