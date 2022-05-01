@@ -3,6 +3,7 @@ import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
+import {cepMask} from '../etc/Mask'
 
 function CarrinhoComponent() {
     const navegate = useNavigate()
@@ -46,17 +47,7 @@ function CarrinhoComponent() {
             alert(error.response.data)
         })
     }
-    function cepMask(cepNumero) {
-        if(cepNumero){
-            cepNumero = cepNumero.replace(/\D/g, "");
-            if(cepNumero.length >8){
-                cepNumero = cepNumero.slice(0, 8);
-            }
-            if(cepNumero.length >4)
-                cepNumero = cepNumero.replace(/(\d{1,5})(\d\d\d)/, "$1-$2");
-            return cepNumero
-        }
-    }
+
     function cepHandler ( event )  {
         if (!localStorage.getItem("isLogged")){
             var posicao = event.target.selectionStart;
