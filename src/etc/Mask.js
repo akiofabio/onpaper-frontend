@@ -11,3 +11,21 @@ export　function cepMask(cepNumero) {
     }
 }
 
+export　function moedaRealMask(valor) {
+    
+    if(valor){
+        
+        var valorMask
+        if(valor<0){
+            valorMask = "- "
+        }
+        valorMask = "R$ " + Number(valor).toFixed(2)
+        valorMask = valorMask.replace(/\./, ',')
+        return valorMask
+    }
+    else{
+        return valor
+    }
+}
+
+

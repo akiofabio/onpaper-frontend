@@ -4,16 +4,17 @@ import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import PedidoService from '../services/PedidoService';
-import {cepMask} from '../etc/Mask'
+import {cepMask,moedaRealMask} from '../etc/Mask'
 import {separarParagrafo} from '../etc/Funcoes'
 function FianlizarCompraComponent (){
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ total , setTotal ] = useState(0)
+    const [ totalPagar , setTotalPagar ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
     const [ mostrarCartoes , setMostrarCartoes ] = useState(0)
     const [ mostrarCupomPromocionais , setMostrarCupomPromocionais ] = useState(0)
-
+    const [ mostrarCupomTroca , setMostrarCupomTroca ] = useState(0)
     const [ pedido , setPedido ] = useState({
         novo: true,
         itens : [], 
@@ -52,6 +53,16 @@ function FianlizarCompraComponent (){
         setTotal(subtotal + freteTotal)
     }
 
+    function calculoTotalPagar(){
+        var resultado = 0 
+        pedido.meioDePagamentos.forEach(meio => {
+            if(meio.valor){
+                resultado += meio.valor
+            }
+        })
+        setTotalPagar(resultado)
+    }
+
     function MostrarEndereco(){
         if( !mostrarEnderecos ){
             return (
@@ -86,10 +97,18 @@ function FianlizarCompraComponent (){
     
 
     function valorHandler(event,meio){
+        var valorTemp = event.target.value
+        valorTemp = valorTemp.replace(/\D/g, "");
+        if(valorTemp.length >2){
+            valorTemp = valorTemp.replace(/(\d+)(\d\d)/, "$1.$2");
+        }
+        else{
+            valorTemp = valorTemp.replace(/(\d\d)/, "0.$1");
+        }
         setPedido({
             ...pedido,
             meioDePagamentos: pedido.meioDePagamentos.map(meioTemp => 
-                meioTemp.index === meio.index ? {...meioTemp, valor:event.target.value} : meioTemp
+                meioTemp.index === meio.index ? {...meioTemp, valor:valorTemp} : meioTemp
             )
         })
     }
@@ -98,16 +117,18 @@ function FianlizarCompraComponent (){
         if( mostrarCartoes == props.meio.index ){
             var cartoesTemp = cliente.cartoes
             pedido.meioDePagamentos.forEach(pag => {
-                cartoesTemp = cartoesTemp.filter(cartao => ("Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira )!== pag.detalhes)
+                cartoesTemp = cartoesTemp.filter(cartao => ( ( "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira ) !== pag.detalhes) || ( props.meio.index == pag.index ))
             })
             return (
                 <div>
                     {cartoesTemp.map(cartao => 
+                        
                         <button key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira}</p>
                         </button>
+                        
                     )}
                     <button className='btn btn-outline-dark' style={{ margin:2}}>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Novo Cartão</p>
@@ -117,9 +138,8 @@ function FianlizarCompraComponent (){
         }
         else{
             return (
-                <div>
-                    <button  className='btn btn-outline-dark' onClick={() => setMostrarCartoes(props.meio.index)} style={{ margin:2}}>
-                        <p>index: {props.meio.index}</p>
+                <div className='d-grid'>
+                    <button  className='btn btn-outline-dark btn-block' onClick={() => setMostrarCartoes(props.meio.index)} style={{ margin:2}}>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -193,7 +213,7 @@ function FianlizarCompraComponent (){
                         <button key={cupom.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCupomPromocional(cupom,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cupom.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>{cupom.descricao}</p>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>Valor: {cupom.valor}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>Valor: {moedaRealMask(cupom.valor)}</p>
                         </button>
                     )}
                 </div>          
@@ -203,7 +223,6 @@ function FianlizarCompraComponent (){
             return (
                 <div key={props.meio.index}>
                     <button  className='btn btn-outline-dark' onClick={() => setMostrarCupomPromocionais(true)} style={{ margin:2}}>
-                        <p>index: {props.meio.index}</p>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -268,6 +287,89 @@ function FianlizarCompraComponent (){
         }
     }
 
+    function MostrarCupomTroca(props){
+        if( mostrarCupomTroca == props.meio.index ){
+            var cupomTroca = cliente.cupons.filter(cupom => cupom.tipo === "Troca")
+            pedido.meioDePagamentos.forEach(pag => {
+                cupomTroca = cupomTroca.filter(cupom => ("Numero: " + cupom.id + "\n" + cupom.descricao )!== pag.detalhes)
+            })
+            return (
+                <div>
+                    {cupomTroca.map(cupom => 
+                        <button key={cupom.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCupomTroca(cupom,props.meio)  }>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cupom.id}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>{cupom.descricao}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>Valor: {moedaRealMask(cupom.valor)}</p>
+                        </button>
+                    )}
+                </div>          
+            )
+        }
+        else{
+            return (
+                <div key={props.meio.index}>
+                    <button  className='btn btn-outline-dark' onClick={() => setMostrarCupomTroca(props.meio.index)} style={{ margin:2}}>
+                        {separarParagrafo(props.meio.detalhes)}
+                    </button>
+                </div>
+            )
+        }
+    }
+
+    function selecionarCupomTroca(cupom,meioPagamento){
+        setMostrarCupomTroca(0)
+        var meioDePagamentoTemp={
+            index:meioPagamento.index,
+            detalhes: "Numero: " + cupom.id + "\n" + cupom.descricao,
+            tipo: "Cupom de Troca",
+            valor: cupom.valor
+        }
+        setPedido({ 
+            ...pedido, 
+            meioDePagamentos : pedido.meioDePagamentos.map(meio => 
+                meio.index === meioPagamento.index ? meioDePagamentoTemp : meio
+        )})
+    }
+
+    function addCupomTroca(){
+        if(mostrarCupomTroca == 0){
+            var indexTemp
+            if(pedido.meioDePagamentos.length == 0){
+                indexTemp = 1
+            }
+            else{
+                indexTemp = pedido.meioDePagamentos[pedido.meioDePagamentos.length-1].index + 1
+            }
+            var meio = {
+                index: indexTemp,
+                tipo: "Cupom de Troca",
+                detalhes: " ",
+                valor: 0
+            }
+            setPedido({
+                ...pedido,
+                meioDePagamentos:[
+                    ...pedido.meioDePagamentos,
+                    meio
+                ]
+            })
+            setMostrarCupomTroca(indexTemp)
+        }
+        else{
+            alert("Escolha/Remova o Cupom primeiro")
+        }
+    }
+    
+    function removerCupomTroca(meioDePagamento){
+        if(mostrarCupomTroca==0 || mostrarCupomTroca == meioDePagamento.index){
+            setPedido({
+                ...pedido,
+                meioDePagamentos: pedido.meioDePagamentos.filter(meio => meio.index !== meioDePagamento.index )
+            })
+            setMostrarCupomTroca(0)
+        }
+    }
+
     useEffect(() => {
         if(localStorage.getItem( "isLogged" )){
             if(!cliente.id){
@@ -310,6 +412,7 @@ function FianlizarCompraComponent (){
         calculoSubtotal()
         calculoFreteTotal()
         calculoTotal()
+        calculoTotalPagar()
     }, [pedido]);
 
     return(
@@ -357,31 +460,39 @@ function FianlizarCompraComponent (){
                     <div className='card'>
                         <MostrarEndereco/>
                     </div>
-                    <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
+                    <h2>Subtotal: {moedaRealMask(subtotal)} + {moedaRealMask(freteTotal)}</h2>
                 
                     <h3>Meio de Pagamento: </h3>
                 
                     <div className='card'>
                         <h4>Cartao de Credito: </h4>
-                        <div className='card'>
+                        <div className='row row-cols-3'>
                             {pedido.meioDePagamentos.filter(meioDePagamentoTemp => meioDePagamentoTemp.tipo==="Cartão de Credito").map( meioDePagamento =>
-                                <div key={meioDePagamento.index}>
-                                    <MostrarCartao meio = {meioDePagamento}/>
-                                    <div className='row'>
-                                        <div className="col-auto">
-                                            <label>Valor:</label>
+                                
+                                <div className='col'>
+                                    <div className='card text-center' >
+                                        <div className='card-body'>
+                                        <div key={meioDePagamento.index}>
+                                            <div className='row'>
+                                                <MostrarCartao meio = {meioDePagamento}/>
+                                            </div>
+                                            <div className='row' >
+                                                <div className="col-sm-4 text-end">
+                                                    <label>Valor:</label>
+                                                </div>
+                                                <div className="col">
+                                                    <input className='form-control' value={ moedaRealMask(meioDePagamento.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, meioDePagamento ) } ></input>
+                                                </div>
+                                            </div>
+                                            <button className='btn ' onClick={() => removerCartao(meioDePagamento)}> - Remover</button>
                                         </div>
-                                        <div className="col-auto">
-                                            <input className='form-control' value={ meioDePagamento.valor } style={{width:80}} onChange={ ( event ) => valorHandler( event, meioDePagamento ) } type={"number"} min="1"></input>
                                         </div>
                                     </div>
-                                    <button className='btn ' onClick={() => removerCartao(meioDePagamento)}> - Remover</button>
-
                                 </div>
                             )}
                         </div>
-                        <button className='btn ' onClick={() => addCartao()}> + Add Cartão de credito</button>
                     </div>
+                    <button className='btn ' onClick={() => addCartao()}> + Add Cartão de credito</button>
                     <div className='card'>
                         <h4>Cupons Promocionais: </h4>
                         <div className='card'>
@@ -390,7 +501,7 @@ function FianlizarCompraComponent (){
                                     <MostrarCupomPromocinais meio = {meioDePagamento}/>
                                     <div className='row'>
                                         <div className="col-auto">
-                                            <label>Valor: { meioDePagamento.valor.toFixed(2) } </label>
+                                            <label>Valor: { moedaRealMask(meioDePagamento.valor) } </label>
                                         </div>
                                     </div>
                                     <button className='btn ' onClick={() => removerCupomPromocional(meioDePagamento)}> - Remover</button>
@@ -399,6 +510,55 @@ function FianlizarCompraComponent (){
                             )}
                         </div>
                         <button className='btn ' onClick={() => addCupomPromocional()}> + Add Cupom Promocional</button>
+                    </div>
+                    <div className='card'>
+                        <h4>Cupons de Troca: </h4>
+                        <div className='card'>
+                            {pedido.meioDePagamentos.filter(meioDePagamento => meioDePagamento.tipo==="Cupom de Troca").map( meioDePagamento =>
+                                <div key={meioDePagamento.index}>
+                                    <MostrarCupomTroca meio = {meioDePagamento}/>
+                                    <div className='row'>
+                                        <div className="col-auto">
+                                            <label>Valor: { moedaRealMask(meioDePagamento.valor) } </label>
+                                        </div>
+                                    </div>
+                                    <button className='btn ' onClick={() => removerCupomTroca(meioDePagamento)}> - Remover</button>
+
+                                </div>
+                            )}
+                        </div>
+                        <button className='btn ' onClick={() => addCupomTroca()}> + Add Cupom de Troca</button>
+                    </div>
+                    <div className='row' style={{ textAlign:'right'}}>
+                        <div className='col-sm-2'>
+                            <p style={{ margin: 0 }}>Total:</p>
+                        </div>
+                        <div className='col-sm-2' >
+                            <p style={{ margin: 0 }}>{moedaRealMask(total)}</p>
+                        </div>
+                    </div>
+                    <div className='row' style={{ textAlign:'right'}}>
+                        <div className='col-sm-2'>
+                            <p style={{ margin: 0 }}>Valor a pagar:</p>
+                        </div>
+                        <div className='col-sm-2' >
+                            <p style={{ margin: 0 }}>{moedaRealMask(totalPagar)}</p>
+                        </div>
+                    </div>
+                    <div className='row' style={{ textAlign:'right'}}>
+                        <div className='col-sm-2'>
+                        </div>
+                        <div className='col-sm-2' >
+                            <hr/>
+                        </div>
+                    </div>
+                    <div className='row' style={{ textAlign:'right'}}>
+                        <div className='col-sm-2'>
+                            <p style={{ margin: 0 }}>Restante:</p>
+                        </div>
+                        <div className='col-sm-2' >
+                            <p style={{ margin: 0 }}> {moedaRealMask(total - totalPagar)}</p>
+                        </div>
                     </div>
                 </div>
             </div>

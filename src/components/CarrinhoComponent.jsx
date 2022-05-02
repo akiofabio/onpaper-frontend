@@ -229,7 +229,7 @@ function CarrinhoComponent() {
                                                     <label>{ item.status }</label>
                                                 </div>
                                                 <div className="col-auto">
-                                                    <button className='btn' onClick={() => removeItem( item )}> Remover</button>
+                                                    <button className='btn' onClick={() => removeItem( item )}> - Remover</button>
                                                 </div>
                                             </div>
                                             

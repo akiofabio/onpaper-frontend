@@ -96,10 +96,31 @@ function AutoCreateComponet(){
         pedidos: [],
         cupons: [
             {
-                tipo: "PROMOCIONAL",
-                descricao: "Desconto na de R$5,00",
+                tipo: "Promocional",
+                descricao: "Desconto de R$5,00",
                 valor: 5.0
-            }
+            },
+            {
+                tipo: "Promocional",
+                descricao: "Desconto de R$10,00",
+                valor: 10.0
+            },
+            {
+                tipo: "Troca",
+                descricao: "Troca no valor de R$15,00",
+                valor: 15.0
+            },
+            {
+                tipo: "Troca",
+                descricao: "Troca no valor de R$10,00",
+                valor: 10.0
+            },
+            {
+                tipo: "Troca",
+                descricao: "Troca no valor de R$1,00",
+                valor: 1.0
+            },
+            
         ],
         carrinho: {
         }
