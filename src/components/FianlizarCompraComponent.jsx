@@ -370,6 +370,10 @@ function FianlizarCompraComponent (){
         }
     }
 
+    function finalizar(){
+        
+        PedidoService.createPedido()
+    }
     useEffect(() => {
         if(localStorage.getItem( "isLogged" )){
             if(!cliente.id){
@@ -560,6 +564,9 @@ function FianlizarCompraComponent (){
                             <p style={{ margin: 0 }}> {moedaRealMask(total - totalPagar)}</p>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <button className='btn btn-dark' onClick={() => finalizar()}>Finalizar</button>
                 </div>
             </div>
         </div>
