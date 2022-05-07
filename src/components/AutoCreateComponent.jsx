@@ -4,7 +4,7 @@ import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import { useNavigate } from 'react-router-dom';
 
-function AutoCreateComponet(){
+function AutoCreateComponent(){
     const navigate = useNavigate()
     var produto = {
         nome: "Produto1",
@@ -135,4 +135,4 @@ function AutoCreateComponet(){
         <button className='btn btn-dark' onClick={() => save()}>Auto Criar</button>
     )
 }
-export default AutoCreateComponet
+export default AutoCreateComponent
