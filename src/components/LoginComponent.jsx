@@ -3,7 +3,7 @@ import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import UserService from '../services/UserService';
 import ClienteService from '../services/ClienteService';
-import axios from 'axios'
+
 function LoginComponent(){
     const navegate = useNavigate()
     const [ email , setEmail ] = useState("")

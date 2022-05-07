@@ -6,6 +6,7 @@ import ClienteService from '../services/ClienteService';
 import AutoCreateComponent from './AutoCreateComponent';
 import GraficoComponent from './GraficoComponent';
 
+
 function HomeComponent() {
     const [produtos, setProdutos] = useState([]);
     const navigate = useNavigate();
@@ -71,17 +72,18 @@ function HomeComponent() {
             
             <div style={{marginTop:100}}>
                 <h3>Destaques:</h3>
-                <div>
+                <div className='row row-cols-4'>
                     {produtos.map(
                         produto => 
-                        <div key = {produto.id} style={{ border: "1px black solid" }}>
+                        <div key = {produto.id} style={{ border: "1px black solid" }} className="col text-center">
+                            <div className='card-body'>
                             <div>
-                                <img src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto" width='100' height="auto"></img>
+                                <img src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto" width='200' height="auto"></img>
                             </div>
-                            <p>id: {produto.id}</p>
                             <p>Nome: {produto.nome}</p>
                             <p>Descrição: {produto.descricao}</p>
-                            <button type="button" className='btn btn-success' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+                            <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+                        </div>
                         </div>
                     )}
                 </div>

@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react'
 import {BrowserRouter as Router, Navigate, Route, Routes,useNavigate}from 'react-router-dom'
 import ListClienteComponents from './components/ListClienteComponents'
 import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
 import CreateClienteComponet from './components/CreateClienteComponet';
-import UpdateClienteComponent from './components/UpdateClienteComponent';
 import HomeComponent from './components/HomeComponent';
 import ProdutoAutoCreate from './components/ProdutoAutoCreate';
 import CarrinhoComponet from './components/CarrinhoComponent';
@@ -26,7 +26,6 @@ function App() {
 
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
                         <Route path = "/cadastrar-cliente" element = {<CreateClienteComponet/>}></Route>
-                        <Route path = "/update-cliente/:id" element = {<UpdateClienteComponent/>}></Route>
                         <Route path = "/auto" element = {<ProdutoAutoCreate/>}></Route>
                     </Routes >
                     </div>

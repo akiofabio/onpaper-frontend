@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import ClienteService from '../services/ClienteService';
 import { useNavigate,Link } from 'react-router-dom';
-import {withRouter} from '../etc/withRouter'
 
 class ListClienteComponents extends Component {
-    constructor(props){
+    /* constructor(props){
         super(props)
 
         this.state = { 
@@ -59,6 +58,6 @@ class ListClienteComponents extends Component {
                 </div>
             </div>
         );
-    }
+    } */
 }
-export default withRouter(ListClienteComponents);
+export default (ListClienteComponents);
