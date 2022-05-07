@@ -5,7 +5,7 @@ import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import AutoCreateComponent from './AutoCreateComponent';
 import GraficoComponent from './GraficoComponent';
-
+import CreateRandomVendas from './CreateRandomVendas'
 
 function HomeComponent() {
     const [produtos, setProdutos] = useState([]);
@@ -67,7 +67,16 @@ function HomeComponent() {
     return (
         <div>
             <h1>Onpaper, a melhor papelaria online de LES deste 2022</h1>
-            <AutoCreateComponent/>
+            <div className='row'>
+                <div className='col-auto'>
+                    <AutoCreateComponent/>
+                </div>
+                <div className='col-auto'>
+                    <CreateRandomVendas/>
+                </div>
+            </div>
+           
+            <h1>Produtos mais vendidos: </h1>
             <GraficoComponent/>
             
             <div style={{marginTop:100}}>
