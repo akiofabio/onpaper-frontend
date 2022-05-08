@@ -8,52 +8,53 @@ ChartJS.register( BarController , BarElement , Title ,  CategoryScale , LinearSc
 
 
 function GraficoComponent(){
-    const [dataInicio, setDataInicio] = useState(new Date(2022,5,1))
+    const [dataInicio, setDataInicio] = useState("01-01-2022")
     const [dataFinal, setDataFinal] = useState(Date.now()) 
     const [dadosGrafico, setDadosGrafico] = useState({
-        label:["tese","teste"],
-        datasets:[{
-            data:[2,3]
-        }]
+        "labels":[],
+        "datasets":[{data:[]}]
     })
-    const [quantidadeMostrada, setQuantidadeMostrada] = useState(10)
+    const [quantidadeMostrada, setQuantidadeMostrada] = useState(3)
 
 
     function gerarGrafico () {
         var dadosGraficoTemp = {
-            label:[],
+            labels:[],
             datasets:[{
                 data:[]
             }]
         }
         
         PedidoService.getPedidoByDatas( new Date(dataInicio)  , new Date(dataFinal) ).then( res => {
-            alert(JSON.stringify(res.data))
             res.data.forEach(pedido => {
-
                 pedido.itens.forEach(item => {
-                    if(dadosGraficoTemp.label.find(item.produto.nome)){
-                        dadosGraficoTemp.datasets[0].data[dadosGraficoTemp.label.findIndex(item.produto.nome)] += item.quantidade
+                    if(dadosGraficoTemp.labels.includes(item.produto.nome)){
+                        dadosGraficoTemp.datasets[0].data[dadosGraficoTemp.labels.indexOf(item.produto.nome)] += item.quantidade
                     }
                     else {
-                        dadosGraficoTemp.label.push(item.produto.nome)
+                        dadosGraficoTemp.labels.push(item.produto.nome)
                         dadosGraficoTemp.datasets[0].data.push(item.quantidade)
                     }
+                    
                 })
             })
-            for(var i=0 ; i < dadosGraficoTemp.label.length;i++){
-                for(var j=i+1 ; j < dadosGraficoTemp.label.length;j++){
-                    if(dadosGraficoTemp.datasets[0].data[i] > dadosGraficoTemp.datasets[0].data[j] ){
+            for(var i=0 ; i < dadosGraficoTemp.labels.length;i++){
+                for(var j=i+1 ; j < dadosGraficoTemp.labels.length;j++){
+                    if(dadosGraficoTemp.datasets[0].data[i] < dadosGraficoTemp.datasets[0].data[j] ){
                         var temp = dadosGraficoTemp.datasets[0].data[i]
                         dadosGraficoTemp.datasets[0].data[i] = dadosGraficoTemp.datasets[0].data[j]
                         dadosGraficoTemp.datasets[0].data[j] = temp
+
+                        temp = dadosGraficoTemp.labels[i]
+                        dadosGraficoTemp.labels[i] = dadosGraficoTemp.labels[j]
+                        dadosGraficoTemp.labels[j] = temp
                     }
                 } 
             } 
-            if( quantidadeMostrada < dadosGraficoTemp.label.length ) {
-                dadosGraficoTemp.label.length = quantidadeMostrada;
+            if( quantidadeMostrada < dadosGraficoTemp.labels.length ) {
+                dadosGraficoTemp.labels.length = quantidadeMostrada;
+                dadosGraficoTemp.datasets[0].data.length = quantidadeMostrada
             }
-            alert(JSON.stringify(dadosGraficoTemp))
             setDadosGrafico(dadosGraficoTemp) 
         }).catch(error => {
             alert("not find")
@@ -64,13 +65,25 @@ function GraficoComponent(){
         <div>
             <Bar data={dadosGrafico} />
             <div className ="row">
-                <div className ="col" >
+                <div className ="col-auto" >
+                    <h5>Data de Inicio: </h5>
+                </div>
+                <div className ="col-auto" >
                     <input type="date" value={dataInicio} onChange={ (e) => setDataInicio(e.target.value) } ></input>
                 </div>
-                <div className ="col" >
-                    <input type="date" value={dataFinal} onChange={(e) => setDataFinal(e.target.value) } ></input>
+                <div className ="col-auto" >
+                    <h5>Data de Final: </h5>
                 </div>
-                <div className ="col" >
+                <div className ="col-auto" >
+                    <input type="date" value={dataFinal}  onChange={(e) => setDataFinal(e.target.value) } ></input>
+                </div>
+                <div className ="col-auto" >
+                    <h5>Quantidade Mostrada: </h5>
+                </div>
+                <div className ="col-auto" >
+                    <input type="number" value={quantidadeMostrada}  onChange={(e) => setQuantidadeMostrada(e.target.value) } ></input>
+                </div>
+                <div className ="col-auto" >
                     <button className ="btn btn-dark" onClick={() => gerarGrafico() } >Alterar</button>
                 </div>
             </div>
