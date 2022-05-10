@@ -6,7 +6,9 @@ import ClienteService from '../services/ClienteService';
 import PedidoService from '../services/PedidoService';
 import {cepMask,moedaRealMask} from '../etc/Mask'
 import {separarParagrafo} from '../etc/Funcoes'
+
 function FianlizarCompraComponent (){
+    const navigate = useNavigate()
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ total , setTotal ] = useState(0)
@@ -371,8 +373,26 @@ function FianlizarCompraComponent (){
     }
 
     function finalizar(){
-        
-        PedidoService.createPedido()
+        var meioDePagamentosTemp=[]
+        pedido.meioDePagamentos.forEach(meio => {
+            var meioTemp = {
+                detalhes: meio.detalhes,
+                tipo: meio.tipo,
+                valor: meio.valor
+            }
+            meioDePagamentosTemp.push(meioTemp)
+        })
+        var pedidoTemp = {
+            ...pedido,
+            meioDePagamentos: meioDePagamentosTemp
+        }
+        cliente.pedidos.push(pedidoTemp)
+        ClienteService.updateCliente(cliente,cliente.id).then(res => {
+            alert("Pedido Realizado Com Sucesso!")
+            navigate("/")
+        }).catch(error =>{
+            alert(error.response.data)
+        })
     }
     useEffect(() => {
         if(localStorage.getItem( "isLogged" )){

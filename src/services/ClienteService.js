@@ -12,6 +12,9 @@ class ClienteService{
     getClienteById( clienteId){
         return axios.get(CLIENTE_API_BASE_URL + "/" + clienteId);
     }
+    updateCliente( cliente, clienteId ){
+        return axios.put( CLIENTE_API_BASE_URL + "/" + clienteId , cliente );
+    }
 }
 
 export default new ClienteService()
