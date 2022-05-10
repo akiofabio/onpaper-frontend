@@ -5,11 +5,7 @@ import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import PedidoService from '../services/PedidoService';
 import {cepMask,moedaRealMask} from '../etc/Mask'
-<<<<<<< HEAD
-import {separarParagrafo} from '../etc/Funcoes'
-=======
 import {separarParagrafo, separarParagrafoSemMargem,cartaoToString,enderecoToString} from '../etc/Funcoes'
->>>>>>> 0bb8b11ac6de298a3fdcc33244aa297e3bae8e81
 
 function FianlizarCompraComponent (){
     const navigate = useNavigate()
@@ -50,18 +46,18 @@ function FianlizarCompraComponent (){
             cepNumero = cepNumero.replace(/\D/g, "");
             fretetotalSoma *= (parseFloat(cepNumero))/1000000
         }
-        setFreteTotal(fretetotalSoma);
+        setFreteTotal(fretetotalSoma.toFixed(2));
     }
     
     function calculoTotal(){
-        setTotal(subtotal + freteTotal)
+        setTotal(Number(subtotal) + Number(freteTotal))
     }
 
     function calculoTotalPagar(){
         var resultado = 0 
         pedido.meioDePagamentos.forEach(meio => {
             if(meio.valor){
-                resultado += meio.valor
+                resultado += Number(meio.valor)
             }
         })
         setTotalPagar(resultado)
@@ -96,7 +92,8 @@ function FianlizarCompraComponent (){
         setPedido({ 
             ...pedido,
             cep: endereco.cep,
-            endereco : enderecoToString(endereco)
+            endereco : enderecoToString(endereco),
+            idEndereco : endereco.id
         })
     }
 
@@ -104,10 +101,10 @@ function FianlizarCompraComponent (){
         var valorTemp = event.target.value
         valorTemp = valorTemp.replace(/\D/g, "");
         if(valorTemp.length >2){
-            valorTemp = valorTemp.replace(/(\d+)(\d\d)/, "$1,$2");
+            valorTemp = valorTemp.replace(/(\d+)(\d\d)/, "$1.$2");
         }
         else{
-            valorTemp = valorTemp.replace(/(\d\d)/, "0,$1");
+            valorTemp = valorTemp.replace(/(\d\d)/, "0.$1");
         }
         setPedido({
             ...pedido,
@@ -373,30 +370,36 @@ function FianlizarCompraComponent (){
     }
 
     function finalizar(){
-        var meioDePagamentosTemp=[]
-        pedido.meioDePagamentos.forEach(meio => {
-            var meioTemp = {
-                detalhes: meio.detalhes,
-                tipo: meio.tipo,
-                valor: meio.valor
-            }
-            meioDePagamentosTemp.push(meioTemp)
+        var meioDePagamentosTemp= pedido.meioDePagamentos
+        meioDePagamentosTemp.forEach(meio => {
+            delete meio.index
         })
         var pedidoTemp = {
             ...pedido,
-            meioDePagamentos: meioDePagamentosTemp
+            meioDePagamentos: meioDePagamentosTemp,
+            frete: freteTotal
         }
-        cliente.pedidos.push(pedidoTemp)
-        ClienteService.updateCliente(cliente,cliente.id).then(res => {
-            alert("Pedido Realizado Com Sucesso!")
-            navigate("/")
+        alert("pedido: " + JSON.stringify(pedidoTemp))
+        PedidoService.createPedido(pedidoTemp).then(res => {
+            cliente.pedidos.push(pedidoTemp)
+            ClienteService.updateCliente(cliente,cliente.id).then(res => {
+                alert("Pedido Realizado Com Sucesso!")
+    
+                navigate("/")
+                
+            }).catch(error =>{
+                alert("Cliente save erro" + error.response.data)
+            })
         }).catch(error =>{
             alert(error.response.data)
         })
+        
     }
+
     useEffect(() => {
         if(localStorage.getItem( "isLogged" )){
             if(!cliente.id){
+                
                 ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
                     setCliente(res.data)
                     if(pedido.itens.length===0){
@@ -420,9 +423,10 @@ function FianlizarCompraComponent (){
                             }
                         }
                         var pedidoTemp = {
-                            novo: false,
                             itens : res.data.carrinho.itens, 
-                            endereco : enderecoToString(res.data.carrinho.endereco),
+                            endereco : res.data.carrinho.endereco,
+                            cep: res.data.carrinho.cep,
+                            idEndereco : res.data.carrinho.idEndereco,
                             meioDePagamentos: [meioPag]
                         }
                         setPedido(pedidoTemp)
