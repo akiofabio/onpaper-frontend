@@ -8,8 +8,8 @@ ChartJS.register( BarController , BarElement , Title ,  CategoryScale , LinearSc
 
 
 function GraficoComponent(){
-    const [dataInicio, setDataInicio] = useState("01-01-2022")
-    const [dataFinal, setDataFinal] = useState(Date.now()) 
+    const [dataInicio, setDataInicio] = useState("2022-01-01")
+    const [dataFinal, setDataFinal] = useState(new Date().toISOString().split('T')[0]) 
     const [dadosGrafico, setDadosGrafico] = useState({
         "labels":[],
         "datasets":[{data:[]}]
@@ -28,11 +28,11 @@ function GraficoComponent(){
         PedidoService.getPedidoByDatas( new Date(dataInicio)  , new Date(dataFinal) ).then( res => {
             res.data.forEach(pedido => {
                 pedido.itens.forEach(item => {
-                    if(dadosGraficoTemp.labels.includes(item.produto.nome)){
-                        dadosGraficoTemp.datasets[0].data[dadosGraficoTemp.labels.indexOf(item.produto.nome)] += item.quantidade
+                    if(dadosGraficoTemp.labels.includes(item.nomeProduto)){
+                        dadosGraficoTemp.datasets[0].data[dadosGraficoTemp.labels.indexOf(item.nomeProduto)] += item.quantidade
                     }
                     else {
-                        dadosGraficoTemp.labels.push(item.produto.nome)
+                        dadosGraficoTemp.labels.push(item.nomeProduto)
                         dadosGraficoTemp.datasets[0].data.push(item.quantidade)
                     }
                     
@@ -81,10 +81,12 @@ function GraficoComponent(){
                     <h5>Quantidade Mostrada: </h5>
                 </div>
                 <div className ="col-auto" >
-                    <input type="number" value={quantidadeMostrada}  onChange={(e) => setQuantidadeMostrada(e.target.value) } ></input>
+                    <input type="number" value={quantidadeMostrada}  onChange={(e) => setQuantidadeMostrada(e.target.value) } style={{width:80}}></input>
                 </div>
+            </div>
+            <div className ="row justify-content-md-center" >
                 <div className ="col-auto" >
-                    <button className ="btn btn-dark" onClick={() => gerarGrafico() } >Alterar</button>
+                    <button className ="btn btn-dark" onClick={() => gerarGrafico() } >Atualizar Gráfico</button>
                 </div>
             </div>
         </div>

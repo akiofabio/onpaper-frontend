@@ -16,11 +16,12 @@ function LoginComponent(){
             localStorage.setItem( "id" , usuario.id )
             localStorage.setItem( "tipo" , usuario.tipo )
             localStorage.setItem( "isLogged" , true )
-            localStorage.setItem( "user" , res.data )
-            if(localStorage.getItem("carrinhoId")){
+            if(usuario.tipo == "CLIENTE"){
+                if(localStorage.getItem("carrinhoId")){
 
+                }
+                localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
             }
-            localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
             navegate(-1)
         }).catch(error => {
             alert(error.response.data)
