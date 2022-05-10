@@ -1,8 +1,19 @@
 import React from 'react'
-
+import {cepMask} from '../etc/Mask'
 export function separarParagrafo(texto){
     return texto.split("\n").map(txt => <p>{txt}</p>)
 }
+
 export function separarParagrafoSemMargem(texto){
     return texto.split("\n").map(txt => <p style={{ margin:0, padding:0, fontSize:10}}>{txt}</p>)
+}
+
+export function cartaoToString(cartao){
+    return "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira
+}
+
+export function enderecoToString(endereco){
+    return "Nome: " + endereco.nome + 
+    "\n" + endereco.tipoLogradouro + " " + endereco.logradouro + ", nº " + endereco.numero +
+    "\n" + cepMask(endereco.cep) + " - " + endereco.bairro + " - " + endereco.cidade + " - " + endereco.estado
 }

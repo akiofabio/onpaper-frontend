@@ -4,7 +4,7 @@ import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import {cepMask} from '../etc/Mask'
-import {separarParagrafoSemMargem} from '../etc/Funcoes'
+import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
 
 function CarrinhoComponent() {
     const navegate = useNavigate()
@@ -92,7 +92,7 @@ function CarrinhoComponent() {
             if( !mostrarEnderecos ){
                 return (
                     <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                        <p style={{ margin:0, padding:0, fontSize:10}}>{separarParagrafoSemMargem(carrinho.endereco)}</p>
+                        {separarParagrafoSemMargem(carrinho.endereco)}
                     </button>
                 )
             }
@@ -122,9 +122,7 @@ function CarrinhoComponent() {
         setCarrinho({ 
             ...carrinho,
             cep: endereco.cep,
-            endereco : "Nome: " + endereco.nome + 
-                        "\n" + endereco.tipoLogradouro + " " + endereco.logradouro + ", nº " + endereco.numero +
-                        "\n" + cepMask(endereco.cep) + " - " + endereco.bairro + " - " + endereco.cidade + " - " + endereco.estado})
+            endereco : enderecoToString(endereco)})
     }
 
     function MostrarFinalizarCompra(){
@@ -153,6 +151,7 @@ function CarrinhoComponent() {
             setCarrinho(res.data)
         })
     }
+
     useEffect(() => {
         if(localStorage.getItem( "isLogged" )){
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
