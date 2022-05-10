@@ -12,9 +12,7 @@ export　function cepMask(cepNumero) {
 }
 
 export　function moedaRealMask(valor) {
-    
     if(valor){
-        
         var valorMask
         if(valor<0){
             valorMask = "- "
@@ -27,5 +25,4 @@ export　function moedaRealMask(valor) {
         return valor
     }
 }
-
 

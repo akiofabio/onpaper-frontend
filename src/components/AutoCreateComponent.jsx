@@ -2,6 +2,7 @@ import React from 'react';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import { useNavigate } from 'react-router-dom';
+import UserService from '../services/UserService';
 
 function AutoCreateComponent(){
     const navigate = useNavigate()
@@ -421,14 +422,15 @@ function AutoCreateComponent(){
     }
 
     var user = {
-        email:"admin@mail",
+        email:"admin@mail.com",
         senha: "admin123",
         tipo: "ADMIN"
     }
 
     
     function save(){
-        localStorage.clear()        
+        localStorage.clear()
+        UserService.createUser(user)      
         ClienteService.createCliente(cliente);
         produtos.forEach(produto =>{
             alert(produto.nome)

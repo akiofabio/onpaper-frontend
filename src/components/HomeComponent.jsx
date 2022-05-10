@@ -45,7 +45,9 @@ function HomeComponent() {
             return res.data
         })
         var item =  {
-            produto : porduto, 
+            idProduto: porduto.id, 
+            nomeProduto : porduto.nome,
+            imagemProduto : porduto.imagens, 
             quantidade : 1,
             preco : porduto.preco,
         }        
@@ -87,7 +89,7 @@ function HomeComponent() {
                         <div key = {produto.id} style={{ border: "1px black solid" }} className="col text-center">
                             <div className='card-body'>
                             <div>
-                                <img src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto" width='200' height="auto"></img>
+                                <img class="img-fluid" src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto" width='200' height="auto"></img>
                             </div>
                             <p>Nome: {produto.nome}</p>
                             <p>Descrição: {produto.descricao}</p>

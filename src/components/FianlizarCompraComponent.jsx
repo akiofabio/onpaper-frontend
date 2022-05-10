@@ -5,7 +5,11 @@ import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import PedidoService from '../services/PedidoService';
 import {cepMask,moedaRealMask} from '../etc/Mask'
+<<<<<<< HEAD
 import {separarParagrafo} from '../etc/Funcoes'
+=======
+import {separarParagrafo, separarParagrafoSemMargem,cartaoToString,enderecoToString} from '../etc/Funcoes'
+>>>>>>> 0bb8b11ac6de298a3fdcc33244aa297e3bae8e81
 
 function FianlizarCompraComponent (){
     const navigate = useNavigate()
@@ -18,11 +22,9 @@ function FianlizarCompraComponent (){
     const [ mostrarCupomPromocionais , setMostrarCupomPromocionais ] = useState(0)
     const [ mostrarCupomTroca , setMostrarCupomTroca ] = useState(0)
     const [ pedido , setPedido ] = useState({
-        novo: true,
         itens : [], 
-        endereco : {
-            cep: " "
-        },
+        endereco : " ",
+        cep : " ",
         meioDePagamentos: [],
     })
     const [ cliente , setCliente ] = useState( {
@@ -33,18 +35,18 @@ function FianlizarCompraComponent (){
         var subtotalSoma =0
         
         pedido.itens.forEach(item => {
-            subtotalSoma +=  item.quantidade * item.produto.preco
+            subtotalSoma +=  item.quantidade * item.preco
         })
         setSubtotal(subtotalSoma);
     }
 
     function calculoFreteTotal(){
         var fretetotalSoma = 0
-        if(pedido.endereco && pedido.endereco.cep.length==8){
+        if(pedido.endereco && pedido.cep && pedido.cep.length==8){
             pedido.itens.forEach(item => {
                 fretetotalSoma +=  0.1 * item.quantidade
             })
-            var cepNumero = pedido.endereco.cep;
+            var cepNumero = pedido.cep;
             cepNumero = cepNumero.replace(/\D/g, "");
             fretetotalSoma *= (parseFloat(cepNumero))/1000000
         }
@@ -69,9 +71,7 @@ function FianlizarCompraComponent (){
         if( !mostrarEnderecos ){
             return (
                 <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                    <p style={{ margin:0, padding:0}}>{pedido.endereco.nome}</p>
-                    <p style={{ margin:0, padding:0}}>{pedido.endereco.tipoLogradouro} {pedido.endereco.logradouro}, nº {pedido.endereco.numero}</p>
-                    <p style={{ margin:0, padding:0}}>{cepMask(pedido.endereco.cep)} - {pedido.endereco.bairro} - {pedido.endereco.cidade} - {pedido.endereco.estado}</p>
+                    {separarParagrafoSemMargem(pedido.endereco)}
                 </button>
             )
         }
@@ -83,29 +83,31 @@ function FianlizarCompraComponent (){
                             <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
-
                         </button>
                     )}
                 </div>
-                                    
             )
         }
     }
 
     function selecionarEndereco(id){
         setMostrarEnderecos(false)
-        setPedido({ ...pedido , endereco : cliente.enderecos.find(endereco => endereco.id == id)})
+        var endereco = cliente.enderecos.find(endereco => endereco.id == id)
+        setPedido({ 
+            ...pedido,
+            cep: endereco.cep,
+            endereco : enderecoToString(endereco)
+        })
     }
-    
 
     function valorHandler(event,meio){
         var valorTemp = event.target.value
         valorTemp = valorTemp.replace(/\D/g, "");
         if(valorTemp.length >2){
-            valorTemp = valorTemp.replace(/(\d+)(\d\d)/, "$1.$2");
+            valorTemp = valorTemp.replace(/(\d+)(\d\d)/, "$1,$2");
         }
         else{
-            valorTemp = valorTemp.replace(/(\d\d)/, "0.$1");
+            valorTemp = valorTemp.replace(/(\d\d)/, "0,$1");
         }
         setPedido({
             ...pedido,
@@ -124,13 +126,11 @@ function FianlizarCompraComponent (){
             return (
                 <div>
                     {cartoesTemp.map(cartao => 
-                        
                         <button key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira}</p>
                         </button>
-                        
                     )}
                     <button className='btn btn-outline-dark' style={{ margin:2}}>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Novo Cartão</p>
@@ -399,7 +399,7 @@ function FianlizarCompraComponent (){
             if(!cliente.id){
                 ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
                     setCliente(res.data)
-                    if(pedido.novo){
+                    if(pedido.itens.length===0){
                         var meioPag;
                         if( res.data.cartoes && res.data.cartoes.length!=0){
                             res.data.cartoes.forEach(cartao => {
@@ -407,7 +407,7 @@ function FianlizarCompraComponent (){
                                     meioPag = {
                                         index: 1,
                                         tipo: "Cartão de Credito",
-                                        detalhes: "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira,
+                                        detalhes: cartaoToString(cartao),
                                         valor: subtotal + freteTotal
                                     }
                                 }
@@ -422,7 +422,7 @@ function FianlizarCompraComponent (){
                         var pedidoTemp = {
                             novo: false,
                             itens : res.data.carrinho.itens, 
-                            endereco : res.data.carrinho.endereco,
+                            endereco : enderecoToString(res.data.carrinho.endereco),
                             meioDePagamentos: [meioPag]
                         }
                         setPedido(pedidoTemp)
@@ -453,10 +453,10 @@ function FianlizarCompraComponent (){
                                 <div className='card-body'>
                                     <div className='row no-gutters'>
                                         <div className='col-sm-2'>
-                                            <img src={'imagens/produtos/' + item.produto.imagens} alt={item.produto.imagens} width='80' height="auto"></img>
+                                            <img src={'imagens/produtos/' + item.imagemProduto} alt={item.imagemProduto} width='80' height="auto"></img>
                                         </div>
                                         <div className='col-sm-8'>
-                                            <p style={{ height:60}}>Nome: {item.produto.nome}</p>
+                                            <p style={{ height:60}}>Nome: {item.nomeProduto}</p>
                                             <div className="row g-3 align-items-center">
                                                 <div className="col-auto">
                                                     <label>Quantidade:</label>
@@ -473,7 +473,7 @@ function FianlizarCompraComponent (){
                                         </div>
                                         <div className='col-sm-2' >
                                             <p align="center" style={{ marginBottom:0}}>Preço</p>
-                                            <p align="center">R$ {item.preco.toFixed(2)}</p>
+                                            <p align="center">{moedaRealMask(item.preco)}</p>
                                         </div>
                                     </div>
                                 </div>

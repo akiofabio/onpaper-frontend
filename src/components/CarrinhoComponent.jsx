@@ -4,6 +4,7 @@ import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import {cepMask} from '../etc/Mask'
+import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
 
 function CarrinhoComponent() {
     const navegate = useNavigate()
@@ -12,9 +13,8 @@ function CarrinhoComponent() {
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
     const [ carrinho , setCarrinho ] = useState({
         itens : [], 
-        endereco : {
-            cep: " "
-        }
+        endereco : " ",
+        cep : "0"
     })
     
     const [ cliente , setCliente ] = useState( {
@@ -61,7 +61,7 @@ function CarrinhoComponent() {
             event.target.value = cepNumero;
             event.target.selectionStart = posicao;
             event.target.selectionEnd = posicao;
-            setCarrinho({...carrinho, endereco : { ...carrinho.endereco , cep : event.target.value.replace(/\D/g, "") }})
+            setCarrinho({...carrinho, cep : event.target.value.replace(/\D/g, "")})
         }
     }
     
@@ -69,18 +69,18 @@ function CarrinhoComponent() {
         var subtotalSoma =0
         
         carrinho.itens.forEach(item => {
-            subtotalSoma +=  item.quantidade * item.produto.preco
+            subtotalSoma +=  item.quantidade * item.preco
         })
         setSubtotal(subtotalSoma);
     }
 
     function calculoFreteTotal(){
         var fretetotalSoma = 0
-        if(carrinho.endereco && carrinho.endereco.cep.length==8){
+        if(carrinho.endereco && carrinho.cep.length==8){
             carrinho.itens.forEach(item => {
                 fretetotalSoma +=  0.1 * item.quantidade
             })
-            var cepNumero = carrinho.endereco.cep;
+            var cepNumero = carrinho.cep;
             cepNumero = cepNumero.replace(/\D/g, "");
             fretetotalSoma *= (parseFloat(cepNumero))/1000000
         }
@@ -92,9 +92,7 @@ function CarrinhoComponent() {
             if( !mostrarEnderecos ){
                 return (
                     <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                        <p style={{ margin:0, padding:0, fontSize:10}}>{carrinho.endereco.nome}</p>
-                        <p style={{ margin:0, padding:0, fontSize:10}}>{carrinho.endereco.tipoLogradouro} {carrinho.endereco.logradouro}, nº {carrinho.endereco.numero}</p>
-                        <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(carrinho.endereco.cep)} - {carrinho.endereco.bairro} - {carrinho.endereco.cidade} - {carrinho.endereco.estado}</p>
+                        {separarParagrafoSemMargem(carrinho.endereco)}
                     </button>
                 )
             }
@@ -109,8 +107,7 @@ function CarrinhoComponent() {
 
                             </button>
                         )}
-                    </div>
-                                      
+                    </div>        
                 )
             }
         }
@@ -121,11 +118,15 @@ function CarrinhoComponent() {
 
     function selecionarEndereco(id){
         setMostrarEnderecos(false)
-        setCarrinho({ ...carrinho , endereco : cliente.enderecos.find(endereco => endereco.id == id)})
+        var endereco = cliente.enderecos.find(endereco => endereco.id == id)
+        setCarrinho({ 
+            ...carrinho,
+            cep: endereco.cep,
+            endereco : enderecoToString(endereco)})
     }
 
     function MostrarFinalizarCompra(){
-        if( ( carrinho.endereco.cep ) && ( carrinho.endereco.cep.length == 8 ) && ( carrinho.itens.length!=0 )){
+        if( ( carrinho.cep ) && ( carrinho.cep.length == 8 ) && ( carrinho.itens.length!=0 )){
             return(
                 <button type="button" className="btn btn-dark" onClick={() => finalizarCompra()}>Finalizar Compra</button>
             )
@@ -150,11 +151,17 @@ function CarrinhoComponent() {
             setCarrinho(res.data)
         })
     }
+
     useEffect(() => {
         if(localStorage.getItem( "isLogged" )){
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
                 if(res.data.carrinho.endereco==null){
-                    res.data.carrinho.endereco=res.data.enderecos[0]
+                    var endereco = res.data.enderecos[0]
+                    res.data.carrinho.endereco = "Nome: " + endereco.nome + 
+                    "\n" + endereco.tipoLogradouro + " " + endereco.logradouro + ", nº " + endereco.numero +
+                    "\n" + cepMask(endereco.cep) + " - " + endereco.bairro + " - " + endereco.cidade + " - " + endereco.estado
+                    res.data.carrinho.cep = endereco.cep
+                    res.data.carrinho.idEndereco = endereco.id
                     CarrinhoService.updateCarrinho(res.data.carrinho,res.data.carrinho.id)
                 }
                 setCliente(res.data)
@@ -174,9 +181,7 @@ function CarrinhoComponent() {
                     var carrinhoTemp =  res.data
                     
                     if(res.data.endereco==null){
-                        carrinhoTemp.endereco = {
-                            cep: " "
-                        }
+                        carrinhoTemp.cep = " "
                     }
                     setCarrinho( res.data );
                     CarrinhoService.updateCarrinho(res.data)
@@ -201,7 +206,7 @@ function CarrinhoComponent() {
                 <div className='row justify-content-end'>
                     <div className='col-3 align-content-center' style={{ marginBottom:10 }} >
                         <label>CEP</label>
-                        <input value={cepMask(carrinho.endereco.cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
+                        <input value={cepMask(carrinho.cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
                         <MostrarEndereco/>
                     </div>
                 </div>
@@ -213,11 +218,10 @@ function CarrinhoComponent() {
                                 <div className='card-body'>
                                     <div className='row no-gutters'>
                                         <div className='col-sm-2'>
-                                            <img src={'imagens/produtos/' + item.produto.imagens} alt={item.produto.imagens} width='80' height="auto"></img>
+                                            <img src={'imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto} width='80' height="auto"></img>
                                         </div>
                                         <div className='col-sm-8'>
-                                            <p style={{ height:60}}>Id: {item.id}   qtdBloc: {item.produto.quantidadeBloqueada}</p>
-                                            <p style={{ height:60}}>Nome: {item.produto.nome}</p>
+                                            <p style={{ height:60}}>Nome: {item.nomeProduto}</p>
                                             <div className="row g-3 align-items-center">
                                                 <div className="col-auto">
                                                     <label>Quantidade:</label>
