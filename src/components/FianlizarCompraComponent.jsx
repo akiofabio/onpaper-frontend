@@ -381,10 +381,16 @@ function FianlizarCompraComponent (){
         }
         alert("pedido: " + JSON.stringify(pedidoTemp))
         PedidoService.createPedido(pedidoTemp).then(res => {
-            cliente.pedidos.push(pedidoTemp)
-            ClienteService.updateCliente(cliente,cliente.id).then(res => {
+            var clienteTemp = cliente
+            clienteTemp.pedidos.push(res.data)
+            clienteTemp.carrinho={
+                ...clienteTemp.carrinho,
+                itens: [],
+                frete: 0
+            }
+            ClienteService.updateCliente(clienteTemp,clienteTemp.id).then(res => {
                 alert("Pedido Realizado Com Sucesso!")
-    
+
                 navigate("/")
                 
             }).catch(error =>{
