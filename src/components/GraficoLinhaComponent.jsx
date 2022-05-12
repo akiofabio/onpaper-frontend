@@ -2,12 +2,14 @@ import React, { useEffect , useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale} from 'chart.js';
 import PedidoService from '../services/PedidoService';
+import {stringDataMask} from '../etc/Mask'
 
 
 ChartJS.register( LineElement, PointElement, LinearScale, Title ,CategoryScale);
 function GraficoComponent(){
-    const [dataInicio, setDataInicio] = useState("2022-01-01")
-    const [dataFinal, setDataFinal] = useState(new Date().toISOString().split('T')[0]) 
+    const [dataInicio, setDataInicio] = useState("2022-04-01")
+    const [dataFinal, setDataFinal] = useState(new Date().toISOString().split('T')[0])
+    const [escala, setEscala] = useState("Dia")
     const [dadosGrafico, setDadosGrafico] = useState({
         "labels":["dia1","dia2","dia3"],
         "datasets":[
@@ -18,19 +20,20 @@ function GraficoComponent(){
     })
     const [intervalo,setIntervalo] = useState("Dia");
     function gerarGrafico () {
-        var dataInicioTemp = new Date(dataInicio)
-        var dataFinalTemp = new Date(dataFinal)
+        var dataInicioTemp = new Date(stringDataMask(dataInicio))
+        var dataFinalTemp = new Date(stringDataMask(dataFinal))
         var dadosGraficoTemp = {
             labels:[],
             datasets:[{
                 data:[]
             }]
         }
+        
         for(var i=0; i < (dataFinalTemp.getTime() - dataInicioTemp.getTime())/( 1000 * 60 * 60 * 24); i++ ){
-            var dataTemp = (dataInicioTemp.getTime() + (i * 1000 * 60 * 60 * 24))
-            alert(dataTemp)
-            dadosGraficoTemp.labels.push(dataTemp.getDate())
+            var dataTemp = new Date(dataInicioTemp.getTime() + (i * 1000 * 60 * 60 * 24))
+            //dadosGraficoTemp.labels.push(dataTemp.getDate() + "/" + (dataTemp.getMonth()+1))            
         }
+        setDadosGrafico(dadosGraficoTemp) 
         /* PedidoService.getPedidoByDatas( dataInicioTemp  , dataFinalTemp ).then( res => {
             
             res.data.forEach(pedido => {
@@ -79,6 +82,17 @@ function GraficoComponent(){
                 </div>
                 <div className ="col-auto" >
                     <input type="date" value={dataFinal}  onChange={(e) => setDataFinal(e.target.value) } ></input>
+                </div>
+                <div className ="col-auto" >
+                    <h5>Escala: </h5>
+                </div>
+                <div className ="col-auto" >
+                    <select  value={escala}  onChange={(e) => setEscala(e.target.value) } >
+                        <option value="Dia">Dia</option>
+                        <option value="Semana">Semana</option>
+                        <option value="Mes">Mes</option>
+                        <option value="Ano">Ano</option>
+                    </select>
                 </div>
             </div>
             <div className ="row justify-content-md-center" >

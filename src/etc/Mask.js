@@ -26,3 +26,11 @@ export　function moedaRealMask(valor) {
     }
 }
 
+export　function stringDataMask(data) {
+    if(data){
+        data = data.replace(/\D/g, "");
+        data = data.replace(/(\d\d\d\d)(\d\d)(\d\d)/, "$2-$3-$1");
+        return data
+    }
+}
+
