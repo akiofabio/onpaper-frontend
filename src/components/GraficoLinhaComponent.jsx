@@ -2,7 +2,9 @@ import React, { useEffect , useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, CategoryScale} from 'chart.js';
 import PedidoService from '../services/PedidoService';
+import CategoriaService from '../services/CategoriaService';
 import {stringDataMask} from '../etc/Mask'
+import ProdutoService from '../services/ProdutoService';
 
 
 ChartJS.register( LineElement, PointElement, LinearScale, Title ,CategoryScale);
@@ -33,7 +35,23 @@ function GraficoComponent(){
             var dataTemp = new Date(dataInicioTemp.getTime() + (i * 1000 * 60 * 60 * 24))
             //dadosGraficoTemp.labels.push(dataTemp.getDate() + "/" + (dataTemp.getMonth()+1))            
         }
-        setDadosGrafico(dadosGraficoTemp) 
+        var categorias =[]
+        setDadosGrafico(dadosGraficoTemp)
+        ProdutoService.getProdutos().then( resProduto => {
+            CategoriaService.getCategorias().then( resCategoria => {
+                resCategoria.data.forEach( categoria => {
+                    var categoriaTemp = {
+                        label: categoria.nome,
+                        value:[],
+                        ids: []
+                    }
+
+                    resProduto.data.filter(produto => produto.categoria.nome === categoria.nome).forEach( produto2 => {
+                       categoriaTemp.ids.push(produto2.id)
+                    })
+                })
+            })
+        })
         /* PedidoService.getPedidoByDatas( dataInicioTemp  , dataFinalTemp ).then( res => {
             
             res.data.forEach(pedido => {
