@@ -7,7 +7,6 @@ import CategoriaService from '../services/CategoriaService';
 
 function AutoCreateComponent(){
     const navigate = useNavigate()
-    
     async function save(){
         var categorias = [
             {
@@ -39,10 +38,11 @@ function AutoCreateComponent(){
                 descricao: "Categoria geral para todos os tipos de borracha"
             }
         ]
-
-        categorias.forEach(categoria => {
-            CategoriaService.createCategoria(categoria)
-        })
+        for (const categoria of categorias) {
+            await CategoriaService.createCategoria(categoria).catch(error =>{
+                alert(error.response.data)
+             })
+        }
 
         var produtos =[
             {
@@ -51,7 +51,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto1",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 11.0,
+                preco: 10.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "caderno1.jpg",
@@ -74,7 +74,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 2",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 11.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto2.jpg",
@@ -97,7 +97,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 3",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 12.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto3.jpg",
@@ -118,7 +118,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 4",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 13.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto4.jpg",
@@ -139,7 +139,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 5",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 14.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto5.jpg",
@@ -160,7 +160,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 6",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 15.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto6.jpg",
@@ -181,7 +181,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 7",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 16.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto7.jpg",
@@ -202,7 +202,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 8",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 17.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto8.jpg",
@@ -223,7 +223,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 9",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 18.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto9.jpg",
@@ -244,7 +244,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 10",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 19.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto10.jpg",
@@ -265,7 +265,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 11",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 20.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto11.jpg",
@@ -307,7 +307,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 13",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 22.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto13.jpg",
@@ -328,7 +328,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 14",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 23.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto14.jpg",
@@ -349,7 +349,7 @@ function AutoCreateComponent(){
                 descricao: "Desc do Produto 15",
                 codigoDeBarra: "11111",
                 grupoDePrecificacao: null,
-                preco: 21.0,
+                preco: 24.0,
                 custo: 10.0,
                 quantidade: 100,
                 imagens: "produto15.jpg",
@@ -472,18 +472,14 @@ function AutoCreateComponent(){
         UserService.createUser(user)      
         ClienteService.createCliente(cliente);
 
-
-
-        produtos.forEach(produto =>{
-            //alert(produto.nome)
-            ProdutoService.createProduto(produto).then(res =>{
-                //alert(JSON.stringify(res.data))
-            }).catch(error =>{
+        for (const produto of produtos) {
+            await ProdutoService.createProduto(produto).catch(error =>{
                 alert(error.response.data)
-            })
-        })
+             })
+        }
         navigate(0)
     }
+
     return(
         <button className='btn btn-dark' onClick={() => save()}>Auto Criar</button>
     )
