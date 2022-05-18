@@ -11,6 +11,7 @@ import ProdutoAutoCreate from './components/ProdutoAutoCreate';
 import CarrinhoComponet from './components/CarrinhoComponent';
 import LoginComponent from './components/LoginComponent';
 import FianlizarCompraComponent from './components/FianlizarCompraComponent';
+import AreaClienteComponent from './components/AreaClienteComponent';
 
 function App() {
     return (
@@ -23,7 +24,7 @@ function App() {
                         <Route path = "/carrinho" element = {<CarrinhoComponet/>}></Route>
                         <Route path = "/login" element = {<LoginComponent/>}></Route>
                         <Route path = "/finalizar_compra" element = {<FianlizarCompraComponent/>}></Route>
-
+                        <Route path = "/areaCliente" element = {<AreaClienteComponent/>}></Route>
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
                         <Route path = "/cadastrar-cliente" element = {<CreateClienteComponet/>}></Route>
                         <Route path = "/auto" element = {<ProdutoAutoCreate/>}></Route>

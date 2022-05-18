@@ -13,11 +13,8 @@ function GraficoComponent(){
     const [dataFinal, setDataFinal] = useState(new Date().toISOString().split('T')[0])
     const [escala, setEscala] = useState("Mes")
     const [dadosGrafico, setDadosGrafico] = useState({
-        labels:["dia1","dia2","dia3"],
-        datasets:[
-            {data:[1,2,3]},
-            {data:[3,2,3]}
-        ]
+        labels:[],
+        datasets:[]
 
     })
     const [tipoDado,setTipoDado] = useState("Quantidade");
@@ -107,7 +104,8 @@ function GraficoComponent(){
                 label: categoria.nome,
                 data: [], 
                 ids: [],
-                borderColor: dynamicColors()
+                borderColor: dynamicColors(),
+                tension:0.3
             }
             produtos.forEach( produto => {
                 produto.categorias.forEach( categoriaProduto => {

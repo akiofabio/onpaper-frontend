@@ -8,7 +8,9 @@ function LoginImage (props){
         localStorage.clear()
         navigate(0)
     }
-
+    function menu(){
+        navigate("/areaCliente")
+    }
     if( !isLogged ){
         return (
             <a href="http://localhost:3000/login" className='nav-item'>
@@ -18,7 +20,11 @@ function LoginImage (props){
     }
     else{
         return (
-            <button className='btn btn-dark' onClick={() => sair()}>Sair</button>
+            <div className='row'>
+                <button className='btn btn-dark' onClick={() => menu()}>Menu</button>
+                <button className='btn btn-dark' onClick={() => sair()}>Sair</button>
+
+            </div>
         );
     }
 

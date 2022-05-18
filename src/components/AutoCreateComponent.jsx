@@ -289,7 +289,7 @@ function AutoCreateComponent(){
                 preco: 21.0,
                 custo: 10.0,
                 quantidade: 100,
-                imagens: "produto11.jpg",
+                imagens: "produto12.jpg",
                 inativacoes: [],
                 ativacoes: [],
                 altura: 1.0,
