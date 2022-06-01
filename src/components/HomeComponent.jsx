@@ -87,14 +87,14 @@ function HomeComponent() {
                     {produtos.map(
                         produto => 
                         <div key = {produto.id} style={{ border: "1px black solid" }} className="col text-center">
-                            <div className='card-body'>
-                            <div>
-                                <img class="img-fluid" src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto" width='200' height="auto"></img>
+                            <div className='card-body' >
+                                <div style={{ height:150 , margin:0, alignSelf:'center'}}>
+                                    <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  height="150" ></img>
+                                </div>
+                                <p>Nome: {produto.nome}</p>
+                                <p>Descrição: {produto.descricao}</p>
+                                <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
                             </div>
-                            <p>Nome: {produto.nome}</p>
-                            <p>Descrição: {produto.descricao}</p>
-                            <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
-                        </div>
                         </div>
                     )}
                 </div>

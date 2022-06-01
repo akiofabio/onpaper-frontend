@@ -42,7 +42,7 @@ function HeaderComponent (){
                             <button className="btn btn-success" type="submit">Search</button>
                         </form>
                         <a href="http://localhost:3000/carrinho" className='nav-item' style={{marginLeft:200}}>
-                            <img src='imagens/icones/carrinho.png' width={30} height='auto'></img>
+                            <img src='/imagens/icones/carrinho.png' width={30} height='auto'></img>
                         </a>
                         <LoginImage />
                     </div>
