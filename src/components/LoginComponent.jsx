@@ -27,6 +27,10 @@ function LoginComponent(){
             alert(error.response.data)
         })
     }
+    function cadastrar(){
+        navegate("/cadastrar_cliente")
+    }
+
     return(
         <div>
             <div className='container' style={{ marginBottom:30 ,marginTop:30}}>
@@ -52,6 +56,11 @@ function LoginComponent(){
                                 </div>
                                 <div className="col-auto">
                                     <button className='btn btn-secondary' onClick={()=>navegate(-1)}>Cancelar</button>
+                                </div>
+                            </div>
+                            <div className='row justify-content-center' style={{ marginBottom:15 ,marginTop:15}}>
+                                <div className="col-auto">
+                                    <button className='btn btn-secondary' onClick={()=>cadastrar()}>Cadastrar</button>
                                 </div>
                             </div>
                         </div>

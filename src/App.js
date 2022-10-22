@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Navigate, Route, Routes,useNavigate}from 'react
 import ListClienteComponents from './components/ListClienteComponents'
 import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
-import CreateClienteComponet from './components/CreateClienteComponet';
+import CadastrarClienteComponent from './components/CadastrarClienteComponent';
 import HomeComponent from './components/HomeComponent';
 import ProdutoAutoCreate from './components/ProdutoAutoCreate';
 import CarrinhoComponet from './components/CarrinhoComponent';
@@ -26,7 +26,7 @@ function App() {
                         <Route path = "/finalizar_compra" element = {<FianlizarCompraComponent/>}></Route>
                         <Route path = "/areaCliente/*" element = {<AreaClienteComponent/>}></Route>
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
-                        <Route path = "/cadastrar-cliente" element = {<CreateClienteComponet/>}></Route>
+                        <Route path = "/cadastrar_cliente" element = {<CadastrarClienteComponent/>}></Route>
                         <Route path = "/auto" element = {<ProdutoAutoCreate/>}></Route>
                     </Routes >
                     </div>
