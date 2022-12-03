@@ -1,25 +1,30 @@
-import React, { useEffect , useState } from 'react';
+import React, { useEffect , useState , useRef} from 'react';
+import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import {cepMask} from '../etc/Mask'
-import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
+import {separarParagrafoSemMargemFonte,enderecoToString} from '../etc/Funcoes'
 
 function CarrinhoComponent() {
     const navegate = useNavigate()
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
+    const [ mostrarNovoEndereco , setMostrarNovoEndereco ] = useState(false)
+    const [ enderecoIndexTemp , setEnderecoIndexTemp ] = useState()
+    const [ clienteTemp , setClienteTemp ] = useState()
     const [ carrinho , setCarrinho ] = useState({
         itens : [], 
         endereco : " ",
         cep : "0"
     })
-    
     const [ cliente , setCliente ] = useState( {
         enderecos : []
     } )
+
+    const target = useRef(null);
 
     function ItensCarrinho(){
         //console.log("carrinhoID = " + localStorage.getItem("carrinhoId"))
@@ -92,7 +97,7 @@ function CarrinhoComponent() {
             if( !mostrarEnderecos ){
                 return (
                     <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                        {separarParagrafoSemMargem(carrinho.endereco)}
+                        {separarParagrafoSemMargemFonte(carrinho.endereco,10)}
                     </button>
                 )
             }
@@ -100,13 +105,15 @@ function CarrinhoComponent() {
                 return (
                     <div>
                         {cliente.enderecos.map(endereco => 
-                            <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
+                            <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)}>
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
-
                             </button>
                         )}
+                        <button className='btn btn-outline-dark' style={{ margin:2}} onClick={() => novoEndereco()}>
+                            <p style={{ margin:0, padding:0, fontSize:15}}>Novo Endereco</p>
+                        </button>
                     </div>        
                 )
             }
@@ -125,6 +132,88 @@ function CarrinhoComponent() {
             endereco : enderecoToString(endereco)})
     }
 
+    function novoEndereco(){
+        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"", estsdo:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:""}]})
+        setEnderecoIndexTemp(cliente.enderecos.length)
+        setMostrarNovoEndereco(true)
+    }
+
+    function novoEnderecoOverlay(){
+        return(
+            <div>
+                <Overlay show={mostrarNovoEndereco} placement="auto" target={target.current}>
+                    {({ placement, arrowProps, show: _show, popper, ...props }) => (
+                        <div className='card'
+                            {...props}
+                            
+                            style={{
+                            backgroundColor: 'white',
+                            borderRadius: 5,
+                            borderBlockColor: 'black',
+                            
+                            ...props.style,
+                            }}
+                        >
+                            <div  className="card-header border-dark bg-dark text-white">
+                                <h3 className='text-center'>Novo Endereco</h3>
+                            </div>
+                            <div className='card-body' >
+                                <div className='form-group'>
+                                    <label>Nome:</label>
+                                    <input type={"text"} placeholder='Nome' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].nome} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, nome : event.target.value} : end)})} size="50"></input>
+                                    <label>CEP:</label>
+                                    <input type={"text"} placeholder='CEP' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cep} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cep : event.target.value} : end)})}></input>
+                                    <label>Estado:</label>
+                                    <input type={"text"} placeholder='Estado' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].estado} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, estado : event.target.value} : end)})}></input>
+                                    <label>Cidade:</label>
+                                    <input type={"text"} placeholder='Cidade' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cidade} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cidade : event.target.value} : end)})}></input>
+                                    <label>Bairro:</label>
+                                    <input type={"text"} placeholder='Tipo' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].bairro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, bairro : event.target.value} : end)})}></input>
+                                    <label>Tipo de Logradouro:</label>
+                                    <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipoLogradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipoLogradouro : event.target.value} : end)})}></input>
+                                    <label>Logradouro:</label>
+                                    <input type={"text"} placeholder='Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].logradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, logradouro : event.target.value} : end)})}></input>
+                                    <label>Numero:</label>
+                                    <input type={"text"} placeholder='Numero' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, numero : event.target.value} : end)})}></input>
+                                    <label>Observacao:</label>
+                                    <input type={"text"} placeholder='Observacao' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].observacao} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, observacao : event.target.value} : end)})}></input>
+                                </div>
+                            </div>
+                            <div className='row justify-content-md-center'>
+                                <div className='col-auto'>
+                                    <button className='btn btn-dark' style={{marginBottom: 5} } onClick={() => salvar(clienteTemp)}>Salvar</button>
+                                </div>
+                                <div className='col-auto'>
+                                    <button className='btn btn-dark' style={{marginBottom: 5}} onClick={() => setMostrarNovoEndereco(!mostrarNovoEndereco)}>Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </Overlay>
+            </div>
+        )
+    }
+
+    function salvar(cli){
+        ClienteService.updateCliente(cli, cliente.id).then(res => {
+            var usuario = res.data
+            localStorage.setItem( "id" , usuario.id )
+            localStorage.setItem( "tipo" , usuario.tipo )
+            localStorage.setItem( "isLogged" , true )
+            if(usuario.tipo == "CLIENTE"){
+                if(localStorage.getItem("carrinhoId")){
+
+                }
+                localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
+            }
+            alert("Cliente Alterado com sucesso")
+            setCliente(usuario)
+            setMostrarNovoEndereco(false)
+        }).catch(error => {
+            alert(error.response.data)
+        })
+    }
+
     function MostrarFinalizarCompra(){
         if( ( carrinho.cep ) && ( carrinho.cep.length == 8 ) && ( carrinho.itens.length!=0 )){
             return(
@@ -137,6 +226,7 @@ function CarrinhoComponent() {
             )
         }
     }
+
     function finalizarCompra(){
         if( localStorage.getItem( "isLogged" ) ){
             navegate("/finalizar_compra")
@@ -201,13 +291,14 @@ function CarrinhoComponent() {
 
     return (
         <div>
-            <h3 style={{ marginTop: 40 }}>Meu Carrinho de Compra</h3>
+            <h3 style={{ marginTop: 40 }} ref={target}>Meu Carrinho de Compra</h3>
             <div>
                 <div className='row justify-content-end'>
                     <div className='col-3 align-content-center' style={{ marginBottom:10 }} >
                         <label>CEP</label>
                         <input value={cepMask(carrinho.cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
                         <MostrarEndereco/>
+                        {novoEnderecoOverlay()}
                     </div>
                 </div>
                 <ItensCarrinho/>

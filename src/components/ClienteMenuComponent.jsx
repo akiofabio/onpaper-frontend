@@ -14,7 +14,7 @@ function ClienteMenuComponent(){
             <h3 style={{textAlign:"center"}}>Menu</h3>
             <div className='card-body '>
                 <div className='row'>
-                    <Link to="" className='btn btn-outline-dark'>Meus Dados</Link>
+                    <Link to="dados" className='btn btn-outline-dark'>Meus Dados</Link>
                 </div>
                 <div className='row'>
                     <Link to="pedidos" className='btn btn-outline-dark'>Meus Pedidos</Link>

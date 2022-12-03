@@ -15,6 +15,10 @@ class PedidoService{
     getPedidoByDatas( dataInicio , dataFinal ){
         return axios.get( API_BASE_URL + "/datas/dataInicio=" + dataInicio + "&dataFinal=" + dataFinal );
     }
+    getPedidoByParametros( pesquisa , parametros ){
+        return axios.get( API_BASE_URL + pesquisa );
+    }
+
     updatePedido( pedido, pedidoId ){
         return axios.put( API_BASE_URL + "/" + pedidoId , pedido );
     }

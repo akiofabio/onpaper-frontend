@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { moedaRealMask } from "../etc/Mask";
-
+import { moedaRealMask , stringDataMask } from "../etc/Mask";
 function AreaClientePedidosComponent (props){
     function getUltimoStatus(status){
         var ultimoStatus={
@@ -92,7 +91,7 @@ function AreaClientePedidosComponent (props){
                                 Status: {getUltimoStatus(pedido.status).status}
                             </div>
                             <div className="col">
-                                data: {getUltimoStatus(pedido.status).data}
+                                data: {stringDataMask(getUltimoStatus(pedido.status).data)}
                             </div>
                         </div>
                     </div>
@@ -118,7 +117,6 @@ function AreaClientePedidosComponent (props){
                                                     <MostrarBotataoDevolverItem pedido={pedido} status={getUltimoStatus(pedido.status).status}/> 
                                                 </div>
                                             </div>
-                                            
                                         </div>
                                         <div className='col-sm-2' >
                                             <p align="center" style={{ marginBottom:0}}>Preço</p>

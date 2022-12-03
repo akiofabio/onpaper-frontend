@@ -4,7 +4,7 @@ import ClienteService from '../services/ClienteService';
 import { useNavigate } from 'react-router-dom';
 import UserService from '../services/UserService';
 import CategoriaService from '../services/CategoriaService';
-
+import FabricanteService from '../services/FabricanteService';
 function AutoCreateComponent(){
     const navigate = useNavigate()
     async function save(){
@@ -40,6 +40,23 @@ function AutoCreateComponent(){
         ]
         for (const categoria of categorias) {
             await CategoriaService.createCategoria(categoria).catch(error =>{
+                alert(error.response.data)
+             })
+        }
+
+        var fabricantes = [
+            {
+                nome:"Bic"
+            },
+            {
+                nome:"Faber Castell"
+            },
+            {
+                nome:"CiS"
+            }
+        ]
+        for (const fabricante of fabricantes) {
+            await FabricanteService.createFabricante(fabricante).catch(error =>{
                 alert(error.response.data)
              })
         }

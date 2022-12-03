@@ -88,7 +88,7 @@ function HomeComponent() {
                         produto => 
                         <div key = {produto.id} style={{ border: "1px black solid" }} className="col text-center">
                             <div className='card-body' >
-                                <div style={{ height:150 , margin:0, alignSelf:'center'}}>
+                                <div style={{ height:150 , margin:5, alignSelf:'center'}}>
                                     <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  height="150" ></img>
                                 </div>
                                 <p>Nome: {produto.nome}</p>

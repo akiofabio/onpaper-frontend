@@ -9,7 +9,7 @@ import AreaClientePedidosComponent from '../components/AreaClientePedidosCompone
 import AreaClienteDadosComponent from '../components/AreaClienteDadosComponent'
 
 
-function AreaClienteComponent(){
+function ProcurarProduto(){
     const [cliente, setCliente] = useState({
         nome: "",
         pedidos: []
@@ -22,6 +22,7 @@ function AreaClienteComponent(){
         }
     }, [])
     return( 
+        
         <div className='row ' >
             <div className='col-sm-2'>
                 <ClienteMenuComponent/>
@@ -37,4 +38,4 @@ function AreaClienteComponent(){
         </div>
     )
 }
-export default AreaClienteComponent
+export default ProcurarProduto

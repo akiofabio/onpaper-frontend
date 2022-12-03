@@ -5,7 +5,7 @@ import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import PedidoService from '../services/PedidoService';
 import {cepMask,moedaRealMask} from '../etc/Mask'
-import {separarParagrafo, separarParagrafoSemMargem,cartaoToString,enderecoToString} from '../etc/Funcoes'
+import {separarParagrafo, separarParagrafoSemMargem,cartaoToString,enderecoToString, separarParagrafoSemMargemFonte} from '../etc/Funcoes'
 
 function FianlizarCompraComponent (){
     const navigate = useNavigate()
@@ -76,9 +76,9 @@ function FianlizarCompraComponent (){
                 <div>
                     {cliente.enderecos.map(endereco => 
                         <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
-                            <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
+                            <p style={{ margin:0, padding:0}}>{endereco.nome}</p>
+                            <p style={{ margin:0, padding:0}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
+                            <p style={{ margin:0, padding:0}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
                         </button>
                     )}
                 </div>
@@ -492,7 +492,9 @@ function FianlizarCompraComponent (){
                     )}
                     <h3>Endereco de Entrega: </h3>
                     <div className='card'>
-                        <MostrarEndereco/>
+                        <div className='card-body'>
+                            <MostrarEndereco/>
+                        </div>
                     </div>
                     <h2>Subtotal: {moedaRealMask(subtotal)} + {moedaRealMask(freteTotal)}</h2>
                 
@@ -506,20 +508,20 @@ function FianlizarCompraComponent (){
                                 <div className='col'>
                                     <div className='card text-center' >
                                         <div className='card-body'>
-                                        <div key={meioDePagamento.index}>
-                                            <div className='row'>
-                                                <MostrarCartao meio = {meioDePagamento}/>
-                                            </div>
-                                            <div className='row' >
-                                                <div className="col-sm-4 text-end">
-                                                    <label>Valor:</label>
+                                            <div key={meioDePagamento.index}>
+                                                <div className='row'>
+                                                    <MostrarCartao meio = {meioDePagamento}/>
                                                 </div>
-                                                <div className="col">
-                                                    <input className='form-control' value={ moedaRealMask(meioDePagamento.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, meioDePagamento ) } ></input>
+                                                <div className='row' >
+                                                    <div className="col-sm-4 text-end">
+                                                        <label>Valor:</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <input className='form-control' value={ moedaRealMask(meioDePagamento.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, meioDePagamento ) } ></input>
+                                                    </div>
                                                 </div>
+                                                <button className='btn ' onClick={() => removerCartao(meioDePagamento)}> - Remover</button>
                                             </div>
-                                            <button className='btn ' onClick={() => removerCartao(meioDePagamento)}> - Remover</button>
-                                        </div>
                                         </div>
                                     </div>
                                 </div>

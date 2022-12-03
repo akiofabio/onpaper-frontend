@@ -12,7 +12,9 @@ import CarrinhoComponet from './components/CarrinhoComponent';
 import LoginComponent from './components/LoginComponent';
 import FianlizarCompraComponent from './components/FianlizarCompraComponent';
 import AreaClienteComponent from './components/AreaClienteComponent';
-
+import AreaClienteDadosComponent from './components/AreaClienteDadosComponent';
+import PesquisarComponent from './components/PesquisarComponet';
+import AreaGerenteComponent from './components/AreaGerenteComponent';
 function App() {
     return (
         <div>
@@ -28,6 +30,10 @@ function App() {
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
                         <Route path = "/cadastrar_cliente" element = {<CadastrarClienteComponent/>}></Route>
                         <Route path = "/auto" element = {<ProdutoAutoCreate/>}></Route>
+                        <Route path = "/areaClienteDados" element = {<AreaClienteDadosComponent/>}></Route>
+                        <Route path = "/areaGerente/*" element = {<AreaGerenteComponent/>}></Route>
+                        <Route path = "/pesquisar/:pesquisa" element = {<PesquisarComponent/>}></Route>
+                        <Route path = "/pesquisar/" element = {<PesquisarComponent/>}></Route>
                     </Routes >
                     </div>
                 <FooterComponent />

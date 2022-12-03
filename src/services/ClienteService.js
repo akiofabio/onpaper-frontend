@@ -15,6 +15,20 @@ class ClienteService{
     updateCliente( cliente, clienteId ){
         return axios.put( CLIENTE_API_BASE_URL + "/" + clienteId , cliente );
     }
+    getClientesByParametros( pesquisas ){
+        var params = new URLSearchParams();
+        pesquisas.map(pesquisa => {
+            if(pesquisa!==undefined && pesquisa.conteudo.length>0){
+                params.append("pes", pesquisa.conteudo)
+                params.append("par", pesquisa.parametro)
+            }
+        })
+        var request = {
+            params: params
+        };
+        alert(request.params)
+        return axios.get( CLIENTE_API_BASE_URL + "/pesquisa",request);
+    }
 }
 
 export default new ClienteService()

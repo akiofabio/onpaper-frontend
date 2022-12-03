@@ -15,7 +15,6 @@ function GraficoComponent(){
     const [dadosGrafico, setDadosGrafico] = useState({
         labels:[],
         datasets:[]
-
     })
     const [tipoDado,setTipoDado] = useState("Quantidade");
     const [options,setOptions] = useState({

@@ -5,9 +5,11 @@ export function separarParagrafo(texto){
 }
 
 export function separarParagrafoSemMargem(texto){
-    return texto.split("\n").map(txt => <p style={{ margin:0, padding:0, fontSize:10}}>{txt}</p>)
+    return texto.split("\n").map(txt => <p style={{ margin:0, padding:0}}>{txt}</p>)
 }
-
+export function separarParagrafoSemMargemFonte(texto,tamnhoFonte){
+    return texto.split("\n").map(txt => <p style={{ margin:0, padding:0, fontSize:tamnhoFonte}}>{txt}</p>)
+}
 export function cartaoToString(cartao){
     return "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira
 }

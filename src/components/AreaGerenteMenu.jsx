@@ -1,0 +1,26 @@
+import React, { useEffect , useState } from 'react';
+import { Link, useNavigate , useParams} from 'react-router-dom';
+        
+function AreaGerenteMenu(){
+    
+    return(
+        <div className='card border-dark' style={{marginTop:10}}>
+            <h3 style={{textAlign:"center"}}>Menu</h3>
+            <div className='card-body '>
+                <div className='row'>
+                    <Link to="clientes" className='btn btn-outline-dark'>Clientes</Link>
+                </div>
+                <div className='row'>
+                    <Link to="pedidos" className='btn btn-outline-dark'>Pedidos</Link>
+                </div>
+                <div className='row'>
+                    <Link to="produtos" className='btn btn-outline-dark'>Produtos</Link>
+                </div>
+                <div className='row'>
+                    <Link to="configuracaoes"className='btn btn-outline-dark'>Configuracao</Link>
+                </div>
+            </div>
+        </div>
+    )
+}
+export default AreaGerenteMenu

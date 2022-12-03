@@ -1,3 +1,18 @@
+export　function cpfMask(cpfNumero) {
+    if(cpfNumero){
+        cpfNumero = cpfNumero.replace(/\D/g, "");
+        if(cpfNumero.length >11){
+            cpfNumero = cpfNumero.slice(0, 11);
+        }
+        if(cpfNumero.length > 8)
+            cpfNumero = cpfNumero.replace(/(\d{1,3})(\d{3})(\d{3})(\d\d)/, "$1.$2.$3-$4");
+        else if(cpfNumero.length > 5)
+            cpfNumero = cpfNumero.replace(/(\d{1,3})(\d{3})(\d\d)/, "$1.$2-$3");
+        else if(cpfNumero.length > 2)
+            cpfNumero = cpfNumero.replace(/(\d{1,3})(\d\d)/, "$1-$2");
+        return cpfNumero
+    }
+}
 
 export　function cepMask(cepNumero) {
     if(cepNumero){
@@ -28,9 +43,18 @@ export　function moedaRealMask(valor) {
 
 export　function stringDataMask(data) {
     if(data){
+        if(data.search("T"))
+            data = data.split('T')[0]
         data = data.replace(/\D/g, "");
-        data = data.replace(/(\d\d\d\d)(\d\d)(\d\d)/, "$2-$3-$1");
+        data = data.replace(/(\d\d\d\d)(\d\d)(\d\d)/, "$3/$2/$1");
         return data
     }
 }
 
+export　function dataToInputDataMask(data) {
+    if(data){
+        if(data.search("T"))
+            data = data.split('T')[0]
+        return data
+    }
+}
