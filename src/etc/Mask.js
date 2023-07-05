@@ -42,7 +42,12 @@ export　function moedaRealMask(valor) {
 }
 
 export　function stringDataMask(data) {
+
+    
     if(data){
+        if(Object.prototype.toString.call(data) === '[object Date]'){
+            data = data.getDate()
+        }
         if(data.search("T"))
             data = data.split('T')[0]
         data = data.replace(/\D/g, "");

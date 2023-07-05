@@ -42,9 +42,11 @@ function DadosClientesComponent (props){
             preferencial:false,
             bandeira:""
         }],
-        pedidos: [],
+        pedidos: [{
+            data:"",
+            status:""
+        }],
         cupons: [],
-        pedidos: [],
         carrinho:null,
     })
     const { id } = useParams()

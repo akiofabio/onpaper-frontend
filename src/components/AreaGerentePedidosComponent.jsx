@@ -30,10 +30,7 @@ function AreaGerentePedidodComponent(){
     function setParametro(event , pesquisa){
         setPesquisas(pesquisas.map(pes => pesquisas.indexOf(pes) == pesquisas.indexOf(pesquisa)? {...pes, parametro : event.target.value} : pes))
     }
-
-    function editar(cliente){
-        navegation("/areaGerente/editarCliente/"+cliente.id)
-    }
+    
     function mostrarDetalhesDisplay(cliente){        
         if( !mostrarDetalhes[clientes.indexOf(cliente)]){
             return(
@@ -51,7 +48,7 @@ function AreaGerentePedidodComponent(){
                             <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == clientes.indexOf(cliente)? true: mosDel))}>Mostrar Detalhes</button>
                         </div>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                            <button className='btn btn-dark' >Editar</button>
                         </div>
                     </div>
                 </div>
@@ -143,7 +140,7 @@ function AreaGerentePedidodComponent(){
                             <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == clientes.indexOf(cliente)? false: mosDel))}>Esconder Detalhes</button>
                         </div>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                            <button className='btn btn-dark' >Editar</button>
                         </div>
                     </div>
                 </div>
@@ -203,9 +200,8 @@ function AreaGerentePedidodComponent(){
                         <button className="btn btn-success" type="button" onClick={()=> navegation(0)}>Pedidos Pendentes</button>
                     </div>
                 </div>
-                
             </div>
-            {clientes.length == 0? <h3>Cliente nao encontrado</h3> : <h3>Resultado:</h3>}
+            {clientes.length == 0? <h3>Pedido nao encontrado</h3> : <h3>Resultado:</h3>}
             {clientes.map(cliente =>
                 <div >
                     {mostrarDetalhesDisplay(cliente)}

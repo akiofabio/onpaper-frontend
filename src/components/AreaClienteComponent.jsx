@@ -7,7 +7,7 @@ import ClienteService from '../services/ClienteService';
 import AreaClienteInicioComponent from '../components/AreaClienteInicioComponent'
 import AreaClientePedidosComponent from '../components/AreaClientePedidosComponent'
 import AreaClienteDadosComponent from '../components/AreaClienteDadosComponent'
-
+import DetalhesPedidosComponent from './DetalhesPedidosComponent';
 
 function AreaClienteComponent(){
     const [cliente, setCliente] = useState({
@@ -31,6 +31,7 @@ function AreaClienteComponent(){
                     <Route index element = {<AreaClienteInicioComponent cliente={cliente}/>}></Route>
                     <Route path = "pedidos" element = {<AreaClientePedidosComponent pedidos={cliente.pedidos}/>} ></Route>
                     <Route path = "dados" element = {<AreaClienteDadosComponent cliente={cliente}/>} ></Route>
+                    <Route path = "detalhePedido/:id" element = {<DetalhesPedidosComponent />} ></Route>
                 </Routes >
                 <Outlet/>
             </div>

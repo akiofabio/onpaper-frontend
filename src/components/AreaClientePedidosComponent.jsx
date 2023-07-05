@@ -1,18 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { moedaRealMask , stringDataMask } from "../etc/Mask";
+import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
+
+import ClienteService from "../services/ClienteService";
+import PedidoService from "../services/PedidoService"
 function AreaClientePedidosComponent (props){
+    const [cliente, setCliente] = useState({
+        email: "",
+        senha: "",
+        nome: "",
+        cpf: "",
+        genero: "",
+        dataNascimento:"",
+        
+        telefones: [{
+            tipo:"",
+            ddd:"",
+            numero:""
+        }],
+        
+        enderecos: [{
+            nome:"",
+            cep:"",
+            estado:"",
+            cidade:"",
+            bairro:"",
+            tipoLogradouro:"",
+            logradouro:"",
+            numero:"",
+            observacao:""
+        }],
+        cartoes: [{
+            nome:"",
+            numero:"",
+            codigoSeguranca:"",
+            validade:"",
+            preferencial:false,
+            bandeira:""
+        }],
+        cupons: [],
+        pedidos: [],
+        carrinho:null,
+    })
+    const navegation = useNavigate()
+
     function getUltimoStatus(status){
         var ultimoStatus={
-            data: new Date(0)
+            data: new Date(0).getDate,
+            status: "Status nao Encontrado"
         }
-        for (const st of status){
-            if(!st.data || st.data==null){
-                return st
-            }
-            else {
-                ultimoStatus=st
-            }
-        };
+        if(status!==undefined && status.length>0){
+            ultimoStatus = status[status.length - 1]
+        }
         return ultimoStatus
     }
 
@@ -80,10 +119,19 @@ function AreaClientePedidosComponent (props){
     function cancelarPedido(){
         alert("nao implementado")
     }
+
+    useEffect(() => {
+        if(!cliente.id){
+            ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
+                setCliente(res.data)
+            })
+        }
+    }, [])
+
     return(
         <div>
             <h3>Meus Pedidos</h3>
-            {props.pedidos.map( pedido => 
+            {cliente.pedidos.map( pedido => 
                 <div key={pedido.id} className="card border-dark" style={{ marginTop:10}}>
                     <div key="id" className="card-header border-dark bg-dark text-white">
                         <div className="row">
@@ -120,7 +168,7 @@ function AreaClientePedidosComponent (props){
                                         </div>
                                         <div className='col-sm-2' >
                                             <p align="center" style={{ marginBottom:0}}>Preço</p>
-                                            <p align="center">R$ {item.preco.toFixed(2)}</p>
+                                            <p align="center"> {moedaRealMask(item.preco)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +181,9 @@ function AreaClientePedidosComponent (props){
                             <div className="col">
                                 <MostrarBotaoDevolverPedido pedido={pedido} status={getUltimoStatus(pedido.status).status}/>
                             </div>
+                        </div>
+                        <div className="col">
+                            <button className="btn btn-dark" onClick={() => navegation("/areaCliente/detalhePedido/" + pedido.id)}>Detalhes</button>
                         </div>
                     </div>
                 </div>
