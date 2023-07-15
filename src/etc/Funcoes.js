@@ -21,7 +21,7 @@ export function enderecoToString(endereco){
 }
 
 export function dateToUTC (data) {
-    return new Date(Date.UTC(data.getUTCFullYear(), data.getUTCMonth(),
-    data.getUTCDate(), data.getUTCHours(),
-    data.getUTCMinutes(), data.getUTCSeconds())).toDateString();
+    var dataTemp = new Date(data)
+    dataTemp.setMinutes(dataTemp.getMinutes() + dataTemp.getTimezoneOffset())
+    return dataTemp;
 };

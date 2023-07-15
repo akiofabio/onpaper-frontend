@@ -27,6 +27,9 @@ function GraficoComponent_v2(){
         }
     });
 
+    useEffect(() => {
+        gerarGrafico ()
+    }, [])
     
     function addMes(data){
         data.setMonth(data.getMonth()-6)
@@ -44,15 +47,13 @@ function GraficoComponent_v2(){
         alert( 'TESTE' )
         var dataInicioTemp = new Date(dataInicio)
         var dataFinalTemp = new Date(dataFinal)
+        dataFinalTemp.setDate(dataFinalTemp.getDate() + 1)
         var datasets = []
-        alert( JSON.stringify(dataInicio))
-        alert( JSON.stringify(dataInicioTemp))
-        alert(dataInicioTemp.toUTCString())
-
+        
         var dados
-        await ItemService.getDados( dataInicioTemp.toUTCString(), dataFinalTemp.toUTCString(), tipoDado, escala ).then( res => {
+        await ItemService.getDados( dateToUTC(dataInicioTemp), dateToUTC(dataFinalTemp), tipoDado, escala ).then( res => {
             dados = res.data
-            alert( JSON.stringify(res.data ))
+            
         } )
         for(var i=0; i<dados.categoriaLabel.length; i++){
             var dataset = {
