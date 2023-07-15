@@ -479,7 +479,69 @@ function AutoCreateComponent(){
             carrinho: {
             }
         }
-    
+        
+        var clienteTeste ={
+            email: "clienteTeste@mail.com",
+            senha: "senha1",
+            tipo: "CLIENTE",
+            status: "ATIVO",
+            nome: "Cliente Teste",
+            cpf: "22222222222",
+            genero: "Masculino",
+            dataNascimento: "2001-01-01T00:00:00.000+00:00",
+            score: "0",
+            telefones: [
+                {
+                    tipo: "FIXO",
+                    ddd: "011",
+                    numero: "1111111"
+                },
+                {
+                    tipo: "CELULAR",
+                    ddd: "011",
+                    numero: "222222222"
+                }
+            ],
+            enderecos: [
+                {
+                    nome: "Casa",
+                    cep: "01111111",
+                    estado: "SP",
+                    cidade: "Cidade1",
+                    bairro: "Bairro1",
+                    tipoLogradouro: "Rua",
+                    logradouro: "1",
+                    numero: "1",
+                    observacao: null
+                },
+                {
+                    nome: "Trabalho",
+                    cep: "02222222",
+                    estado: "SP",
+                    cidade: "Cidade2",
+                    bairro: "Bairro2",
+                    tipoLogradouro: "Rua",
+                    logradouro: "2",
+                    numero: "2",
+                    observacao: null
+                }
+            ],
+            cartoes: [
+                {
+                    nome: "Cartao1",
+                    numero: "1111111",
+                    codigoSeguranca: "1111",
+                    validade: null,
+                    preferencial: false,
+                    bandeira:"Visa"
+                }
+            ],
+            pedidos: [],
+            cupons: [],
+            carrinho: {
+            }
+        }
+
         var user = {
             email:"admin@mail.com",
             senha: "admin123",
@@ -488,7 +550,7 @@ function AutoCreateComponent(){
         localStorage.clear()
         UserService.createUser(user)      
         ClienteService.createCliente(cliente);
-
+        ClienteService.createCliente(clienteTeste);
         for (const produto of produtos) {
             await ProdutoService.createProduto(produto).catch(error =>{
                 alert(error.response.data)

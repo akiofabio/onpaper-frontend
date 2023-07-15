@@ -9,7 +9,7 @@ import ProdutoService from '../services/ProdutoService';
  
 ChartJS.register( LineElement, PointElement, LinearScale, Title ,CategoryScale, Legend);
 function GraficoComponent(){
-    const [dataInicio, setDataInicio] = useState("2022-02-01")
+    const [dataInicio, setDataInicio] = useState(addMes(new Date()).toISOString().split('T')[0])
     const [dataFinal, setDataFinal] = useState(new Date().toISOString().split('T')[0])
     const [escala, setEscala] = useState("Mes")
     const [dadosGrafico, setDadosGrafico] = useState({
@@ -25,6 +25,10 @@ function GraficoComponent(){
             }
         }
     });
+    function addMes(data){
+        data.setMonth(data.getMonth()-6)
+        return data
+    }
     function dynamicColors () {
         var r = Math.floor(Math.random() * 255);
         var g = Math.floor(Math.random() * 255);

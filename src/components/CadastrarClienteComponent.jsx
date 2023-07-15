@@ -189,7 +189,7 @@ function CadastrarClienteComponent(){
                                     </div>
                                     <div className='form-group'>
                                         <label>Data de Nascimento:</label>
-                                        <input type={"date"} name='genero_input' className='form-control' value={cliente.dataNascimento} onChange={(event) => setCliente({...cliente, dataNascimento : event.target.value})}></input>
+                                        <input type={"date"} name='data_nacimento_input' className='form-control' value={cliente.dataNascimento} onChange={(event) => setCliente({...cliente, dataNascimento : event.target.value})}></input>
                                     </div>
                                 </div>
                                 <h4 className='text'>Meios de Contatos</h4>
@@ -269,7 +269,7 @@ function CadastrarClienteComponent(){
                                             </div>
                                             <div className='card-body'>
                                                 <label>Bandeira:</label>
-                                                <input type={"text"} placeholder='Bandeira' name='tipo' className='form-control' value={cartao.nome} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, nome : event.target.value} : cart)})}></input>
+                                                <input type={"text"} placeholder='Bandeira' name='tipo' className='form-control' value={cartao.bandeira} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, bandeira : event.target.value} : cart)})}></input>
                                                 <label>Nome:</label>
                                                 <input type={"text"} placeholder='Nome' name='tipo' className='form-control' value={cartao.nome} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, nome : event.target.value} : cart)})}></input>
                                                 <label>Numero:</label>

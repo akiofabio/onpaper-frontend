@@ -5,6 +5,7 @@ import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import AutoCreateComponent from './AutoCreateComponent';
 import GraficoLinhaComponent from './GraficoLinhaComponent';
+import GraficoLinhaComponent_v2 from './GraficoLinhaComponent_v2';
 import CreateRandomVendas from './CreateRandomVendas'
 
 function HomeComponent() {
@@ -79,7 +80,7 @@ function HomeComponent() {
             </div>
            
             <h1>Produtos mais vendidos: </h1>
-            <GraficoLinhaComponent/>
+            <GraficoLinhaComponent_v2/>
             
             <div style={{marginTop:100}}>
                 <h3>Destaques:</h3>

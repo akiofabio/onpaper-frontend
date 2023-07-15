@@ -20,7 +20,7 @@ function CreateRandomVendas(){
                     valor: 0
                 }],
                 status: [{
-                    status: "Concluido",
+                    status: "ENTREGUE",
                     data: randomDate( new Date(2022,1,1) , new Date() )
                 }]
             }
@@ -37,7 +37,7 @@ function CreateRandomVendas(){
                         imagenProduto : produtoRandom.imagens,
                         preco : produtoRandom.preco,
                         quantidade : quantidadeRandom,
-
+                        status : pedidoRandom.status,
                     }
                     pedidoRandom.itens.push(itemRandom)
                     pedidoRandom.meioDePagamentos[0].valor += ( produtoRandom.preco * quantidadeRandom )

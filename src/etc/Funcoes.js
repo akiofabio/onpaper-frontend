@@ -19,3 +19,9 @@ export function enderecoToString(endereco){
     "\n" + endereco.tipoLogradouro + " " + endereco.logradouro + ", nº " + endereco.numero +
     "\n" + cepMask(endereco.cep) + " - " + endereco.bairro + " - " + endereco.cidade + " - " + endereco.estado
 }
+
+export function dateToUTC (data) {
+    return new Date(Date.UTC(data.getUTCFullYear(), data.getUTCMonth(),
+    data.getUTCDate(), data.getUTCHours(),
+    data.getUTCMinutes(), data.getUTCSeconds())).toDateString();
+};

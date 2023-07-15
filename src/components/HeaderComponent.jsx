@@ -14,7 +14,13 @@ function LoginImage (props){
     }
     function menu(){
         setShow(!show)
-        navigate("/areaCliente")
+        if(localStorage.getItem( "tipo" )=="CLIENTE"){
+            navigate("/areaCliente")
+        }
+        else if(localStorage.getItem( "tipo" )=="ADMIN"){
+            navigate("/areaGerente")
+        }
+        
     }
     if( !isLogged ){
         return (
