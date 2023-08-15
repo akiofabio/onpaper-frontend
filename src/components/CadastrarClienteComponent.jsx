@@ -96,27 +96,7 @@ function CadastrarClienteComponent(){
             temp.pop()
             setCliente({...cliente, enderecos : temp})
         }
-    }
-    function cadastrar(){
-        ClienteService.createCliente(cliente).then(res => {
-            var usuario = res.data
-            localStorage.setItem( "id" , usuario.id )
-            localStorage.setItem( "tipo" , usuario.tipo )
-            localStorage.setItem( "isLogged" , true )
-            if(usuario.tipo == "CLIENTE"){
-                if(localStorage.getItem("carrinhoId")){
-
-                }
-                localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
-            }
-            navegate(-1)
-            alert("Cliente Cadastrado com sucesso")
-        }).catch(error => {
-            alert(error.response.data)
-        })
-    }
-
-    
+    }    
     function addCartao(){
         var cart = {
             nome:"",
@@ -142,7 +122,12 @@ function CadastrarClienteComponent(){
     }
 
     function cadastrar(){
-        ClienteService.createCliente(cliente).then(res => {
+        var clienteTemp = cliente
+        clienteTemp.cartoes.forEach(cartao =>{
+            cartao.validade = new Date(cartao.validade)
+            alert(cartao.validade);
+        } )
+        ClienteService.createCliente(clienteTemp).then(res => {
             if(!localStorage.getItem("isLogged")){
                     var usuario = res.data
                 localStorage.setItem( "id" , usuario.id )
@@ -160,7 +145,7 @@ function CadastrarClienteComponent(){
             navegate(-1)
             
         }).catch(error => {
-            alert(error.response.data)
+            alert(JSON.stringify(error.response.data))
         })
     }
 
@@ -230,8 +215,8 @@ function CadastrarClienteComponent(){
                                                 <label>Endereco {cliente.enderecos.indexOf(endereco) +1}</label>
                                             </div>
                                                 <div className='card-body'>
-                                                <label>Tipo</label>
-                                                <input type={"text"} placeholder='Nome' className='form-control' value={endereco.nome} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, nome : event.target.value} : end)})}></input>
+                                                <label>Nome</label>
+                                                <input type={"text"} placeholder='Nome do endereço, exp. "Casa" , "Trabalho"' className='form-control' value={endereco.nome} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, nome : event.target.value} : end)})}></input>
                                                 <label>CEP</label>
                                                 <input type={"text"} placeholder='CEP' className='form-control' value={endereco.cep} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cep : event.target.value} : end)})}></input>
                                                 <label>Estado</label>
