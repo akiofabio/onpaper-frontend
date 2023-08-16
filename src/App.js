@@ -15,10 +15,11 @@ import AreaClienteComponent from './components/AreaClienteComponent';
 import AreaClienteDadosComponent from './components/AreaClienteDadosComponent';
 import PesquisarComponent from './components/PesquisarComponet';
 import AreaGerenteComponent from './components/AreaGerenteComponent';
+import DetalheProdutoComponent from './components/DetalheProdutoComponent';
 function App() {
     return (
         <div>
-        <Router>
+            <Router>
                 <HeaderComponent />
                     <div className="container">
                     <Routes>
@@ -34,6 +35,8 @@ function App() {
                         <Route path = "/areaGerente/*" element = {<AreaGerenteComponent/>}></Route>
                         <Route path = "/pesquisar/:pesquisa" element = {<PesquisarComponent/>}></Route>
                         <Route path = "/pesquisar/" element = {<PesquisarComponent/>}></Route>
+                        <Route path = "/produto/" element = {<DetalheProdutoComponent/>}></Route>
+                    
                     </Routes >
                     </div>
                 <FooterComponent />
