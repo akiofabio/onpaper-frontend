@@ -9,6 +9,7 @@ import {separarParagrafoSemMargemFonte,enderecoToString} from '../etc/Funcoes'
 
 function DetalheProdutoComponent() {
     const navegate = useNavigate()
+    const parametros = useParams()
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
@@ -18,9 +19,14 @@ function DetalheProdutoComponent() {
     const [ cliente , setCliente ] = useState( {
         enderecos : []
     } )
-    const [ produto , setProduto ] = useState()
-    const [ quantidade , setQuantidade] = useState()
-    const [ cep , setCep ] = useState()
+    const [ produto , setProduto ] = useState({
+        id : null,
+        imagens : "produto2.jpg",
+        nome : "",
+        preco : 0,
+    })
+    const [ quantidade , setQuantidade] = useState(1)
+    const [ cep , setCep ] = useState(0)
     const target = useRef(null)
 
     function cepHandler ( event )  {
@@ -62,7 +68,7 @@ function DetalheProdutoComponent() {
             if( !mostrarEnderecos ){
                 return (
                     <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                        {separarParagrafoSemMargemFonte(cliente.carrinho.endereco,10)}
+                        
                     </button>
                 )
             }
@@ -76,9 +82,6 @@ function DetalheProdutoComponent() {
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
                             </button>
                         )}
-                        <button className='btn btn-outline-dark' style={{ margin:2}} onClick={() => novoEndereco()}>
-                            <p style={{ margin:0, padding:0, fontSize:15}}>Novo Endereco</p>
-                        </button>
                     </div>        
                 )
             }
@@ -136,10 +139,14 @@ function DetalheProdutoComponent() {
         }        
                 
         await CarrinhoService.addItemCarrinho( item , localStorage.getItem( "carrinhoId" ) )
-        navigate( "/carrinho" )
+        navegate( "/carrinho" )
     }
 
     useEffect(() => {
+        if(produto.id == null)
+        ProdutoService.getProdutoById(parametros.id).then(res => {
+            setProduto(res.data)
+        })
         if(localStorage.getItem( "isLogged" )){
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
                 if(res.data.carrinho.endereco==null){
@@ -171,7 +178,7 @@ function DetalheProdutoComponent() {
                 <div className='row justify-content-end'>
                     <div className='col-3 align-content-center' style={{ marginBottom:10 }} >
                         <label>CEP</label>
-                        <input value={cepMask(carrinho.cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
+                        <input value={cepMask(cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
                         <MostrarEndereco/>
                     </div>
                 </div>
@@ -181,7 +188,8 @@ function DetalheProdutoComponent() {
                             <div className='card-body'>
                                 <div className='row no-gutters'>
                                     <div className='col-sm-2'>
-                                        <img src={'imagens/produtos/' + produto.imagem} width='80' height="auto"></img>
+                                        <img src={'imagens/produtos/caderno2.jpg'} width='150' alt={produto.imagens}></img>
+                                        <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt={produto.imagens}  height="150" ></img>
                                     </div>
                                     <div className='col-sm-8'>
                                         <p style={{ height:60}}>Nome: {produto.nome}</p>
@@ -190,7 +198,7 @@ function DetalheProdutoComponent() {
                                                 <label>Quantidade:</label>
                                             </div>
                                             <div className="col-auto">
-                                                <input className='form-control' value={ quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item.id ) } type={"number"} min="1"></input>
+                                                <input className='form-control' value={ quantidade } style={{width:80}} onChange={ ( event ) => setQuantidade( event.target.value ) } type={"number"} min="1"></input>
                                             </div>
                                             <div className="col-auto">
                                                 <label>{ produto.status }</label>
@@ -206,7 +214,6 @@ function DetalheProdutoComponent() {
                         </div>
                     </div>
                     <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
-                    <MostrarFinalizarCompra/>
                 </div>
             </div>
         </div>

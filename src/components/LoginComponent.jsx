@@ -27,7 +27,7 @@ function LoginComponent(){
                 navegate("/areaGerente")
             }
         }).catch(error => {
-            alert(error.response.data)
+            alert(JSON.stringify(error.response.data))
         })
     }
     function cadastrar(){

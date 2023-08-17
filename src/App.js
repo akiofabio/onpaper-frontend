@@ -35,7 +35,7 @@ function App() {
                         <Route path = "/areaGerente/*" element = {<AreaGerenteComponent/>}></Route>
                         <Route path = "/pesquisar/:pesquisa" element = {<PesquisarComponent/>}></Route>
                         <Route path = "/pesquisar/" element = {<PesquisarComponent/>}></Route>
-                        <Route path = "/produto/" element = {<DetalheProdutoComponent/>}></Route>
+                        <Route path = "/produto/:id" element = {<DetalheProdutoComponent/>}></Route>
                     
                     </Routes >
                     </div>

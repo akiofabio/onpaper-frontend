@@ -123,10 +123,9 @@ function CadastrarClienteComponent(){
 
     function cadastrar(){
         var clienteTemp = cliente
-        clienteTemp.cartoes.forEach(cartao =>{
+        clienteTemp.cartoes.forEach( cartao =>{
             cartao.validade = new Date(cartao.validade)
-            alert(cartao.validade);
-        } )
+        })
         ClienteService.createCliente(clienteTemp).then(res => {
             if(!localStorage.getItem("isLogged")){
                     var usuario = res.data
