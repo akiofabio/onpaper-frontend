@@ -18,7 +18,7 @@ function AreaGerentePedidodComponent(){
         PedidoService.getPedidoByParametros(pesquisas).then(res => {
             setPedidos(res.data)
             var mosDel = []
-            for( var i=0 ; i<clientesTemp.length ; i++){
+            for( var i=0 ; i<res.data.length ; i++){
                 mosDel.push(false)
             }
             setMostrarDetalhes(mosDel)
@@ -45,17 +45,17 @@ function AreaGerentePedidodComponent(){
                             </div>
                         </div>
                         <div className="row">
-                            <label>Nome: {cliente.nome}</label>
+                            <label>Nome: {"cliente.nome"}</label>
                             
                         </div>
                         <div className="row">
-                            <label>CPF: {cpfMask(cliente.cpf)}</label>
+                            <label>CPF: {"cpfMask(cliente.cpf)"}</label>
                         </div>
                         
                     </div>
                     <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == clientes.indexOf(cliente)? true: mosDel))}>Mostrar Detalhes</button>
+                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == pedidos.indexOf(pedido)? true: mosDel))}>Mostrar Detalhes</button>
                         </div>
                         <div className='col-auto'>
                             <button className='btn btn-dark' >Editar</button>
@@ -69,85 +69,11 @@ function AreaGerentePedidodComponent(){
                 <div className='card border-dark' style={{ padding:10}}>
                     <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className="card-body">
-                            <div className="row">
-                                <label>Nome: {cliente.nome}</label>
-                            </div>
-                            <div className="row">
-                                <label>CPF: {cpfMask(cliente.cpf)}</label>
-                            </div>
-                            <div className="row">
-                                <label>Genero: {cliente.genero}</label>
-                            </div>
-                            <div className="row">
-                                <label>Data de Nascimento: {stringDataMask(cliente.dataNascimento)}</label>
-                            </div>
-                            <h4>Contatos</h4>
-                            <div className="row">
-                                <label>Email: {cliente.email}</label>
-                            </div>
-                            {cliente.telefones.map( telefone => 
-                                <div className="row">
-                                    <div className='col-8'>
-                                        <label>Telefone {cliente.telefones.indexOf(telefone) +1}: {telefone.tipo} ({telefone.ddd}) {telefone.numero}</label>
-                                    </div>
-                                </div>
-                            )}
-                            <h4>Endereco</h4>
-                            {cliente.enderecos.map( endereco =>
-                                <div>
-                                    <div className="card border-dark" style={{ marginTop:10 , marginBottom:10}}>
-                                        <div className="card-header">
-                                            <label>Endereco {cliente.enderecos.indexOf(endereco) +1}</label>
-                                        </div>
-                                        <div className='card-body'>
-                                            <div className="row">
-                                                <label>nome: {endereco.nome} </label>
-                                            </div>
-                                            <div className="row">
-                                                <label>CEP: {cepMask(endereco.cep)} </label>
-                                            </div>
-                                            <div className="row">
-                                                <label>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            <h4>Cartao de Credito</h4>
-                            {cliente.cartoes.map( cartao =>
-                                <div>
-                                    <div className="card border-dark" style={{ marginTop:10 , marginBottom:10}}>
-                                        <div className="card-header">
-                                            <label>Cartao {cliente.cartoes.indexOf(cartao) +1}</label>
-                                        </div>
-                                        <div className='card-body'>
-                                            <div className="row">
-                                                <label>Bandeira: {cartao.bandeira} </label>
-                                            </div>
-                                            <div className="row">
-                                                <label>Nome: {cartao.nome} </label>
-                                            </div>
-                                            <div className="row">
-                                                <label>Numero: {cartao.numero} </label>
-                                            </div>
-                                            <div className="row">
-                                                <label>Data de Vencimento: {cartao.vencimento} </label>
-                                            </div>
-                                            <div className="row">
-                                                <label>Codigo de Seguranca: {cartao.codigoSeguranca} </label>
-                                            </div>
-                                            <div className='form'>
-                                                <input type={"checkbox"} name='tipo' checked={cartao.preferencial} disabled></input>Preferencial
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     </div>
                     <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == clientes.indexOf(cliente)? false: mosDel))}>Esconder Detalhes</button>
+                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == pedidos.indexOf(pedido)? false: mosDel))}>Esconder Detalhes</button>
                         </div>
                         <div className='col-auto'>
                             <button className='btn btn-dark' >Editar</button>

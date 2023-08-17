@@ -462,8 +462,8 @@ function FianlizarCompraComponent (){
                             <div className="container" style={{margin: 0,padding :0}}>
                                 <div className='card-body'>
                                     <div className='row no-gutters'>
-                                        <div className='col-sm-2'>
-                                            <img src={'imagens/produtos/' + item.imagemProduto} alt={item.imagemProduto} width='80' height="auto"></img>
+                                    <div className='col' style={{textAlign:'center', width:160, height:160}}>
+                                            <img src={'imagens/produtos/' + item.imagemProduto} alt={item.imagemProduto} style={{maxHeight:"100%"}}></img>
                                         </div>
                                         <div className='col-sm-8'>
                                             <p style={{ height:60}}>Nome: {item.nomeProduto}</p>
