@@ -171,7 +171,7 @@ function DetalheProdutoComponent() {
                 <div className='row justify-content-end'>
                     <div className='col-3 align-content-center' style={{ marginBottom:10 }} >
                         <label>CEP</label>
-                        <input value={cepMask(carrinho.cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
+                        <input value={cepMask(cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
                         <MostrarEndereco/>
                     </div>
                 </div>
