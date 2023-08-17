@@ -89,12 +89,14 @@ function HomeComponent() {
                         produto => 
                         <div key = {produto.id} style={{ border: "1px black solid" }} className="col text-center">
                             <div className='card-body' >
-                                <div style={{ height:150 , margin:5, alignSelf:'center'}}>
-                                    <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  height="150" ></img>
-                                </div>
-                                <p>Nome: {produto.nome}</p>
-                                <p>Descrição: {produto.descricao}</p>
-                                <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+                                <button type="button"  onClick={()=>navigate("/produto/"+ produto.id)}>
+                                    <div style={{ height:150 , margin:5, alignSelf:'center'}}>
+                                        <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  height="150" ></img>
+                                    </div>
+                                    <p>Nome: {produto.nome}</p>
+                                    <p>Descrição: {produto.descricao}</p>
+                                    <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+                                </button>
                             </div>
                         </div>
                     )}
