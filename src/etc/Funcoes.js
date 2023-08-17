@@ -24,4 +24,15 @@ export function dateToUTC (data) {
     var dataTemp = new Date(data)
     dataTemp.setMinutes(dataTemp.getMinutes() + dataTemp.getTimezoneOffset())
     return dataTemp;
+}
+
+export function getUltimoStatus(status){
+    var ultimoStatus={
+        data: new Date(0).getDate,
+        status: "Status nao Encontrado"
+    }
+    if(status!==undefined && status.length>0){
+        ultimoStatus = status[status.length - 1]
+    }
+    return ultimoStatus
 };

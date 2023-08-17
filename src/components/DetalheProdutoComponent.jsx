@@ -214,6 +214,7 @@ function DetalheProdutoComponent() {
                         </div>
                     </div>
                     <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
+                    <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
                 </div>
             </div>
         </div>
