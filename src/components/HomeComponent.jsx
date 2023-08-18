@@ -79,8 +79,7 @@ function HomeComponent() {
                 </div>
             </div>
            
-            <h1>Produtos mais vendidos: </h1>
-            <GraficoLinhaComponent_v2/>
+            
             
             <div style={{marginTop:100}}>
                 <h3>Destaques:</h3>

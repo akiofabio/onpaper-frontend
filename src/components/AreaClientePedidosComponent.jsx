@@ -75,7 +75,12 @@ function AreaClientePedidosComponent (props){
             
         }
         else{
-
+            return(
+                <div>
+                    <button className="btn" onClick={() => trocarItem(props.item)} disabled>Trocar</button>
+                    <button className="btn" onClick={() => devolverItem(props.item)} disabled>Devolver</button>
+                </div>
+            )
         }
     }
     
@@ -149,27 +154,29 @@ function AreaClientePedidosComponent (props){
                             <div key={item.id} className="card border-dark">
                                 <div key={item.id} className="card-body">
                                     <div className='row no-gutters'>
-                                        <div className='col-sm-2'>
-                                            <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto} width='80' height="auto"></img>
+                                        <div className='col-sm-2'  style={{textAlign:'center', width: 90, height:90}}>
+                                            <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto}  className="img-fluid" style={{maxHeight:"100%"}}></img>
                                         </div>
                                         <div className='col-sm-8'>
-                                            <p style={{ height:60}}>Nome: {item.nomeProduto}</p>
+                                            <div className="row">
+                                                <label>Status: {getUltimoStatus(item.status)}</label>
+                                            </div>
                                             <div className="row g-3 align-items-center">
-                                                <div className="col-auto">
-                                                    <label>Quantidade:</label>
+                                                <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
+                                            </div>
+                                            <div className="row g-3 align-items-center">
+                                                <div className='col-sm-4' >
+                                                    <label>Quantidade: { item.quantidade } </label>
                                                 </div>
-                                                <div className="col-auto">
-                                                    { item.quantidade } 
-                                                </div>
-                                                <div className="col-auto">
-                                                    <MostrarBotataoDevolverItem pedido={pedido} status={getUltimoStatus(pedido.status).status}/> 
+                                                <div className='col-sm-4' >
+                                                    <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
                                                 </div>
                                             </div>
+                                            
+                                            <MostrarBotataoDevolverItem pedido={pedido} status={getUltimoStatus(pedido.status).status}/> 
                                         </div>
-                                        <div className='col-sm-2' >
-                                            <p align="center" style={{ marginBottom:0}}>Preço</p>
-                                            <p align="center"> {moedaRealMask(item.preco)}</p>
-                                        </div>
+                                        
+
                                     </div>
                                 </div>
                             </div>

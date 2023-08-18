@@ -146,8 +146,8 @@ function DetalhesPedidosComponent (props){
                         <div key={item.id} className="card border-dark">
                             <div key={item.id} className="card-body">
                                 <div className='row no-gutters'>
-                                    <div className='col-sm-2'>
-                                        <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto} width='80' height="auto"></img>
+                                    <div className='col-sm-2' style={{textAlign:'center', width: 90, height:90}}>
+                                        <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto} className="img-fluid" style={{maxHeight:"100%"}}></img>
                                     </div>
                                     <div className='col-sm-8'>
                                         <p style={{ height:60}}>Nome: {item.nomeProduto}</p>

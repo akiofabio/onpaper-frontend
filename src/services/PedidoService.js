@@ -15,8 +15,19 @@ class PedidoService{
     getPedidoByDatas( dataInicio , dataFinal ){
         return axios.get( API_BASE_URL + "/datas/dataInicio=" + dataInicio + "&dataFinal=" + dataFinal );
     }
-    getPedidoByParametros( pesquisa , parametros ){
-        return axios.get( API_BASE_URL + pesquisa );
+    getPedidoByParametros( pesquisas ){
+        var params = new URLSearchParams();
+        pesquisas.map(pesquisa => {
+            if(pesquisa!==undefined && pesquisa.conteudo.length>0){
+                params.append("pes", pesquisa.conteudo)
+                params.append("par", pesquisa.parametro)
+            }
+        })
+        var request = {
+            params: params
+        };
+        alert(request.params)
+        return axios.get( API_BASE_URL + "/pesquisa",request);
     }
 
     updatePedido( pedido, pedidoId ){

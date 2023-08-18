@@ -549,7 +549,9 @@ function AutoCreateComponent(){
         }
         localStorage.clear()
         UserService.createUser(user)      
-        ClienteService.createCliente(cliente);
+        ClienteService.createCliente(cliente).catch(error =>{
+            alert(JSON.stringify(error.response.data))
+         });
         ClienteService.createCliente(clienteTeste);
         for (const produto of produtos) {
             await ProdutoService.createProduto(produto).catch(error =>{
