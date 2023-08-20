@@ -139,20 +139,96 @@ function AreaGerentePedidodComponent(){
                         <button className='btn btn-success' onClick={()=>{mudarStatus("Aprovado",pedido)}}>Aprovar Transação</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger'>Recusar Transação</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Recusado",pedido)}}>Recusar Transação</button>
                     </div>
                 </div>
             )
         }
+        else if(status.status == "Aprovado"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Em Preparo",pedido)}}>Separar Pedido</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado",pedido)}}>Cancelar Pedido</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(status.status == "Em Preparo"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Enviado",pedido)}}>Pedido Enviado</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado",pedido)}}>Cancelar Pedido</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(status.status == "Em Troca"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Aprovada",pedido)}}>Aceitar Troca</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Recusada",pedido)}}>Recusar Troca</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(status.status == "Troca Aprovada"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Realizada",pedido)}}>Aceitar Troca</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Cancelada",pedido)}}>Cancelar Troca</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(status.status == "Em Devolução"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Devolução Aprovada",pedido)}}>Aceitar Devolução</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Devolução Recusada",pedido)}}>Recusar Devolução</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(status.status == "Devolução Aprovada"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Devolução Realizada",pedido)}}>Aceitar Devolução</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Devolução Cancelada",pedido)}}>Cancelar Devolução</button>
+                    </div>
+                </div>
+            )
+        }
+
     }
 
     function mudarStatus(status,pedido){
         PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
-            alert(JSON.stringify(res.data))
+            navegation(0)
+            
+            /*
             setPedidos(pedidos.map( pedidoTemp =>{
                 if(pedidos.indexOf(pedidoTemp) === pedidos.indexOf(pedido))
                     pedidoTemp = res.data
-            })) 
+            }))
+            */ 
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
         })
@@ -191,13 +267,22 @@ function AreaGerentePedidodComponent(){
 
     useEffect(() => {
         if(pedidos.length==0){
+            PedidoService.getPedidos().then(res => {
+                setPedidos(res.data)
+            }).catch( erro => {
+                alert(JSON.stringify(erro.response.data))
+            })
+            
+            /*
             PedidoService.getPedidoByPendente().then(res => {
                 setPedidos(res.data)
             }).catch( erro => {
                 alert(JSON.stringify(erro.response.data))
             })
+            */
         }
     });
+
     return(
         <div>
             <h3>Pedidos</h3>
