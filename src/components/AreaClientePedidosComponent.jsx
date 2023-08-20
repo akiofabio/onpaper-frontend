@@ -87,23 +87,30 @@ function AreaClientePedidosComponent (props){
         if( props.status=="Entregue"){
             return(
                 <div>
-                    <button className="btn" onClick={() => trocarPedido(props.pedido)}>Trocar Pedido</button>
-                    <button className="btn" onClick={() => trocarPedido(props.pedido)}>Devolver Pedido</button>
+                    <button className="btn btn-dark" onClick={() => trocarPedido(props.pedido)}>Trocar Pedido</button>
+                    <button className="btn btn-dark" onClick={() => trocarPedido(props.pedido)}>Devolver Pedido</button>
+                </div>
+            )
+        }
+        else if(props.status=="Em Processamento" || props.status=="Aprovado" || props.status=="Em Preparo" ){
+            return(
+                <div>
+                    <button className="btn btn-dark" onClick={() => cancelarPedido(props.pedido)}>Cancelar Pedido</button>
                 </div>
             )
         }
         else if(props.status=="Em Processamento" || props.status=="Aprovado"){
             return(
                 <div>
-                    <button className="btn" onClick={() => cancelarPedido(props.pedido)}>Cancelar Pedido</button>
+                    <button className="btn btn-dark" onClick={() => cancelarPedido(props.pedido)}>Cancelar Pedido</button>
                 </div>
             )
         }
         else{
             return(
                 <div>
-                    <button className="btn" disabled>Trocar Pedido</button>
-                    <button className="btn" disabled>Devolver Pedido</button>
+                    <button className="btn btn-dark" disabled>Trocar Pedido</button>
+                    <button className="btn btn-dark" disabled>Devolver Pedido</button>
                 </div>
             )
         }
