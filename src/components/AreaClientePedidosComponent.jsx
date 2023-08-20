@@ -180,11 +180,8 @@ function AreaClientePedidosComponent (props){
                                                     <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
                                                 </div>
                                             </div>
-                                            
                                             <MostrarBotataoDevolverItem pedido={pedido} status={getUltimoStatus(pedido.status).status}/> 
                                         </div>
-                                        
-
                                     </div>
                                 </div>
                             </div>
@@ -193,12 +190,15 @@ function AreaClientePedidosComponent (props){
                             <div className="col-sm-8">
                                 Total: {moedaRealMask(calculoSubtotal(pedido)+pedido.frete)} ( {moedaRealMask( calculoSubtotal(pedido))} + {moedaRealMask(pedido.frete)} de Frete)
                             </div>
+                            
+                        </div>
+                        <div className="row">
+                            <div className="col">
+                                <button className="btn btn-dark" onClick={() => navegation("/areaCliente/detalhePedido/" + pedido.id)}>Detalhes</button>
+                            </div>
                             <div className="col">
                                 <MostrarBotaoDevolverPedido pedido={pedido} status={getUltimoStatus(pedido.status).status}/>
                             </div>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-dark" onClick={() => navegation("/areaCliente/detalhePedido/" + pedido.id)}>Detalhes</button>
                         </div>
                     </div>
                 </div>
