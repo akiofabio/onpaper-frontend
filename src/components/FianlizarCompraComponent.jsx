@@ -403,9 +403,11 @@ function FianlizarCompraComponent (){
     }
 
     useEffect(() => {
+        if(totalPagar==0){
+
+        }
         if(localStorage.getItem( "isLogged" )){
             if(!cliente.id){
-                
                 ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
                     setCliente(res.data)
                     if(pedido.itens.length===0){
@@ -448,6 +450,14 @@ function FianlizarCompraComponent (){
         calculoTotal()
         calculoTotalPagar()
     }, [pedido]);
+
+    useEffect(() => {
+        calculoTotal()
+    }, [subtotal],[freteTotal]);
+
+    useEffect(() => {
+        
+    }, [total]);
 
     return(
         <div>

@@ -78,7 +78,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{
                     id:1
                 }],
@@ -101,7 +103,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:1
+                },
                 categorias: [{
                     id:1
                 }],
@@ -124,7 +128,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 1}],
                 destaque: true,
                 quantidadeBloqueada: 0
@@ -145,7 +151,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 2}],
                 destaque: true,
                 quantidadeBloqueada: 0
@@ -166,7 +174,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 2}],
                 destaque: true,
                 quantidadeBloqueada: 0
@@ -187,7 +197,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 3}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -208,7 +220,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 3}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -229,7 +243,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 4}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -250,7 +266,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 4}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -271,7 +289,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 5}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -292,7 +312,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 5}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -313,7 +335,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 6}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -334,7 +358,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 6}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -355,7 +381,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 7}],
                 destaque: false,
                 quantidadeBloqueada: 0
@@ -376,7 +404,9 @@ function AutoCreateComponent(){
                 largura: 1.0,
                 comprimento: 1.0,
                 peso: 1.0,
-                fabricante: null,
+                fabricante:{
+                    id:3
+                },
                 categorias: [{ id: 7}],
                 destaque: false,
                 quantidadeBloqueada: 0

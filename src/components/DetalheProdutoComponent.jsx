@@ -4,7 +4,7 @@ import { useNavigate , useParams} from 'react-router-dom';
 import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
-import {cepMask} from '../etc/Mask'
+import {cepMask,moedaRealMask} from '../etc/Mask'
 import {separarParagrafoSemMargemFonte,enderecoToString} from '../etc/Funcoes'
 
 function DetalheProdutoComponent() {
@@ -17,6 +17,7 @@ function DetalheProdutoComponent() {
     const [ enderecoIndexTemp , setEnderecoIndexTemp ] = useState()
     const [ clienteTemp , setClienteTemp ] = useState()
     const [ cliente , setCliente ] = useState( {
+        id: null,
         enderecos : []
     } )
     const [ produto , setProduto ] = useState({
@@ -24,28 +25,41 @@ function DetalheProdutoComponent() {
         imagens : "produto2.jpg",
         nome : "",
         preco : 0,
+        categorias:[],
+        fabricante:{
+            nome:""
+        },
     })
     const [ quantidade , setQuantidade] = useState(1)
+    const [ quantidadeDisponivel , setQuantidadeDisponivel] = useState(0)
     const [ cep , setCep ] = useState(0)
     const target = useRef(null)
 
     function cepHandler ( event )  {
-        if (!localStorage.getItem("isLogged")){
-            var posicao = event.target.selectionStart;
-            var cepNumero = cepMask(event.target.value);
-            if(event.target.value.length<cepNumero.length){
-                posicao++
-            }
-            if(event.target.value.length>8 && event.target.selectionStart==6){
-                posicao++
-            }
-            event.target.value = cepNumero;
-            event.target.selectionStart = posicao;
-            event.target.selectionEnd = posicao;
-            setCep(target.value.replace(/\D/g, ""))
+        var cepTemp = event.target.value.replace(/\D/g, "");
+        if(cepTemp==""){
+            event.target.value=''
         }
+        if(Number.isInteger(cepTemp)){
+            cepTemp.toString()
+        }
+        
+        if(cepTemp.length>8){
+            cepTemp = cepTemp.slice(0, 8);
+        }
+        calculoFreteTotal()
+        setCep(cepTemp)
     }
     
+    function quantideHandler (event)  {
+        if(event.target.value <= quantidadeDisponivel){
+            setQuantidade( event.target.value )
+        }
+        else{
+            alert("Quantidade indisponivel")
+        }
+    }
+
     function calculoSubtotal(){
         var subtotalSoma =0
         subtotalSoma =  quantidade * produto.preco
@@ -54,11 +68,12 @@ function DetalheProdutoComponent() {
 
     function calculoFreteTotal(){
         var fretetotalSoma = 0
+        if(Number.isInteger(cep)){
+            cep.toString()
+        }
         if(cep.length==8){
             fretetotalSoma +=  0.1 * quantidade
-            var cepNumero = cep;
-            cepNumero = cepNumero.replace(/\D/g, "");
-            fretetotalSoma *= (parseFloat(cepNumero))/1000000
+            fretetotalSoma *= (parseFloat(cep))/1000000
         }
         setFreteTotal(fretetotalSoma);
     }
@@ -68,7 +83,7 @@ function DetalheProdutoComponent() {
             if( !mostrarEnderecos ){
                 return (
                     <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
-                        
+                        Escolher Endereço
                     </button>
                 )
             }
@@ -87,7 +102,11 @@ function DetalheProdutoComponent() {
             }
         }
         else{
-            
+            return (
+                <button  disabled className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
+                    Escolher Endereço
+                </button>
+            )
         }
     }
 
@@ -125,7 +144,6 @@ function DetalheProdutoComponent() {
                 return res.data
             })
             carrinho = cliente.carrinho
-            console.log("cliente.carrinho" + JSON.stringify(cliente.carrinho))
         }        
         var porduto = await ProdutoService.getProdutoById( produtoId ).then( res => {
             return res.data
@@ -142,13 +160,21 @@ function DetalheProdutoComponent() {
         navegate( "/carrinho" )
     }
 
+    function pesquisarCategoria(categoria){
+        alert("Não implementado")
+    }
+
     useEffect(() => {
         if(produto.id == null)
-        ProdutoService.getProdutoById(parametros.id).then(res => {
-            setProduto(res.data)
+            ProdutoService.getProdutoById(parametros.id).then(res => {
+                setProduto(res.data)
+                setQuantidadeDisponivel(res.data.quantidade - res.data.quantidadeBloqueada)
+                
+                setSubtotal(quantidade * res.data.preco );
         })
-        if(localStorage.getItem( "isLogged" )){
+        if(localStorage.getItem( "isLogged" ) && cliente.id===null ){
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then(res => {
+                
                 if(res.data.carrinho.endereco==null){
                     var endereco = res.data.enderecos[0]
                     res.data.carrinho.endereco = "Nome: " + endereco.nome + 
@@ -172,51 +198,72 @@ function DetalheProdutoComponent() {
     
 
     return (
-        <div>
-            <h3 style={{ marginTop: 40 }} ref={target}>Meu Carrinho de Compra</h3>
-            <div>
-                <div className='row justify-content-end'>
-                    <div className='col-3 align-content-center' style={{ marginBottom:10 }} >
-                        <label>CEP</label>
-                        <input value={cepMask(cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
-                        <MostrarEndereco/>
-                    </div>
-                </div>
-                <div>
-                    <div className='card '>
-                        <div className="container" style={{margin: 0,padding :0}}>
-                            <div className='card-body'>
-                                <div className='row no-gutters'>
-                                    <div className='col-sm-2'>
-                                        <img src={'imagens/produtos/caderno2.jpg'} width='150' alt={produto.imagens}></img>
-                                        <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt={produto.imagens}  height="150" ></img>
-                                    </div>
-                                    <div className='col-sm-8'>
-                                        <p style={{ height:60}}>Nome: {produto.nome}</p>
-                                        <div className="row g-3 align-items-center">
-                                            <div className="col-auto">
-                                                <label>Quantidade:</label>
-                                            </div>
-                                            <div className="col-auto">
-                                                <input className='form-control' value={ quantidade } style={{width:80}} onChange={ ( event ) => setQuantidade( event.target.value ) } type={"number"} min="1"></input>
-                                            </div>
-                                            <div className="col-auto">
-                                                <label>{ produto.status }</label>
-                                            </div>
+        <div style={{margin: 60}}>
+            <div className='card ' >
+                <div className="container" style={{margin: 0,padding :0}}>
+                    <div className='card-body'>
+                        <div className='row no-gutters'>
+                            <div className='col' style={{textAlign:'center', width:420, height:420}}>
+                                <img src={'/imagens/produtos/' + produto.imagens} alt={produto.imagens}  style={{maxHeight:"100%",maxWidth:"100%"}} ></img>
+                            </div>
+                            <div className='col-sm-8'>
+                                <div className="row">
+                                    <label>Nome:</label>
+                                    <textarea value={produto.nome} disabled></textarea>
+                                </div>
+                                <div className="row">
+                                    <label>Descrição:</label>
+                                    <textarea value={produto.descricao} disabled></textarea>
+                                </div>
+                                <div className="row">
+                                    <label>Categorias:</label>
+                                    {produto.categorias.map(categoria => 
+                                        <div className='col-auto'>
+                                            <button className='btn btn-outline-dark' onClick={()=>pesquisarCategoria(categoria.nome)}>{categoria.nome}</button>
                                         </div>
+                                    )}
+                                </div>
+                                <div className="row">
+                                    <label>Fabricante:</label>
+                                    <div className='col-auto'>
+                                        <button className='btn btn-outline-dark' onClick={()=>pesquisarCategoria(produto.fabricante.nome)}>{produto.fabricante.nome}</button>
                                     </div>
-                                    <div className='col-sm-2' >
-                                        <p align="center" style={{ marginBottom:0}}>Preço</p>
-                                        <p align="center">R$ {produto.preco.toFixed(2)}</p>
+                                </div>
+                                <div className="row">
+                                    <label>Preço Unitario: { moedaRealMask(produto.preco)}</label>
+                                </div>
+                                <div className="row g-3 align-items-center">
+                                    <div className="col-auto">
+                                        <label>Quantidade:</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input className='form-control' value={ quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event ) } type={"number"} min="1"></input>
+                                    </div>
+                                    <div className="col-auto">
+                                        <label>Quantidade Disponivel: { quantidadeDisponivel }</label>
+                                    </div>
+                                </div>
+                                <div className="row" style={{marginTop: 30}}>
+                                    <div className="col-sm-2">
+                                        <label>Frete: { moedaRealMask(freteTotal)}</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <label>CEP:</label>
+                                    </div>
+                                    <div className="col-auto">
+                                        <input value={cepMask(cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
+                                    </div>
+                                    <div className="col-auto">
+                                        <MostrarEndereco/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
-                    <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
                 </div>
             </div>
+            <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
+            <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
         </div>
     )
 }

@@ -33,6 +33,12 @@ export function getUltimoStatus(status){
     }
     if(status!==undefined && status.length>0){
         ultimoStatus = status[status.length - 1]
+        status.forEach(st => {
+            if(new Date(ultimoStatus.data).getTime()< new Date(st.data).getTime()){
+                ultimoStatus=st
+            }
+        });
     }
+    
     return ultimoStatus
 };

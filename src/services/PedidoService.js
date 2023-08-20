@@ -29,9 +29,17 @@ class PedidoService{
         alert(request.params)
         return axios.get( API_BASE_URL + "/pesquisa",request);
     }
+    
+    getPedidoByPendente(){
+        return axios.get( API_BASE_URL + "/pendentes");
+    }
 
     updatePedido( pedido, pedidoId ){
         return axios.put( API_BASE_URL + "/" + pedidoId , pedido );
+    }
+
+    updatePedidoStatus( status, pedidoId ){
+        return axios.put( API_BASE_URL + "/" + status + "/" + pedidoId);
     }
 }
 export default new PedidoService()

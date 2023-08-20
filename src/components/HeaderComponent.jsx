@@ -25,7 +25,7 @@ function LoginImage (props){
     if( !isLogged ){
         return (
             <button className='btn btn-dark' onClick={()=>navigate("/login")}>
-                <img src='imagens/icones/login.png'></img>
+                <img src='/imagens/icones/login.png'></img>
             </button>
         );
     }

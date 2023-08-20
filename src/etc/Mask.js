@@ -14,7 +14,12 @@ export　function cpfMask(cpfNumero) {
     }
 }
 
+
+
 export　function cepMask(cepNumero) {
+    if(Number.isInteger(cepNumero)){
+        cepNumero = cepNumero.toString()
+    }
     if(cepNumero){
         cepNumero = cepNumero.replace(/\D/g, "");
         if(cepNumero.length >8){
@@ -37,7 +42,8 @@ export　function moedaRealMask(valor) {
         return valorMask
     }
     else{
-        return valor
+        valorMask = "R$ 0,00" 
+        return valorMask
     }
 }
 

@@ -72,7 +72,6 @@ function AreaClientePedidosComponent (props){
                     <button className="btn" onClick={() => devolverItem(props.item)}>Devolver</button>
                 </div>
             )
-            
         }
         else{
             return(
@@ -89,6 +88,7 @@ function AreaClientePedidosComponent (props){
             return(
                 <div>
                     <button className="btn" onClick={() => trocarPedido(props.pedido)}>Trocar Pedido</button>
+                    <button className="btn" onClick={() => trocarPedido(props.pedido)}>Devolver Pedido</button>
                 </div>
             )
         }
@@ -103,6 +103,7 @@ function AreaClientePedidosComponent (props){
             return(
                 <div>
                     <button className="btn" disabled>Trocar Pedido</button>
+                    <button className="btn" disabled>Devolver Pedido</button>
                 </div>
             )
         }
@@ -159,7 +160,7 @@ function AreaClientePedidosComponent (props){
                                         </div>
                                         <div className='col-sm-8'>
                                             <div className="row">
-                                                <label>Status: {getUltimoStatus(item.status)}</label>
+                                                
                                             </div>
                                             <div className="row g-3 align-items-center">
                                                 <label style={{ height:60}}>Nome: {item.nomeProduto}</label>

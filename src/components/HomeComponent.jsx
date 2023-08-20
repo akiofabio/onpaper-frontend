@@ -69,7 +69,7 @@ function HomeComponent() {
     }
     return (
         <div>
-            <h1>Onpaper, a melhor papelaria online de LES deste 2022</h1>
+            <h1>Onpaper, a melhor papelaria online de LES</h1>
             <div className='row'>
                 <div className='col-auto'>
                     <AutoCreateComponent/>
@@ -78,23 +78,19 @@ function HomeComponent() {
                     <CreateRandomVendas/>
                 </div>
             </div>
-           
-            
-            
             <div style={{marginTop:100}}>
                 <h3>Destaques:</h3>
                 <div className='row row-cols-4'>
-                    {produtos.map(
-                        produto => 
-                        <div key = {produto.id} style={{ border: "1px black solid" }} className="col text-center">
+                    {produtos.map(produto => 
+                        <div key = {produto.id} className="col text-center" style={{marginTop:20}}> 
                             <div className='card-body' >
-                                <button type="button"  onClick={()=>navigate("/produto/"+ produto.id)}>
-                                    <div style={{ height:150 , margin:5, alignSelf:'center'}}>
-                                        <img  className="rounded " src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  height="150" ></img>
+                                <button style={{paddingBottom:20, width:300, height:300}} type="button"  onClick={()=>navigate("/produto/"+ produto.id)} >
+                                    <div className='text-center' style={{ height:150 ,width:150 ,marginLeft:70 , border:0}}>
+                                        <img  className="rounded" src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  style={{maxHeight:"100%",maxWidth:"100%"}} ></img>
                                     </div>
                                     <p>Nome: {produto.nome}</p>
                                     <p>Descrição: {produto.descricao}</p>
-                                    <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+                                    <button  type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
                                 </button>
                             </div>
                         </div>

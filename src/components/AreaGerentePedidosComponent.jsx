@@ -14,6 +14,7 @@ function AreaGerentePedidodComponent(){
     }]);
     const [ mostrarDetalhes , setMostrarDetalhes ] = useState([])
     const navegation = useNavigate()
+    
     function pesquisar(){
         PedidoService.getPedidoByParametros(pesquisas).then(res => {
             setPedidos(res.data)
@@ -31,6 +32,15 @@ function AreaGerentePedidodComponent(){
         setPesquisas(pesquisas.map(pes => pesquisas.indexOf(pes) == pesquisas.indexOf(pesquisa)? {...pes, parametro : event.target.value} : pes))
     }
     
+    function calculoSubtotal(pedido){
+        var subtotalSoma =0
+        
+        pedido.itens.forEach(item => {
+            subtotalSoma +=  item.quantidade * item.preco
+        })
+        return subtotalSoma;
+    }
+
     function mostrarDetalhesDisplay(pedido){        
         if( !mostrarDetalhes[pedidos.indexOf(pedido)]){
             return(
@@ -46,20 +56,57 @@ function AreaGerentePedidodComponent(){
                         </div>
                         <div className="row">
                             <label>Nome: {"cliente.nome"}</label>
-                            
                         </div>
                         <div className="row">
                             <label>CPF: {"cpfMask(cliente.cpf)"}</label>
                         </div>
-                        
+                        <div className="card-body">
+                            Itens:
+                            {pedido.itens.map( item =>
+                                <div key={item.id} className="card border-dark">
+                                    <div key={item.id} className="card-body">
+                                        <div className='row no-gutters'>
+                                            <div className='col-sm-2'  style={{textAlign:'center', width: 90, height:90}}>
+                                                <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto}  className="img-fluid" style={{maxHeight:"100%"}}></img>
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                <div className="row">
+                                                
+                                                </div>
+                                                <div className="row g-3 align-items-center">
+                                                    <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
+                                                </div>
+                                                <div className="row g-3 align-items-center">
+                                                    <div className='col-sm-4' >
+                                                        <label>Quantidade: { item.quantidade } </label>
+                                                    </div>
+                                                    <div className='col-sm-4' >
+                                                        <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="row">
+                                <div className="col-sm-8">
+                                    Total: {moedaRealMask(calculoSubtotal(pedido)+pedido.frete)} ( {moedaRealMask( calculoSubtotal(pedido))} + {moedaRealMask(pedido.frete)} de Frete)
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
-                        <div className='col-auto'>
+                        <div className='col-sm-2'>
                             <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == pedidos.indexOf(pedido)? true: mosDel))}>Mostrar Detalhes</button>
                         </div>
-                        <div className='col-auto'>
+                        <div className='col-sm-4'>
                             <button className='btn btn-dark' >Editar</button>
                         </div>
+                        <div className='col-sm-4'>
+                            {mostrarAcao(getUltimoStatus(pedido.status),pedido)}
+                        </div>
+                        
                     </div>
                 </div>
             )
@@ -84,6 +131,33 @@ function AreaGerentePedidodComponent(){
         }
     }
     
+    function mostrarAcao(status,pedido){
+        if(status.status == "Em Processamento"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Aprovado",pedido)}}>Aprovar Transação</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger'>Recusar Transação</button>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    function mudarStatus(status,pedido){
+        PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
+            alert(JSON.stringify(res.data))
+            setPedidos(pedidos.map( pedidoTemp =>{
+                if(pedidos.indexOf(pedidoTemp) === pedidos.indexOf(pedido))
+                    pedidoTemp = res.data
+            })) 
+        }).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
+    }
+
     function addPesquisa(){
         var pes ={
             conteudo:"",
@@ -104,6 +178,26 @@ function AreaGerentePedidodComponent(){
         }
     }
 
+    function getPendentes(){
+        if(pedidos.length==0){
+            PedidoService.getPedidoByPendente().then(res => {
+                setPedidos(res.data)
+            }).catch( erro => {
+                alert(JSON.stringify(erro.response.data))
+            })
+        }
+    }
+
+
+    useEffect(() => {
+        if(pedidos.length==0){
+            PedidoService.getPedidoByPendente().then(res => {
+                setPedidos(res.data)
+            }).catch( erro => {
+                alert(JSON.stringify(erro.response.data))
+            })
+        }
+    });
     return(
         <div>
             <h3>Pedidos</h3>
