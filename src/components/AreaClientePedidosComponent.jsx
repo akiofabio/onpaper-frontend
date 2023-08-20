@@ -3,7 +3,8 @@ import { moedaRealMask , stringDataMask } from "../etc/Mask";
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 
 import ClienteService from "../services/ClienteService";
-import PedidoService from "../services/PedidoService"
+import PedidoService from "../services/PedidoService";
+import { getUltimoStatus } from "../etc/Funcoes";
 function AreaClientePedidosComponent (props){
     const [cliente, setCliente] = useState({
         email: "",
@@ -44,17 +45,6 @@ function AreaClientePedidosComponent (props){
     })
     const navegation = useNavigate()
 
-    function getUltimoStatus(status){
-        var ultimoStatus={
-            data: new Date(0).getDate,
-            status: "Status nao Encontrado"
-        }
-        if(status!==undefined && status.length>0){
-            ultimoStatus = status[status.length - 1]
-        }
-        return ultimoStatus
-    }
-
     function calculoSubtotal(pedido){
         var subtotalSoma =0
         
@@ -68,16 +58,16 @@ function AreaClientePedidosComponent (props){
         if( props.status=="Entregue"){
             return(
                 <div>
-                    <button className="btn" onClick={() => trocarItem(props.item)}>Trocar</button>
-                    <button className="btn" onClick={() => devolverItem(props.item)}>Devolver</button>
+                    <button className="btn" onClick={() => mudarStatusItem(props.item)}>Trocar</button>
+                    <button className="btn" onClick={() => mudarStatusItem(props.item)}>Devolver</button>
                 </div>
             )
         }
         else{
             return(
                 <div>
-                    <button className="btn" onClick={() => trocarItem(props.item)} disabled>Trocar</button>
-                    <button className="btn" onClick={() => devolverItem(props.item)} disabled>Devolver</button>
+                    <button className="btn" onClick={() => mudarStatusItem(props.item)} disabled>Trocar</button>
+                    <button className="btn" onClick={() => mudarStatusItem(props.item)} disabled>Devolver</button>
                 </div>
             )
         }
@@ -87,22 +77,29 @@ function AreaClientePedidosComponent (props){
         if( props.status=="Entregue"){
             return(
                 <div>
-                    <button className="btn btn-dark" onClick={() => trocarPedido(props.pedido)}>Trocar Pedido</button>
-                    <button className="btn btn-dark" onClick={() => trocarPedido(props.pedido)}>Devolver Pedido</button>
+                    <button className="btn btn-dark" onClick={() => mudarStatus("Em Troca",props.pedido)}>Trocar Pedido</button>
+                    <button className="btn btn-dark" onClick={() => mudarStatus("Em Devolução",props.pedido)}>Devolver Pedido</button>
                 </div>
             )
         }
         else if(props.status=="Em Processamento" || props.status=="Aprovado" || props.status=="Em Preparo" ){
             return(
                 <div>
-                    <button className="btn btn-dark" onClick={() => cancelarPedido(props.pedido)}>Cancelar Pedido</button>
+                    <button className="btn btn-dark" onClick={() => mudarStatus("Em Cancelamento",props.pedido)}>Cancelar Pedido</button>
                 </div>
             )
         }
-        else if(props.status=="Em Processamento" || props.status=="Aprovado"){
+        else if(props.status=="Enviado" ){
             return(
                 <div>
-                    <button className="btn btn-dark" onClick={() => cancelarPedido(props.pedido)}>Cancelar Pedido</button>
+                    <button className="btn btn-dark" onClick={() => mudarStatus("Entregue",props.pedido)}>Confimar Entrega</button>
+                </div>
+            )
+        }
+        else if(props.status=="Troca Enviado" ){
+            return(
+                <div>
+                    <button className="btn btn-dark" onClick={() => mudarStatus("Entregue",props.pedido)}>Confimar Entrega</button>
                 </div>
             )
         }
@@ -116,20 +113,22 @@ function AreaClientePedidosComponent (props){
         }
     }
 
-
-    function trocarItem(){
-        alert("nao implementado")
+    function mudarStatus(status,pedido){
+        PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
+            navegation(0)
+            
+            /*
+            setPedidos(pedidos.map( pedidoTemp =>{
+                if(pedidos.indexOf(pedidoTemp) === pedidos.indexOf(pedido))
+                    pedidoTemp = res.data
+            }))
+            */ 
+        }).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
     }
 
-    function devolverItem(){
-        alert("nao implementado")
-    }
-
-    function trocarPedido(){
-        alert("nao implementado")
-    }
-
-    function cancelarPedido(){
+    function mudarStatusItem(status,item){
         alert("nao implementado")
     }
 

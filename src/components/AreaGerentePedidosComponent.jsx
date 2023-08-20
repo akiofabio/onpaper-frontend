@@ -184,7 +184,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Realizada",pedido)}}>Aceitar Troca</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Enviada",pedido)}}>Troca Enviada</button>
                     </div>
                     <div className='col'>
                         <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Cancelada",pedido)}}>Cancelar Troca</button>

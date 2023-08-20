@@ -124,7 +124,7 @@ function DetalhesPedidosComponent (props){
                                     Status: {pStatus.status}
                                 </div>
                                 <div className="col">
-                                    data: {stringDataMask(pStatus.data)}
+                                    data: {(pStatus.data)}
                                 </div>
                             </div>  
                         )}
