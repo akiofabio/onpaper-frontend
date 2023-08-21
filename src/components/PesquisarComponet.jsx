@@ -84,35 +84,39 @@ function PesquisarComponent() {
             <div className='col'>
                 <h3>Pesquisar: {pesquisa}</h3>
                 {produtos.map(produto =>
-                    <button onClick={()=>navigate("/produto/"+ produto.id)}>
-                        <div key = {produto.id} className='card '>
-                            <div className="container" style={{margin: 0,padding :0}}>
-                                <div className='card-body'>
-                                    <div className='row no-gutters'>
-                                        <div className='col-sm-3' style={{textAlign:'center', width:180, height:180}}>
-                                            <img src={'/imagens/produtos/' + produto.imagens} alt={produto.imagens} className="img-fluid" style={{maxHeight:"100%",maxWidth:"100%"}} ></img>
+                    <div className='row'>
+                        <button onClick={()=>navigate("/produto/"+ produto.id)}>
+                            <div key = {produto.id} className='card '>
+                                <div className="container" style={{margin: 0,padding :0}}>
+                                    <div className='card-body'>
+                                        <div className='row no-gutters'>
+                                            <div className='col-sm-3' style={{textAlign:'center', width:180, height:180}}>
+                                                <img src={'/imagens/produtos/' + produto.imagens} alt={produto.imagens} className="img-fluid" style={{maxHeight:"100%",maxWidth:"100%"}} ></img>
+                                            </div>
+                                            <div className='col-sm-8' style={{textAlign:'left',}}>
+                                                <div className='row' >
+                                                    <label style={{ fontSize:18 , fontWeight:"bold"}}>{produto.nome}</label>
+                                                </div>
+                                                
+                                                <div className='row'>
+                                                    <p style={{ marginBottom:0}}>Por</p>
+                                                    <p>{moedaRealMask(produto.preco)}</p>
+                                                </div>
+                                                <div className='row' style={{margin:20}}>
+                                                    {produto.categorias.map(categoria => 
+                                                        <div className='col-auto'>
+                                                            <button>{categoria.nome}</button>
+                                                        </div>
+                                                    )}
+                                                </div>  
+                                            </div>
+                                            
                                         </div>
-                                        <div className='col-sm-8'>
-                                            <div className='row'>
-                                                <p style={{ fontSize:18 , fontWeight:"bold"}}>{produto.nome}</p>
-                                            </div>
-                                            <div className='row' >
-                                                {produto.categorias.map(categoria => 
-                                                    <div className='col-auto'>
-                                                        <button>{categoria.nome}</button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className='row'>
-                                                <p style={{ marginBottom:0}}>Por</p>
-                                                <p>{moedaRealMask(produto.preco)}</p>
-                                            </div>
-                                        </div>    
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </button>
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

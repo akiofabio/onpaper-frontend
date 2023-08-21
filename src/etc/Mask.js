@@ -1,5 +1,8 @@
 export　function cpfMask(cpfNumero) {
     if(cpfNumero){
+        if(Number.isInteger(cpfNumero) ){
+            cpfNumero = cpfNumero.toString()
+        }
         cpfNumero = cpfNumero.replace(/\D/g, "");
         if(cpfNumero.length >11){
             cpfNumero = cpfNumero.slice(0, 11);

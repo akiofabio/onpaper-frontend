@@ -44,7 +44,6 @@ function GraficoComponent_v2(){
     
 
     async function gerarGrafico () {
-        alert( 'TESTE' )
         var dataInicioTemp = new Date(dataInicio)
         var dataFinalTemp = new Date(dataFinal)
         dataFinalTemp.setDate(dataFinalTemp.getDate() + 1)

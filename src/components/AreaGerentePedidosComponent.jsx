@@ -41,7 +41,11 @@ function AreaGerentePedidodComponent(){
         return subtotalSoma;
     }
 
-    function mostrarDetalhesDisplay(pedido){        
+    function mostrarDetalhesDisplay(pedido){    
+        var clienteTeste ={
+            nome:"Teste1",
+            cpf:1111111
+        }    
         if( !mostrarDetalhes[pedidos.indexOf(pedido)]){
             return(
                 <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
@@ -55,10 +59,10 @@ function AreaGerentePedidodComponent(){
                             </div>
                         </div>
                         <div className="row">
-                            <label>Nome: {"cliente.nome"}</label>
+                            <label>Nome: {clienteTeste.nome}</label>
                         </div>
                         <div className="row">
-                            <label>CPF: {"cpfMask(cliente.cpf)"}</label>
+                            <label>CPF: {cpfMask(clienteTeste.cpf)}</label>
                         </div>
                         <div className="card-body">
                             Itens:

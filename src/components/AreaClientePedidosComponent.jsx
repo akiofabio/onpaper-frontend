@@ -96,7 +96,7 @@ function AreaClientePedidosComponent (props){
                 </div>
             )
         }
-        else if(props.status=="Troca Enviado" ){
+        else if(props.status=="Troca Enviada" ){
             return(
                 <div>
                     <button className="btn btn-dark" onClick={() => mudarStatus("Entregue",props.pedido)}>Confimar Entrega</button>
