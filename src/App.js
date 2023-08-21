@@ -16,6 +16,7 @@ import AreaClienteDadosComponent from './components/AreaClienteDadosComponent';
 import PesquisarComponent from './components/PesquisarComponet';
 import AreaGerenteComponent from './components/AreaGerenteComponent';
 import DetalheProdutoComponent from './components/DetalheProdutoComponent';
+import FianlizarCompraComponent2 from './components/FianlizarCompraComponent2';
 function App() {
     return (
         <div>
@@ -26,7 +27,7 @@ function App() {
                         <Route path = "/" element = {<HomeComponent/>}></Route>
                         <Route path = "/carrinho" element = {<CarrinhoComponet/>}></Route>
                         <Route path = "/login" element = {<LoginComponent/>}></Route>
-                        <Route path = "/finalizar_compra" element = {<FianlizarCompraComponent/>}></Route>
+                        <Route path = "/finalizar_compra" element = {<FianlizarCompraComponent2/>}></Route>
                         <Route path = "/areaCliente/*" element = {<AreaClienteComponent/>}></Route>
                         <Route path = "/clientes" element = {<ListClienteComponents/>}></Route>
                         <Route path = "/cadastrar_cliente" element = {<CadastrarClienteComponent/>}></Route>
