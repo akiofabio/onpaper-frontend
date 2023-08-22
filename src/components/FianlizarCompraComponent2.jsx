@@ -4,7 +4,8 @@ import CarrinhoService from '../services/CarrinhoService';
 import ProdutoService from '../services/ProdutoService';
 import ClienteService from '../services/ClienteService';
 import PedidoService from '../services/PedidoService';
-import {cepMask,moedaRealMask} from '../etc/Mask'
+import {cepMask,moedaRealMask} from '../etc/Mask';
+import Overlay from 'react-bootstrap/Overlay';
 import {separarParagrafo, separarParagrafoSemMargem,cartaoToString,enderecoToString, separarParagrafoSemMargemFonte} from '../etc/Funcoes'
 
 function FianlizarCompraComponent2 (){
@@ -21,6 +22,19 @@ function FianlizarCompraComponent2 (){
     const [ cartoes , setCartoes ] = useState([])
     const [ cuponsPromocionais , setCuponsPromocionais ] = useState([])
     const [ cuponsTroca , setCuponsTroca ] = useState([])
+    
+    const [mostrarNovoEndereco, setMostrarNovoEndereco] = useState(0)
+    const [novoEndereco, setNovoEndereco] = useState({
+        nome:"",
+        cep:"",
+        estado:"",
+        cidade:"",
+        bairro:"",
+        tipoLogradouro:"",
+        logradouro:"",
+        numero:"",
+        observacao:""
+    })
 
     const [ pedido , setPedido ] = useState({
         itens : [], 
@@ -78,6 +92,7 @@ function FianlizarCompraComponent2 (){
         setTotalPagar(resultado)
     }
 
+
     function MostrarEndereco(){
         if( !mostrarEnderecos ){
             return (
@@ -96,9 +111,99 @@ function FianlizarCompraComponent2 (){
                             <p style={{ margin:0, padding:0}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
                         </button>
                     )}
+                    <button className='btn btn-outline-dark' style={{ margin:2}} onClick={() => setMostrarNovoEndereco(1)  }>
+                            <p style={{ margin:0, padding:0}}>Novo Endereço</p>
+                    </button>
                 </div>
             )
         }
+    }
+
+    function novoEnderecoOverlay(){
+        return(
+            <div>
+                <Overlay show={mostrarNovoEndereco} placement="auto">
+                    {({ placement, arrowProps, show: _show, popper, ...props }) => (
+                        <div
+                            {...props}
+                            style={{
+                            position: 'fixed',
+                            width: '100%',
+                            height: '100%',
+                            background: 'rgba(0, 0, 0, 0.8)',
+                            ...props.style,
+                            }}
+                        >
+                            <div className='card border-dark' style={{
+                                position: 'absolute',
+                                left: '50%',
+                                transform: 'translate(-50%)',
+                            }}>
+                                <div  className="card-header border-dark bg-dark text-white">
+                                    <h3 className='text-center'>Alterar Endereco</h3>
+                                </div>
+                                <div className='card-body' >
+                                    <div className='form-group'>
+                                        <label>Nome:</label>
+                                        <input type={"text"} placeholder='Nome' name='tipo_input' className='form-control' value={novoEndereco.nome} onChange={(event) => setNovoEndereco({...novoEndereco, nome : event.target.value})} size="50"></input>
+                                        <label>CEP:</label>
+                                        <input type={"text"} placeholder='CEP' name='tipo_input' className='form-control' value={cepMask(novoEndereco.cep)} onChange={(event) => setNovoEndereco({...novoEndereco, cep : event.target.value})}></input>
+                                        <label>Estado:</label>
+                                        <input type={"text"} placeholder='Estado' name='tipo_input' className='form-control' value={novoEndereco.estado} onChange={(event) => setNovoEndereco({...novoEndereco, estado : event.target.value})}></input>
+                                        <label>Cidade:</label>
+                                        <input type={"text"} placeholder='Cidade' name='tipo_input' className='form-control' value={novoEndereco.cidade} onChange={(event) => setNovoEndereco({...novoEndereco, cidade : event.target.value})}></input>
+                                        <label>Bairro:</label>
+                                        <input type={"text"} placeholder='Tipo' name='tipo_input' className='form-control' value={novoEndereco.bairro} onChange={(event) => setNovoEndereco({...novoEndereco, bairro : event.target.value})}></input>
+                                        <label>Tipo de Logradouro:</label>
+                                        <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_input' className='form-control' value={novoEndereco.tipoLogradouro} onChange={(event) => setNovoEndereco({...novoEndereco, tipoLogradouro : event.target.value})}></input>
+                                        <label>Logradouro:</label>
+                                        <input type={"text"} placeholder='Logradouro' name='tipo_input' className='form-control' value={novoEndereco.logradouro} onChange={(event) => setNovoEndereco({...novoEndereco, logradouro : event.target.value})}></input>
+                                        <label>Numero:</label>
+                                        <input type={"text"} placeholder='Numero' name='tipo_input' className='form-control' value={novoEndereco.numero} onChange={(event) => setNovoEndereco({...novoEndereco, numero : event.target.value})}></input>
+                                        <label>Observacao:</label>
+                                        <input type={"text"} placeholder='Observacao' name='tipo_input' className='form-control' value={novoEndereco.observacao} onChange={(event) => setNovoEndereco({...novoEndereco, observacao : event.target.value})}></input>
+                                    </div>
+                                </div>
+                                <div className='row justify-content-md-center'>
+                                    <div className='col-auto'>
+                                        <button className='btn btn-dark' style={{marginBottom: 5} } onClick={() => salvarEnderecoNovo()}>Salvar</button>
+                                    </div>
+                                    <div className='col-auto'>
+                                        <button className='btn btn-dark' style={{marginBottom: 5}} onClick={() => cancelarEnderecoNovo()}>Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    )}
+                </Overlay>
+            </div>
+        )
+    }
+    function salvarEnderecoNovo(){
+        var clienteTenp = cliente
+        clienteTenp.enderecos.push(novoEndereco)
+
+        ClienteService.updateCliente(clienteTenp).then(res => {
+            setCliente(res.data)
+        }).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
+    }
+
+    function cancelarEnderecoNovo(){
+        setNovoEndereco({
+            nome:"",
+            cep:"",
+            estado:"",
+            cidade:"",
+            bairro:"",
+            tipoLogradouro:"",
+            logradouro:"",
+            numero:"",
+            observacao:""
+        })
+        setMostrarNovoEndereco(0)
     }
 
     function selecionarEndereco(id){
@@ -433,6 +538,7 @@ function FianlizarCompraComponent2 (){
                 </div>
                 <h4>Pedido:</h4>
                 <div>
+                    {novoEnderecoOverlay()}
                     {pedido.itens.map( item => 
                         <div key = {item.id} className='card '>
                             <div className="container" style={{margin: 0,padding :0}}>

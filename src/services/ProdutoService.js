@@ -22,8 +22,8 @@ class ProdutoService{
         var request = {
             params: params
         };
-        alert(request.params)
-        alert(PRODUTO_API_BASE_URL + "/pesquisa",request)
+        //alert(request.params)
+        //alert(PRODUTO_API_BASE_URL + "/pesquisa",request)
         return axios.get( PRODUTO_API_BASE_URL + "/pesquisa",request);
     }
 }

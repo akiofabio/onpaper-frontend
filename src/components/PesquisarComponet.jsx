@@ -25,7 +25,7 @@ function PesquisarComponent() {
     
     function aplicarFiltro(){
         ProdutoService.getProdutoByNome(pesquisa,categoriasFiltro,fabricantesFiltro).then(res => {
-            alert(JSON.stringify(res.data))
+            //alert(JSON.stringify(res.data))
             setProdutos(res.data)
         }).catch(error => {
             alert(JSON.stringify(error.response.data))
@@ -50,9 +50,9 @@ function PesquisarComponent() {
         if(produtos.length===0){
             ProdutoService.getProdutoByNome(pesquisa,categoriasFiltro,fabricantesFiltro).then(res => {
                 setProdutos(res.data)
-                alert(JSON.stringify(res.data))
+                //alert(JSON.stringify(res.data))
             }).catch(error => {
-                alert("produto erro")
+                //alert("produto erro")
                 alert(JSON.stringify(error.response.data))
             })
         }
