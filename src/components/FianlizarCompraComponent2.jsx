@@ -181,13 +181,15 @@ function FianlizarCompraComponent2 (){
         )
     }
     function salvarEnderecoNovo(){
-        var clienteTenp = cliente
+        var clienteTenp = cliente.
         clienteTenp.enderecos.push(novoEndereco)
 
         ClienteService.updateCliente(clienteTenp).then(res => {
             setCliente(res.data)
+            setMostrarNovoEndereco(0)
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
+            
         })
     }
 

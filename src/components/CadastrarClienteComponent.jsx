@@ -8,11 +8,14 @@ import ClienteMenuComponent from './ClienteMenuComponent';
 import ClienteService from '../services/ClienteService';
 import AreaClienteInicioComponent from './AreaClienteInicioComponent'
 import AreaClientePedidosComponent from './AreaClientePedidosComponent'
-
+import BandeiraService from '../services/BandeiraService'
+import { Alert } from 'bootstrap';
 
 function CadastrarClienteComponent(){
     const navegate = useNavigate()
     const [cliente, setCliente] = useState({
+        score:0,
+        tipo:"CLIENTE",
         email: "",
         senha: "",
         nome: "",
@@ -29,12 +32,16 @@ function CadastrarClienteComponent(){
         enderecos: [{
             nome:"",
             cep:"",
+            pais:"",
             estado:"",
             cidade:"",
             bairro:"",
             tipoLogradouro:"",
             logradouro:"",
             numero:"",
+            tipo:"",
+            entrega:true,
+            cobranca:true,
             observacao:""
         }],
         cartoes: [{
@@ -42,16 +49,16 @@ function CadastrarClienteComponent(){
             numero:"",
             codigoSeguranca:"",
             validade:"",
-            preferencial:false,
-            bandeira:""
+            preferencial:true,
+            bandeira:{id:""}
         }],
         pedidos: [],
         cupons: [],
         pedidos: [],
-        carrinho:null,
+        carrinho:{},
     })
     const [senhaConfirmacao, setSenhaConfirmacao] = useState()
-
+    const [bandeiras, setBandeiras] = useState([])
     function confimarSenha(){
         
     }
@@ -78,12 +85,16 @@ function CadastrarClienteComponent(){
         var end = {
             nome:"",
             cep:"",
+            pais:"",
             estado:"",
             cidade:"",
             bairro:"",
             tipoLogradouro:"",
             logradouro:"",
             numero:"",
+            tipo:"",
+            entrega:1,
+            cobranca:1,
             observacao:"",
         }
         var temp = cliente.enderecos
@@ -104,7 +115,7 @@ function CadastrarClienteComponent(){
             codigoSeguranca:"",
             validade:"",
             preferencial:"",
-            bandeira:""
+            bandeira:{nome:""}
         }
         var temp = cliente.cartoes
         temp.push(cart)
@@ -122,31 +133,46 @@ function CadastrarClienteComponent(){
     }
 
     function cadastrar(){
-        var clienteTemp = cliente
-        clienteTemp.cartoes.forEach( cartao =>{
-            cartao.validade = new Date(cartao.validade)
-        })
-        ClienteService.createCliente(clienteTemp).then(res => {
-            if(!localStorage.getItem("isLogged")){
-                    var usuario = res.data
-                localStorage.setItem( "id" , usuario.id )
-                localStorage.setItem( "tipo" , usuario.tipo )
-                localStorage.setItem( "isLogged" , true )
-                if(usuario.tipo == "CLIENTE"){
-                    if(localStorage.getItem("carrinhoId")){
+        if(senhaConfirmacao === cliente.senha){
+            var clienteTemp = cliente
+            clienteTemp.cartoes.forEach( cartao =>{
+                cartao.validade = new Date(cartao.validade)
+            })
+            ClienteService.createCliente(clienteTemp).then(res => {
+                if(!localStorage.getItem("isLogged")){
+                        var usuario = res.data
+                    localStorage.setItem( "id" , usuario.id )
+                    localStorage.setItem( "tipo" , usuario.tipo )
+                    localStorage.setItem( "isLogged" , true )
+                    if(usuario.tipo == "CLIENTE"){
+                        if(localStorage.getItem("carrinhoId")){
 
+                        }
+                        localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
                     }
-                    localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
+                    
                 }
+                alert("Cliente Cadastrado com sucesso")
+                navegate(-1)
                 
-            }
-            alert("Cliente Cadastrado com sucesso")
-            navegate(-1)
-            
-        }).catch(error => {
-            alert(JSON.stringify(error.response.data))
-        })
+            }).catch(error => {
+                alert(JSON.stringify(error.response.data))
+            })
+        }
+        else{
+            alert("A comfimação da senha não é igual")
+        }
     }
+
+    useEffect(() => {
+        if(bandeiras.length === 0){
+            BandeiraService.getBandeiras().then( res => {
+                setBandeiras(res.data)
+            }).catch(erro => {
+                alert(JSON.stringify(erro.response.data))
+            })
+        }
+    }, [])
 
     return( 
         <div className='row ' >
@@ -165,7 +191,7 @@ function CadastrarClienteComponent(){
                                     </div>
                                     <div className='form-group'>
                                         <label>CPF:</label>
-                                        <input type={"text"} placeholder='CPF' name='cpf_input' className='form-control' value={cpfMask(cliente.cpf)} onChange={(event) => setCliente({...cliente, cpf : event.target.value})}></input>
+                                        <input type={"text"} placeholder='CPF' name='cpf_input' className='form-control' value={cpfMask(cliente.cpf)} onChange={(event) => setCliente({...cliente, cpf : event.target.value.replace(/\D/g, "")})}></input>
                                     </div>
                                     <div className='form-group'>
                                         <label>Genero:</label>
@@ -217,7 +243,9 @@ function CadastrarClienteComponent(){
                                                 <label>Nome</label>
                                                 <input type={"text"} placeholder='Nome do endereço, exp. "Casa" , "Trabalho"' className='form-control' value={endereco.nome} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, nome : event.target.value} : end)})}></input>
                                                 <label>CEP</label>
-                                                <input type={"text"} placeholder='CEP' className='form-control' value={endereco.cep} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cep : event.target.value} : end)})}></input>
+                                                <input type={"text"} placeholder='CEP' className='form-control' value={cepMask(endereco.cep)} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cep : event.target.value.replace(/\D/g, "")} : end)})}></input>
+                                                <label>País</label>
+                                                <input type={"text"} placeholder='Pais' className='form-control' value={endereco.pais} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, pais : event.target.value}:end)})}></input>
                                                 <label>Estado</label>
                                                 <input type={"text"} placeholder='Estado' className='form-control' value={endereco.estado} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, estado : event.target.value}:end)})}></input>
                                                 <label>Cidadde</label>
@@ -230,8 +258,14 @@ function CadastrarClienteComponent(){
                                                 <input type={"text"} placeholder='Logradouro'  className='form-control' value={endereco.logradouro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, logradouro : event.target.value}:end)})}></input>
                                                 <label>Numero</label>
                                                 <input type={"text"} placeholder='Numero' className='form-control' value={endereco.numero} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, numero : event.target.value}:end)})}></input>
+                                                <label>Tipo</label>
+                                                <input type={"text"} placeholder='Tipo do endereço, Ex. Casa, Predio, etc.' className='form-control' value={endereco.tipo} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, tipo : event.target.value}:end)})}></input>
                                                 <label>Observacao</label>
                                                 <input type={"text"} placeholder='Observacao' className='form-control' value={endereco.observacao} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, observacao : event.target.value}:end)})}></input>
+                                                <input type={"checkbox"} name='Entrega' onClick={() => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, entrega : !endereco.entrega}:end)})} checked={endereco.entrega}></input>Endereço de Entrega
+                                                <br></br>
+                                                <input type={"checkbox"} name='Cobranca' onClick={()=>setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cobranca : !endereco.cobranca}:end)})} checked={endereco.cobranca}></input>Endereço de Cobrança
+                                                
                                             </div>
                                         </div>
                                     )}
@@ -253,7 +287,13 @@ function CadastrarClienteComponent(){
                                             </div>
                                             <div className='card-body'>
                                                 <label>Bandeira:</label>
-                                                <input type={"text"} placeholder='Bandeira' name='tipo' className='form-control' value={cartao.bandeira} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, bandeira : event.target.value} : cart)})}></input>
+                                                <select name="bandeira" onSelect={(event)=>{setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
+                                                    {bandeiras.map(bandeira => 
+                                                        <option value={bandeira.id}> {bandeira.nome} </option>
+                                                    )}
+
+                                                </select>
+                                                <br></br>
                                                 <label>Nome:</label>
                                                 <input type={"text"} placeholder='Nome' name='tipo' className='form-control' value={cartao.nome} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, nome : event.target.value} : cart)})}></input>
                                                 <label>Numero:</label>
@@ -263,6 +303,7 @@ function CadastrarClienteComponent(){
                                                 <label>Codigo de Seguranca:</label>
                                                 <input type={"text"} placeholder='Codigo de Seguanca' name='tipo' className='form-control' value={cartao.codigoSeguranca} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, codigoSeguranca : event.target.value} : cart)})}></input>
                                                 <input type={"checkbox"} name='tipo' onClick={()=>setCartaoPreferecial(cartao)} checked={cartao.preferencial}></input>Preferencial
+                                                
                                             </div>
                                         </div>
                                     )}

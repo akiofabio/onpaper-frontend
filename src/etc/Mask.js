@@ -17,8 +17,6 @@ export　function cpfMask(cpfNumero) {
     }
 }
 
-
-
 export　function cepMask(cepNumero) {
     if(Number.isInteger(cepNumero)){
         cepNumero = cepNumero.toString()
@@ -69,6 +67,36 @@ export　function dataToInputDataMask(data) {
     if(data){
         if(data.search("T"))
             data = data.split('T')[0]
+        return data
+    }
+}
+
+export　function dataToInputMesEAnoDataMask(data) {
+    if(data){
+        if(data instanceof Date){
+            data = data.toDateString()
+        }
+        if(data.search("T")){
+            data = data.split('T')[0]
+        }
+        if(data.search("-")){
+            data = data.split('-')[0]+ "-" + data.split('-')[1]
+        }
+        return data
+    }
+}
+
+export　function dataToStringMesEAnoDataMask(data) {
+    if(data){
+        if(data instanceof Date){
+            data = data.toDateString()
+        }
+        if(data.search("T")){
+            data = data.split('T')[0]
+        }
+        if(data.search("-")){
+            data = data.split('-')[1]+ "/" + data.split('-')[0]
+        }
         return data
     }
 }

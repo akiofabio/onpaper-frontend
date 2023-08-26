@@ -1,15 +1,17 @@
 import React, { useEffect , useState , useRef } from 'react';
 import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
-import {cepMask, stringDataMask, dataToInputDataMask , cpfMask} from '../etc/Mask'
-import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
+import {cepMask, stringDataMask, dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask} from '../etc/Mask'
+import {separarParagrafoSemMargem,enderecoToString,enderecoToUmaLinhaSemCEP} from '../etc/Funcoes'
 import ClienteMenuComponent from './ClienteMenuComponent';
 import ClienteService from '../services/ClienteService';
 import AreaClienteInicioComponent from './AreaClienteInicioComponent'
 import AreaClientePedidosComponent from './AreaClientePedidosComponent'
+import BandeiraService from '../services/BandeiraService';
 
 function DadosClientesComponent (props){
     const [cliente, setCliente] = useState({
+        score:"",
         email: "",
         senha: "",
         nome: "",
@@ -26,12 +28,16 @@ function DadosClientesComponent (props){
         enderecos: [{
             nome:"",
             cep:"",
+            pais:"",
             estado:"",
             cidade:"",
             bairro:"",
             tipoLogradouro:"",
             logradouro:"",
             numero:"",
+            tipo:"",
+            entrega:false,
+            cobranca:false,
             observacao:""
         }],
         cartoes: [{
@@ -40,7 +46,7 @@ function DadosClientesComponent (props){
             codigoSeguranca:"",
             validade:"",
             preferencial:false,
-            bandeira:""
+            bandeira:{nome:""}
         }],
         pedidos: [{
             data:"",
@@ -60,7 +66,8 @@ function DadosClientesComponent (props){
     const [mostrarEditarEndereco, setMostrarEditarEndereco] = useState(false);
     const [mostrarEditarCartao, setMostrarEditarCartao] = useState(false);
     
-
+    const [bandeiras, setBandeiras] = useState([]);
+    
     function editarDadosPessoal(){
         setClienteTemp(cliente)
         setMostrarEditarDadosPessoal(true)
@@ -127,6 +134,9 @@ function DadosClientesComponent (props){
     }
 
     function salvar(cli){
+        cli.cartoes.forEach( cartao =>{
+            cartao.validade = new Date(cartao.validade)
+        })
         ClienteService.updateCliente(cli, cliente.id).then(res => {
             var usuario = res.data
             localStorage.setItem( "id" , usuario.id )
@@ -145,7 +155,7 @@ function DadosClientesComponent (props){
             setMostrarEditarEndereco(false)
             setMostrarEditarCartao(false)
         }).catch(error => {
-            alert(error.response.data)
+            alert(JSON.stringify(error.response.data))
         })
     }
 
@@ -262,7 +272,7 @@ function DadosClientesComponent (props){
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
-                            background: 'rgba(0, 0, 0, 0.8)',
+                            background: 'rgba(0, 0, 0, 0.4)',
                             ...props.style,
                             }}
                         >
@@ -272,28 +282,54 @@ function DadosClientesComponent (props){
                                 transform: 'translate(-50%)',
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white">
-                                    <h3 className='text-center'>Alterar Endereco</h3>
+                                    <h3 className='text-center'>Alterar Endereço</h3>
                                 </div>
                                 <div className='card-body' >
                                     <div className='form-group'>
                                         <label>Nome:</label>
-                                        <input type={"text"} placeholder='Nome' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].nome} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, nome : event.target.value} : end)})} size="50"></input>
+                                        <input type={"text"} placeholder='Nome' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].nome} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, nome : event.target.value} : end)})} size="80"></input>
                                         <label>CEP:</label>
-                                        <input type={"text"} placeholder='CEP' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cep} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cep : event.target.value} : end)})}></input>
-                                        <label>Estado:</label>
-                                        <input type={"text"} placeholder='Estado' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].estado} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, estado : event.target.value} : end)})}></input>
+                                        <input type={"text"} placeholder='CEP' name='tipo_input' className='form-control' value={cepMask(clienteTemp.enderecos[enderecoIndexTemp].cep)} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cep : event.target.value.replace(/\D/g, "")} : end)})}></input>
+                                        <div className='row'>
+                                            <div className='col'>
+                                                <label>País:</label>
+                                                <input type={"text"} placeholder='País' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].pais} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, pais : event.target.value} : end)})}></input>
+                                            </div>
+                                            <div className='col'>
+                                                <label>Estado:</label>
+                                                <input type={"text"} placeholder='Estado' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].estado} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, estado : event.target.value} : end)})}></input>
+                                            </div>
+                                        </div>
                                         <label>Cidade:</label>
                                         <input type={"text"} placeholder='Cidade' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cidade} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cidade : event.target.value} : end)})}></input>
                                         <label>Bairro:</label>
                                         <input type={"text"} placeholder='Tipo' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].bairro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, bairro : event.target.value} : end)})}></input>
-                                        <label>Tipo de Logradouro:</label>
-                                        <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipoLogradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipoLogradouro : event.target.value} : end)})}></input>
-                                        <label>Logradouro:</label>
-                                        <input type={"text"} placeholder='Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].logradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, logradouro : event.target.value} : end)})}></input>
-                                        <label>Numero:</label>
-                                        <input type={"text"} placeholder='Numero' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, numero : event.target.value} : end)})}></input>
+                                        <div className='row'>
+                                            <div className='col col-sm-5'>
+                                                <label>Tipo de Logradouro:</label>
+                                                <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipoLogradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipoLogradouro : event.target.value} : end)})}></input>
+                                            </div>
+                                            <div className='col'>
+                                                <label>Logradouro:</label>
+                                                <input type={"text"} placeholder='Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].logradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, logradouro : event.target.value} : end)})}></input>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col col-sm-5'>
+                                                <label>Numero:</label>
+                                                <input type={"text"} placeholder='Numero' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, numero : event.target.value} : end)})}></input>
+                                            </div>
+                                            <div className='col col-sm-5'>
+                                                <label>Tipo:</label>
+                                                <input type={"text"} placeholder='Tipo do endereço, Ex. Casa, Predio, etc.' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipo} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipo : event.target.value} : end)})}></input>
+                                            </div>
+                                        </div>
                                         <label>Observacao:</label>
                                         <input type={"text"} placeholder='Observacao' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].observacao} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, observacao : event.target.value} : end)})}></input>
+                                        <input type={"checkbox"} name='Entrega' onClick={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, entrega : !clienteTemp.enderecos[enderecoIndexTemp].entrega} : end)})} checked={clienteTemp.enderecos[enderecoIndexTemp].entrega}></input>Endereço de Entrega
+                                        <br></br>
+                                        <input type={"checkbox"} name='Cobranca' onClick={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cobranca : !clienteTemp.enderecos[enderecoIndexTemp].cobranca} : end)})} checked={clienteTemp.enderecos[enderecoIndexTemp].cobranca}></input>Endereço de Cobrança
+                                        
                                     </div>
                                 </div>
                                 <div className='row justify-content-md-center'>
@@ -339,9 +375,14 @@ function DadosClientesComponent (props){
                                     <h3 className='text-center'>Alterar Cartao</h3>
                                 </div>
                                 <div className='card-body'>
-                                <div className='form-group'>
+                                    <div className='form-group'>
                                         <label>Bandeira:</label>
-                                        <input type={"text"} placeholder='Ex. MasterCard, Visa' name='tipo_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].bandeira} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, bandeira : event.target.value} : car)})} size="50"></input>
+                                        <select name="bandeira" onSelect={(event)=>{setClienteTemp({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
+                                            {bandeiras.map(bandeira => 
+                                                <option value={bandeira}> {bandeira.nome} </option>
+                                            )}
+
+                                        </select>    
                                     </div>
                                     <div className='form-group'>
                                         <label>Nome:</label>
@@ -352,8 +393,8 @@ function DadosClientesComponent (props){
                                         <input type={"text"} placeholder='xxx.xxx.xxx.xxx.xxx.xxx' name='tipo_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, numero : event.target.value} : car)})} size="50"></input>
                                     </div>
                                     <div className='form-group'>
-                                        <label>Data de Vencimento:</label>
-                                        <input type={"month"} name='tipo_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].vencimento} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, vencimento : event.target.value} : car)})} size="50"></input>
+                                        <label>Data de Validade:</label>
+                                        <input type={"month"} name='tipo_input' className='form-control' value={dataToInputMesEAnoDataMask(clienteTemp.cartoes[cartaoIndexTemp].validade)} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, validade : event.target.value} : car)})} size="50"></input>
                                     </div>
                                     <div className='form-group'>
                                         <label>Codigo de Seguranca:</label>
@@ -408,6 +449,11 @@ function DadosClientesComponent (props){
                 })
             }
         }
+        if(bandeiras.length===0){
+            BandeiraService.getBandeiras().then(res =>{
+                setBandeiras(res.data);
+            })
+        }
     }, [])
 
     return(
@@ -419,7 +465,7 @@ function DadosClientesComponent (props){
                         <label>Nome: {cliente.nome}</label>
                     </div>
                     <div className="row">
-                        <label>CPF: {cliente.cpf}</label>
+                        <label>CPF: {cpfMask(cliente.cpf)}</label>
                     </div>
                     <div className="row">
                         <label>Genero: {cliente.genero}</label>
@@ -469,14 +515,18 @@ function DadosClientesComponent (props){
                                 </div>
                                 <div className='card-body'>
                                     <div className="row">
-                                        <label>nome: {endereco.nome} </label>
+                                        <label>Nome: {endereco.nome} </label>
                                     </div>
                                     <div className="row">
                                         <label>CEP: {cepMask(endereco.cep)} </label>
                                     </div>
                                     <div className="row">
-                                        <label>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}, {endereco.bairro}, {endereco.cidade} - {endereco.estado}</label>
+                                        <label> {enderecoToUmaLinhaSemCEP(endereco)} </label>
                                     </div>
+                                        <input type={"checkbox"} name='Entrega' disabled  checked={endereco.entrega}></input>Endereço de Entrega
+                                        <br></br>
+                                        <input type={"checkbox"} name='Cobranca' disabled  checked={endereco.cobranca}></input>Endereço de Cobrança
+                                    
                                 </div>
                                 {editarEnderecoOverlay()}
                             </div>
@@ -504,7 +554,7 @@ function DadosClientesComponent (props){
                                 </div>
                                 <div className='card-body'>
                                     <div className="row">
-                                        <label>Bandeira: {cartao.bandeira} </label>
+                                        <label>Bandeira: {cartao.bandeira.nome} </label>
                                     </div>
                                     <div className="row">
                                         <label>Nome: {cartao.nome} </label>
@@ -513,7 +563,7 @@ function DadosClientesComponent (props){
                                         <label>Numero: {cartao.numero} </label>
                                     </div>
                                     <div className="row">
-                                        <label>Data de Vencimento: {cartao.vencimento} </label>
+                                        <label>Data de Vencimento: {dataToStringMesEAnoDataMask(cartao.validade)} </label>
                                     </div>
                                     <div className="row">
                                         <label>Codigo de Seguranca: {cartao.codigoSeguranca} </label>

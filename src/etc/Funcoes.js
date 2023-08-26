@@ -20,6 +20,10 @@ export function enderecoToString(endereco){
     "\n" + cepMask(endereco.cep) + " - " + endereco.bairro + " - " + endereco.cidade + " - " + endereco.estado
 }
 
+export function enderecoToUmaLinhaSemCEP(endereco){
+    return endereco.tipoLogradouro + " " + endereco.logradouro + ", nº " + endereco.numero +
+    ". " + endereco.bairro +  " . " + endereco.cidade + " - " + endereco.estado +", "+ endereco.pais
+}
 export function dateToUTC (data) {
     var dataTemp = new Date(data)
     dataTemp.setMinutes(dataTemp.getMinutes() + dataTemp.getTimezoneOffset())
