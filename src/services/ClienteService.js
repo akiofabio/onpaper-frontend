@@ -29,6 +29,9 @@ class ClienteService{
         alert(request.params)
         return axios.get( CLIENTE_API_BASE_URL + "/pesquisa",request);
     }
-}
 
+    delete(clienteId){
+        return axios.delete(CLIENTE_API_BASE_URL + "/" + clienteId);
+    }
+}
 export default new ClienteService()

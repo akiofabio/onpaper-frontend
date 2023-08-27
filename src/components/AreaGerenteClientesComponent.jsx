@@ -1,5 +1,5 @@
 import React, { useEffect , useState } from 'react';
-import { moedaRealMask , stringDataMask , cepMask , cpfMask} from "../etc/Mask";
+import { moedaRealMask , stringDataMask , cepMask , cpfMask, dataToInputMesEAnoDataMask} from "../etc/Mask";
 import AreaGerenteMenu from "./AreaGerenteMenu";
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 import PesquisarComponent from './PesquisarComponet';
@@ -35,8 +35,51 @@ function AreaGerenteClientesComponent(){
     function editar(cliente){
         navegation("/areaGerente/editarCliente/"+cliente.id)
     }
-    function mostrarDetalhesDisplay(cliente){        
-        if( !mostrarDetalhes[clientes.indexOf(cliente)]){
+
+    function deletar(cliente){
+        ClienteService.delete(cliente.id).then( res => {
+            alert("Cliente Deletado com sucesso")
+            setClientes(clientes.filter( cli => cli.id !== cliente.id? cli: null))
+        }).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
+    }
+
+    function mostrarDetalhesbutton(cliente){
+        var temp=[]
+        for(var i=0; i<mostrarDetalhes.length;i++){
+            if(i===clientes.indexOf(cliente)){
+                temp.push(true)
+            }
+            else{
+                temp.push(mostrarDetalhes[i])
+            }
+
+        }
+        alert(temp)
+        setMostrarDetalhes(temp)
+    }
+
+    function esconderDetalhesbutton(cliente){
+        var temp=[]
+        for(var i=0; i<mostrarDetalhes.length;i++){
+            if(i===clientes.indexOf(cliente)){
+                temp.push(false)
+            }
+            else{
+                temp.push(mostrarDetalhes[i])
+            }
+
+        }
+        alert(temp)
+        setMostrarDetalhes(temp)
+    }
+
+    function mostrarDetalhesDisplay(cliente){
+        //alert(JSON.stringify(mostrarDetalhes))
+        //alert("cli"+ clientes.indexOf(cliente)+ " = "+ mostrarDetalhes[clientes.indexOf(cliente)])        
+        if( mostrarDetalhes[clientes.indexOf(cliente)]===false){
+            //alert("Sem detalhes")
             return(
                 <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                     <div className="card-body">
@@ -49,18 +92,22 @@ function AreaGerenteClientesComponent(){
                     </div>
                     <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == clientes.indexOf(cliente)? true: mosDel))}>Mostrar Detalhes</button>
+                            <button className='btn btn-dark' onClick={() => mostrarDetalhesbutton(cliente)}>Mostrar Detalhes</button>
                         </div>
                         <div className='col-auto'>
                             <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                        </div>
+                        <div className='col-auto'>
+                            <button className='btn btn-dark' onClick={() => deletar(cliente)}>Deletar</button>
                         </div>
                     </div>
                 </div>
             )
         }
         else{
+            //alert("Com detelhes")
             return(
-                <div className='card border-dark' style={{ padding:10}}>
+                <div>
                     <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className="card-body">
                             <div className="row">
@@ -116,7 +163,7 @@ function AreaGerenteClientesComponent(){
                                         </div>
                                         <div className='card-body'>
                                             <div className="row">
-                                                <label>Bandeira: {cartao.bandeira} </label>
+                                                <label>Bandeira: {cartao.bandeira.nome} </label>
                                             </div>
                                             <div className="row">
                                                 <label>Nome: {cartao.nome} </label>
@@ -125,7 +172,7 @@ function AreaGerenteClientesComponent(){
                                                 <label>Numero: {cartao.numero} </label>
                                             </div>
                                             <div className="row">
-                                                <label>Data de Vencimento: {cartao.vencimento} </label>
+                                                <label>Data de Vencimento: {dataToInputMesEAnoDataMask(cartao.validade)} </label>
                                             </div>
                                             <div className="row">
                                                 <label>Codigo de Seguranca: {cartao.codigoSeguranca} </label>
@@ -137,14 +184,37 @@ function AreaGerenteClientesComponent(){
                                     </div>
                                 </div>
                             )}
+                            
+                            <h4>Cupons</h4>
+                            {cliente.cupons.map( cupom =>
+                                <div>
+                                    <div className="card border-dark" style={{ marginTop:10 , marginBottom:10}}>
+                                        <div className="card-header">
+                                            <label>Cupom {cupom.id}</label>
+                                        </div>
+                                        <div className='card-body'>
+                                            <div className="row">
+                                                <label>Tipo: {cupom.tipo} </label>
+                                            </div>
+                                            <div className="row">
+                                                <label>Descrição: {cupom.nome} </label>
+                                            </div>
+                                            <div className="row">
+                                                <label>Numero: {moedaRealMask(cupom.valor)} </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                    <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
-                        <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == clientes.indexOf(cliente)? false: mosDel))}>Esconder Detalhes</button>
-                        </div>
-                        <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                        
+                        <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
+                            <div className='col-auto'>
+                                <button className='btn btn-dark' onClick={() => esconderDetalhesbutton(cliente)}>Esconder Detalhes</button>
+                            </div>
+                            <div className='col-auto'>
+                                <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -377,9 +377,9 @@ function DadosClientesComponent (props){
                                 <div className='card-body'>
                                     <div className='form-group'>
                                         <label>Bandeira:</label>
-                                        <select name="bandeira" onSelect={(event)=>{setClienteTemp({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
+                                        <select defaultValue={cliente.cartoes[cartaoIndexTemp].bandeira.id} name="bandeira" onChange={(event)=>{setClienteTemp({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
                                             {bandeiras.map(bandeira => 
-                                                <option value={bandeira}> {bandeira.nome} </option>
+                                                <option value={bandeira.id}> {bandeira.nome} </option>
                                             )}
 
                                         </select>    
@@ -523,22 +523,22 @@ function DadosClientesComponent (props){
                                     <div className="row">
                                         <label> {enderecoToUmaLinhaSemCEP(endereco)} </label>
                                     </div>
-                                        <input type={"checkbox"} name='Entrega' disabled  checked={endereco.entrega}></input>Endereço de Entrega
-                                        <br></br>
-                                        <input type={"checkbox"} name='Cobranca' disabled  checked={endereco.cobranca}></input>Endereço de Cobrança
-                                    
+                                    <input type={"checkbox"} name='Entrega' disabled  checked={endereco.entrega}></input>Endereço de Entrega
+                                    <br></br>
+                                    <input type={"checkbox"} name='Cobranca' disabled  checked={endereco.cobranca}></input>Endereço de Cobrança
+                                    <div className="row justify-content-md-center">
+                                        <div className='col-2'>
+                                            <button className='btn btn-outline-dark' onClick={()=>removerEndereco(cliente.enderecos.indexOf(endereco))}>remover</button>
+                                        </div>
+                                        <div className='col-2'>
+                                            <button className='btn btn-outline-dark' onClick={()=>editarEndereco(cliente.enderecos.indexOf(endereco))}>editar</button>
+                                        </div>
+                                    </div>        
                                 </div>
                                 {editarEnderecoOverlay()}
                             </div>
-                            <div className="row justify-content-md-center">
-                            <div className='col-2'>
-                                <button className='btn btn-outline-dark' onClick={()=>removerEndereco(cliente.enderecos.indexOf(endereco))}>remover</button>
-                            </div>
-                            <div className='col-2'>
-                                <button className='btn btn-outline-dark' onClick={()=>editarEndereco(cliente.enderecos.indexOf(endereco))}>editar</button>
-                            </div>
+                            
                         </div>
-                    </div>
                     )}
                     <button className='btn btn-dark' onClick={()=>addEndereco()}>Adicionar Endereco</button>
                 </div>
@@ -571,19 +571,19 @@ function DadosClientesComponent (props){
                                     <div className='form'>
                                         <input type={"checkbox"} name='tipo' onClick={()=>setCartaoPreferecial(cartao)} checked={cartao.preferencial}></input>Preferencial
                                     </div>
+                                    <div className="row justify-content-md-center">
+                                        <div className='col-2'>
+                                            <button className='btn btn-outline-dark' onClick={()=>removerCartao(cliente.cartoes.indexOf(cartao))}>remover</button>
+                                        </div>
+                                        <div className='col-2'>
+                                            <button className='btn btn-outline-dark' onClick={()=>editarCartao(cliente.cartoes.indexOf(cartao))}>editar</button>
+                                        </div>
+                                    </div>  
                                 </div>
                                 {editarCartaoOverlay()}
                             </div>
-                            <div className="row justify-content-md-center">
-                            <div className='col-2'>
-                                <button className='btn btn-outline-dark' onClick={()=>removerCartao(cliente.cartoes.indexOf(cartao))}>remover</button>
-                            </div>
-                            <div className='col-2'>
-                                <button className='btn btn-outline-dark' onClick={()=>editarCartao(cliente.cartoes.indexOf(cartao))}>editar</button>
-                            </div>
                             
                         </div>
-                    </div>
                     )}
                     <button className='btn btn-dark' onClick={()=>addCartao()}>Adicionar Cartao</button>
                 </div>

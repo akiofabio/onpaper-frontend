@@ -34,17 +34,28 @@ export　function cepMask(cepNumero) {
 
 export　function moedaRealMask(valor) {
     if(valor){
-        var valorMask
+        var valorMask =""
         if(valor<0){
             valorMask = "- "
         }
-        valorMask = "R$ " + Number(valor).toFixed(2)
+        valorMask = valorMask + "R$ " + Number(valor).toFixed(2)
         valorMask = valorMask.replace(/\./, ',')
         return valorMask
     }
     else{
         valorMask = "R$ 0,00" 
         return valorMask
+    }
+}
+export　function moedaRealToFloatMask(valor) {
+    if(valor){
+        var valorMask = valor
+        valorMask = valorMask.replace(/\D/g, "");
+        valorMask = parseInt(valorMask)
+        return valorMask/100
+    }
+    else{
+        return 0
     }
 }
 

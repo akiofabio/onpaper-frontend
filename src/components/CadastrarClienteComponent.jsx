@@ -168,6 +168,14 @@ function CadastrarClienteComponent(){
         if(bandeiras.length === 0){
             BandeiraService.getBandeiras().then( res => {
                 setBandeiras(res.data)
+                setCliente({...cliente, cartoes:[{
+                    nome:"",
+                    numero:"",
+                    codigoSeguranca:"",
+                    validade:"",
+                    preferencial:true,
+                    bandeira:res.data[0]
+                }]})
             }).catch(erro => {
                 alert(JSON.stringify(erro.response.data))
             })
