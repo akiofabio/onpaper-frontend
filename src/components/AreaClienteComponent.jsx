@@ -8,6 +8,7 @@ import AreaClienteInicioComponent from '../components/AreaClienteInicioComponent
 import AreaClientePedidosComponent from '../components/AreaClientePedidosComponent'
 import AreaClienteDadosComponent from '../components/AreaClienteDadosComponent'
 import DetalhesPedidosComponent from './DetalhesPedidosComponent';
+import AreaClienteAlterarSenhaComponent from './AlterarSenhaComponente';
 
 function AreaClienteComponent(){
     const [cliente, setCliente] = useState({
@@ -32,6 +33,7 @@ function AreaClienteComponent(){
                     <Route path = "pedidos" element = {<AreaClientePedidosComponent pedidos={cliente.pedidos}/>} ></Route>
                     <Route path = "dados" element = {<AreaClienteDadosComponent cliente={cliente}/>} ></Route>
                     <Route path = "detalhePedido/:id" element = {<DetalhesPedidosComponent />} ></Route>
+                    <Route path = "alterarSenha" element = {<AreaClienteAlterarSenhaComponent cliente={cliente}/>} ></Route>
                 </Routes >
                 <Outlet/>
             </div>

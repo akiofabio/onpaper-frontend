@@ -46,7 +46,7 @@ function DadosClientesComponent (props){
             codigoSeguranca:"",
             validade:"",
             preferencial:false,
-            bandeira:{nome:""}
+            bandeira:{id:"",nome:""}
         }],
         pedidos: [{
             data:"",
@@ -100,7 +100,7 @@ function DadosClientesComponent (props){
     }
 
     function addEndereco(){
-        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"", estsdo:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:""}]})
+        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"",pais:"", estado:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:""}]})
         setEnderecoIndexTemp(cliente.enderecos.length)
         setMostrarEditarEndereco(true)
     }
@@ -119,7 +119,7 @@ function DadosClientesComponent (props){
     }
 
     function addCartao(){
-        setClienteTemp({...cliente , cartoes : [...cliente.cartoes,{nome:"", numero:""}]})
+        setClienteTemp({...cliente , cartoes : [...cliente.cartoes,{nome:"", numero:"",validade:"",bandeira:null}]})
         setCartaoIndexTemp(cliente.cartoes.length)
         setMostrarEditarCartao(true)
     }
@@ -170,7 +170,7 @@ function DadosClientesComponent (props){
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
-                            background: 'rgba(0, 0, 0, 0.8)',
+                            background: 'rgba(0, 0, 0, 0.4)',
                             ...props.style,
                             }}
                         >
@@ -222,7 +222,7 @@ function DadosClientesComponent (props){
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
-                            background: 'rgba(0, 0, 0, 0.8)',
+                            background: 'rgba(0, 0, 0, 0.4)',
                             ...props.style,
                             }}
                         >
@@ -361,7 +361,7 @@ function DadosClientesComponent (props){
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
-                            background: 'rgba(0, 0, 0, 0.8)',
+                            background: 'rgba(0, 0, 0, 0.4)',
                             ...props.style,
                             }}
                         >

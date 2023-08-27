@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+    import logo from './logo.svg';
 import './App.css';
 import React from 'react'
 import {BrowserRouter as Router, Navigate, Route, Routes,useNavigate}from 'react-router-dom'
@@ -17,6 +17,7 @@ import PesquisarComponent from './components/PesquisarComponet';
 import AreaGerenteComponent from './components/AreaGerenteComponent';
 import DetalheProdutoComponent from './components/DetalheProdutoComponent';
 import FianlizarCompraComponent2 from './components/FianlizarCompraComponent2';
+import AlterarSenhaComponent from './components/AlterarSenhaComponente';
 function App() {
     return (
         <div>

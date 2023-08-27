@@ -23,7 +23,7 @@ function ClienteMenuComponent(){
                     <Link to="mensagens" className='btn btn-outline-dark'>Mensagens</Link>
                 </div>
                 <div className='row'>
-                    <Link to="pedidos"className='btn btn-outline-dark'>Alterar Senha</Link>
+                    <Link to="alterarSenha"className='btn btn-outline-dark'>Alterar Senha</Link>
                 </div>
                 <div className='row'>
                     <Link to="pedidos"className='btn btn-outline-dark'>Meus Cupons</Link>
