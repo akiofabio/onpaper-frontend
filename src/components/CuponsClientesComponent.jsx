@@ -116,7 +116,7 @@ function CuponsClientesComponent (props){
                                 transform: 'translate(-50%)',
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white" style={{borderRadius: 5}}>
-                                    <h3 className='text-center'>Alterar Telefone</h3>
+                                    <h3 className='text-center'>Alterar Cupom</h3>
                                 </div>
                                 
                                 <div className='card-body' >
