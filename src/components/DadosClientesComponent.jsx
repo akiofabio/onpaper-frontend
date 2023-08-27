@@ -372,17 +372,17 @@ function DadosClientesComponent (props){
                                 opacity: 1,
                             }}>
                                 <div className="card-header border-dark bg-dark text-white">
-                                    <h3 className='text-center'>Alterar Cartao</h3>
+                                    <h3 className='text-center'>Alterar Cartão de Credito</h3>
                                 </div>
                                 <div className='card-body'>
                                     <div className='form-group'>
                                         <label>Bandeira:</label>
-                                        <select defaultValue={cliente.cartoes[cartaoIndexTemp].bandeira.id} name="bandeira" onChange={(event)=>{setClienteTemp({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
+                                        <select defaultValue={bandeiras.findIndex(ban => cliente.cartoes[cartaoIndexTemp].bandeira.id === ban.id)} name="bandeira" onChange={(event)=>{setClienteTemp({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : bandeiras[event.target.value] } : cart)})}} >
                                             {bandeiras.map(bandeira => 
-                                                <option value={bandeira.id}> {bandeira.nome} </option>
+                                                <option value={bandeiras.indexOf(bandeira)}> {bandeira.nome} </option>
                                             )}
 
-                                        </select>    
+                                        </select>
                                     </div>
                                     <div className='form-group'>
                                         <label>Nome:</label>
