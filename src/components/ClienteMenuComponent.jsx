@@ -26,10 +26,10 @@ function ClienteMenuComponent(){
                     <Link to="alterarSenha"className='btn btn-outline-dark'>Alterar Senha</Link>
                 </div>
                 <div className='row'>
-                    <Link to="pedidos"className='btn btn-outline-dark'>Meus Cupons</Link>
+                    <Link to="cupons"className='btn btn-outline-dark'>Meus Cupons</Link>
                 </div>
                 <div className='row'>
-                    <Link to="pedidos" className='btn btn-outline-dark'>Fale Conosco</Link>
+                    <Link to="contatos" className='btn btn-outline-dark'>Fale Conosco</Link>
                 </div>
             </div>
         </div>

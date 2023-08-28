@@ -239,7 +239,7 @@ function FianlizarCompraComponent2 (){
         if( mostrarCartoes == cartoes.indexOf(props.meio)){
             var cartoesTemp = cliente.cartoes
             cartoes.forEach(pag => {
-                cartoesTemp = cartoesTemp.filter(cartao => ( ( "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira ) !== pag.detalhes))
+                cartoesTemp = cartoesTemp.filter(cartao => ( ( "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira.nome ) !== pag.detalhes))
             })
             return (
                 <div>
@@ -247,7 +247,7 @@ function FianlizarCompraComponent2 (){
                         <button key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
-                            <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira}</p>
+                            <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira.nome}</p>
                         </button>
                     )}
                     <button className='btn btn-outline-dark' style={{ margin:2}}>
@@ -270,7 +270,7 @@ function FianlizarCompraComponent2 (){
     function selecionarCartao(cartao,meioPagamento){
         setMostrarCartoes(-1)
         var meioDePagamentoTemp={
-            detalhes: "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira,
+            detalhes: "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira.nome,
             tipo: "Cartão de Credito",
         }
         setCartoes(cartoes.map(meio => 

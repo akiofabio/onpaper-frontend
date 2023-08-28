@@ -3,10 +3,7 @@ import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 import {cepMask, stringDataMask, dataToInputDataMask , cpfMask} from '../etc/Mask'
 import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
-import ClienteMenuComponent from './ClienteMenuComponent';
 import ClienteService from '../services/ClienteService';
-import AreaClienteInicioComponent from './AreaClienteInicioComponent'
-import AreaClientePedidosComponent from './AreaClientePedidosComponent'
 import DadosClientesComponent from './DadosClientesComponent';
 import CuponsClientesComponent from './CuponsClientesComponent';
 function AreaGerenteAlterarClienteComponent (props){

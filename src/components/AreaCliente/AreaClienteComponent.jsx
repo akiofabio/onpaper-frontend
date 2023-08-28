@@ -1,15 +1,15 @@
 import React, { useEffect , useState } from 'react';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
-import {cepMask} from '../etc/Mask'
-import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
-import ClienteMenuComponent from './ClienteMenuComponent';
-import ClienteService from '../services/ClienteService';
-import AreaClienteInicioComponent from '../components/AreaClienteInicioComponent'
-import AreaClientePedidosComponent from '../components/AreaClientePedidosComponent'
-import AreaClienteDadosComponent from '../components/AreaClienteDadosComponent'
-import DetalhesPedidosComponent from './DetalhesPedidosComponent';
-import AreaClienteAlterarSenhaComponent from './AlterarSenhaComponente';
-
+import ClienteMenuComponent from '../ClienteMenuComponent';
+import ClienteService from '../../services/ClienteService';
+import AreaClienteInicioComponent from './AreaClienteInicioComponent'
+import AreaClientePedidosComponent from './AreaClientePedidosComponent'
+import AreaClienteDadosComponent from './AreaClienteDadosComponent'
+import DetalhesPedidosComponent from '../DetalhesPedidosComponent';
+import AreaClienteAlterarSenhaComponent from './AreaClienteAlterarSenhaComponent';
+import AreaClienteCuponsComponet from './AreaClienteCuponsComponet';
+import AreaClienteMensagemComponet from './AreaClienteMensagemComponet';
+import AreaClienteFaleConoscoComponet from './AreaClienteFaleConoscoComponet';
 function AreaClienteComponent(){
     const [cliente, setCliente] = useState({
         nome: "",
@@ -34,6 +34,9 @@ function AreaClienteComponent(){
                     <Route path = "dados" element = {<AreaClienteDadosComponent cliente={cliente}/>} ></Route>
                     <Route path = "detalhePedido/:id" element = {<DetalhesPedidosComponent />} ></Route>
                     <Route path = "alterarSenha" element = {<AreaClienteAlterarSenhaComponent cliente={cliente}/>} ></Route>
+                    <Route path = "cupons" element = {<AreaClienteCuponsComponet cliente={cliente}/>} ></Route>
+                    <Route path = "mensagens" element = {<AreaClienteMensagemComponet cliente={cliente}/>} ></Route>
+                    <Route path = "contatos" element = {<AreaClienteFaleConoscoComponet cliente={cliente}/>} ></Route>
                 </Routes >
                 <Outlet/>
             </div>

@@ -4,12 +4,8 @@ import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 import {cepMask, cpfMask} from '../etc/Mask'
 import {separarParagrafoSemMargem,enderecoToString} from '../etc/Funcoes'
-import ClienteMenuComponent from './ClienteMenuComponent';
 import ClienteService from '../services/ClienteService';
-import AreaClienteInicioComponent from './AreaClienteInicioComponent'
-import AreaClientePedidosComponent from './AreaClientePedidosComponent'
 import BandeiraService from '../services/BandeiraService'
-import { Alert } from 'bootstrap';
 
 function CadastrarClienteComponent(){
     const navegate = useNavigate()

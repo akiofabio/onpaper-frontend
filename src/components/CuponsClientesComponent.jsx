@@ -3,11 +3,7 @@ import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 import {moedaRealToFloatMask, cepMask, stringDataMask, dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask, moedaRealMask} from '../etc/Mask'
 import {separarParagrafoSemMargem,enderecoToString,enderecoToUmaLinhaSemCEP} from '../etc/Funcoes'
-import ClienteMenuComponent from './ClienteMenuComponent';
 import ClienteService from '../services/ClienteService';
-import AreaClienteInicioComponent from './AreaClienteInicioComponent'
-import AreaClientePedidosComponent from './AreaClientePedidosComponent'
-import BandeiraService from '../services/BandeiraService';
 
 function CuponsClientesComponent (props){
     

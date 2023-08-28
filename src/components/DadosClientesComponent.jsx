@@ -3,10 +3,7 @@ import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 import {cepMask, stringDataMask, dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask} from '../etc/Mask'
 import {separarParagrafoSemMargem,enderecoToString,enderecoToUmaLinhaSemCEP} from '../etc/Funcoes'
-import ClienteMenuComponent from './ClienteMenuComponent';
 import ClienteService from '../services/ClienteService';
-import AreaClienteInicioComponent from './AreaClienteInicioComponent'
-import AreaClientePedidosComponent from './AreaClientePedidosComponent'
 import BandeiraService from '../services/BandeiraService';
 
 function DadosClientesComponent (props){
@@ -56,7 +53,51 @@ function DadosClientesComponent (props){
         carrinho:null,
     })
     const { id } = useParams()
-    const [ clienteTemp , setClienteTemp ] = useState()
+    const [ clienteTemp , setClienteTemp ] = useState({
+        score:"",
+        email: "",
+        senha: "",
+        nome: "",
+        cpf: "",
+        genero: "",
+        dataNascimento:"",
+        
+        telefones: [{
+            tipo:"",
+            ddd:"",
+            numero:""
+        }],
+        
+        enderecos: [{
+            nome:"",
+            cep:"",
+            pais:"",
+            estado:"",
+            cidade:"",
+            bairro:"",
+            tipoLogradouro:"",
+            logradouro:"",
+            numero:"",
+            tipo:"",
+            entrega:false,
+            cobranca:false,
+            observacao:""
+        }],
+        cartoes: [{
+            nome:"",
+            numero:"",
+            codigoSeguranca:"",
+            validade:"",
+            preferencial:false,
+            bandeira:{id:"",nome:""}
+        }],
+        pedidos: [{
+            data:"",
+            status:""
+        }],
+        cupons: [],
+        carrinho:null,
+    })
     const [ telefoneIndexTemp , setTelefoneIndexTemp ] = useState()
     const [ enderecoIndexTemp , setEnderecoIndexTemp ] = useState()
     const [ cartaoIndexTemp , setCartaoIndexTemp ] = useState()
@@ -119,7 +160,7 @@ function DadosClientesComponent (props){
     }
 
     function addCartao(){
-        setClienteTemp({...cliente , cartoes : [...cliente.cartoes,{nome:"", numero:"",validade:"",bandeira:null}]})
+        setClienteTemp({...cliente , cartoes : [...cliente.cartoes,{nome:"", numero:"",validade:"",bandeira:{id:0,nome:""}}]})
         setCartaoIndexTemp(cliente.cartoes.length)
         setMostrarEditarCartao(true)
     }
@@ -377,7 +418,7 @@ function DadosClientesComponent (props){
                                 <div className='card-body'>
                                     <div className='form-group'>
                                         <label>Bandeira:</label>
-                                        <select defaultValue={bandeiras.findIndex(ban => cliente.cartoes[cartaoIndexTemp].bandeira.id === ban.id)} name="bandeira" onChange={(event)=>{setClienteTemp({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : bandeiras[event.target.value] } : cart)})}} >
+                                        <select defaultValue={clienteTemp.cartoes[cartaoIndexTemp].bandeira? bandeiras.findIndex(ban => clienteTemp.cartoes[cartaoIndexTemp].bandeira.id === ban.id):0} name="bandeira" onChange={(event)=>{setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(cart => clienteTemp.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : bandeiras[event.target.value] } : cart)})}} >
                                             {bandeiras.map(bandeira => 
                                                 <option value={bandeiras.indexOf(bandeira)}> {bandeira.nome} </option>
                                             )}

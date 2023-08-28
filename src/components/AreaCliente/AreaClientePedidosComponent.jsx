@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { moedaRealMask , stringDataMask } from "../etc/Mask";
+import { moedaRealMask , stringDataMask } from "../../etc/Mask";
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 
-import ClienteService from "../services/ClienteService";
-import PedidoService from "../services/PedidoService";
-import { getUltimoStatus } from "../etc/Funcoes";
+import ClienteService from "../../services/ClienteService";
+import PedidoService from "../../services/PedidoService";
+import { getUltimoStatus } from "../../etc/Funcoes";
 function AreaClientePedidosComponent (props){
     const [cliente, setCliente] = useState({
         email: "",
