@@ -57,7 +57,7 @@ function FianlizarCompraComponent2 (){
 
     function calculoFreteTotal(){
         var fretetotalSoma = 0
-        if(pedido.endereco && pedido.cep && pedido.cep.length==8){
+        if(pedido.endereco && pedido.cep && pedido.cep.length===8){
             pedido.itens.forEach(item => {
                 fretetotalSoma +=  0.1 * item.quantidade
             })
@@ -210,7 +210,7 @@ function FianlizarCompraComponent2 (){
 
     function selecionarEndereco(id){
         setMostrarEnderecos(false)
-        var endereco = cliente.enderecos.find(endereco => endereco.id == id)
+        var endereco = cliente.enderecos.find(endereco => endereco.id === id)
         setPedido({ 
             ...pedido,
             cep: endereco.cep,
@@ -236,7 +236,7 @@ function FianlizarCompraComponent2 (){
 
     function MostrarCartao(props){
         
-        if( mostrarCartoes == cartoes.indexOf(props.meio)){
+        if( mostrarCartoes === cartoes.indexOf(props.meio)){
             var cartoesTemp = cliente.cartoes
             cartoes.forEach(pag => {
                 cartoesTemp = cartoesTemp.filter(cartao => ( ( "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira.nome ) !== pag.detalhes))
@@ -279,7 +279,7 @@ function FianlizarCompraComponent2 (){
     }
 
     function addCartao(){
-        if(mostrarCartoes==-1){
+        if(mostrarCartoes===-1){
             var meio = {
                 tipo: "Cartão de Credito",
                 detalhes: " ",
@@ -298,7 +298,7 @@ function FianlizarCompraComponent2 (){
     }
 
     function removerCartao(meioDePagamento){
-        if(mostrarCartoes==-1 || mostrarCartoes==cartoes.indexOf(meioDePagamento)){
+        if(mostrarCartoes===-1 || mostrarCartoes===cartoes.indexOf(meioDePagamento)){
             setCartoes(cartoes.filter(meio => cartoes.indexOf(meio) !== cartoes.indexOf(meioDePagamento))
             )
             setMostrarCartoes(-1)
@@ -309,7 +309,7 @@ function FianlizarCompraComponent2 (){
     }
 
     function MostrarCupomPromocinais(props){
-        if( mostrarCupomPromocionais==1 ){
+        if( mostrarCupomPromocionais===1 ){
             var cupomPromocionais = cliente.cupons.filter(cupom => cupom.tipo === "Promocional")
             
             return (
@@ -357,7 +357,7 @@ function FianlizarCompraComponent2 (){
             setCuponsPromocionais([...cuponsPromocionais, meio])
             setMostrarCupomPromocionais(1)
         }
-        else if(mostrarCupomPromocionais == 1){
+        else if(mostrarCupomPromocionais === 1){
             alert("Escolha/Remova o Cupom primeiro")
         }
         else{
@@ -366,7 +366,7 @@ function FianlizarCompraComponent2 (){
     }
     
     function removerCupomPromocional(meioDePagamento){
-        if(mostrarCupomPromocionais==0 || mostrarCupomPromocionais == 1){
+        if(mostrarCupomPromocionais===0 || mostrarCupomPromocionais === 1){
             setCuponsPromocionais(cuponsPromocionais.filter(meio => cartoes.indexOf(meio) !== cartoes.indexOf(meioDePagamento) )
             )
             setMostrarCupomPromocionais(0)
@@ -416,7 +416,7 @@ function FianlizarCompraComponent2 (){
     }
 
     function addCupomTroca(){
-        if(mostrarCupomTroca == -1){
+        if(mostrarCupomTroca === -1){
             var meio = {
                 tipo: "Cupom de Troca",
                 detalhes: " ",
@@ -432,7 +432,7 @@ function FianlizarCompraComponent2 (){
     }
     
     function removerCupomTroca(meioDePagamento){
-        if(mostrarCupomTroca==-1 || mostrarCupomTroca == cuponsTroca.indexOf(meioDePagamento)){
+        if(mostrarCupomTroca===-1 || mostrarCupomTroca === cuponsTroca.indexOf(meioDePagamento)){
             setCuponsTroca(cuponsTroca.filter(meio => cuponsTroca.indexOf(meio) !== cuponsTroca.indexOf(meioDePagamento) ))
             setMostrarCupomTroca(-1)
         }
@@ -472,7 +472,7 @@ function FianlizarCompraComponent2 (){
 
     useEffect(() => {
         
-        if(totalPagar==0){
+        if(totalPagar===0){
 
         }
         if(localStorage.getItem( "isLogged" )){
@@ -481,7 +481,7 @@ function FianlizarCompraComponent2 (){
                     setCliente(res.data)
                     if(pedido.itens.length===0){
                         var meioPag;
-                        if( res.data.cartoes && res.data.cartoes.length!=0){
+                        if( res.data.cartoes && res.data.cartoes.length!==0){
                             res.data.cartoes.forEach(cartao => {
                                 if(cartao.preferencial){
                                     meioPag = {
