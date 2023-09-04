@@ -435,11 +435,11 @@ function DadosClientesComponent (props){
                                     </div>
                                     <div className='form-group'>
                                         <label>Data de Validade:</label>
-                                        <input type={"month"} name='data_validade_input' className='form-control' value={dataToInputMesEAnoDataMask(clienteTemp.cartoes[cartaoIndexTemp].validade)} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, validade : event.target.value} : car)})} size="50"></input>
+                                        <input type={"month"} name='data_validade_car_input' className='form-control' value={dataToInputMesEAnoDataMask(clienteTemp.cartoes[cartaoIndexTemp].validade)} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, validade : event.target.value} : car)})} size="50"></input>
                                     </div>
                                     <div className='form-group'>
                                         <label>Codigo de Seguranca:</label>
-                                        <input type={"text"} placeholder='CVV' name='codigo_seguranca_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].codigoSeguranca} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, codigoSeguranca : event.target.value} : car)})} size="50"></input>
+                                        <input type={"text"} placeholder='CVV' name='codigo_seguranca_car_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].codigoSeguranca} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, codigoSeguranca : event.target.value} : car)})} size="50"></input>
                                     </div>
                                     <div className='form'>
                                         <input type={"checkbox"} name='preferencial_car_input' onClick={()=>setCartaoPreferecialTemp()} checked={clienteTemp.cartoes[cartaoIndexTemp].preferencial}></input>Preferencial

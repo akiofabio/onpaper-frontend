@@ -76,13 +76,13 @@ function AreaClienteAlterarComponent (props){
                 <div className='card-body'>
                     <div className='form-group'>
                         <label>Digite a nova senha:</label>
-                        <input type={"password"}  name='senha' className='form-control' value={cliente.senha} onChange={(event) => setCliente({...cliente, senha: event.target.value})}></input>
+                        <input type={"password"}  name='senha_input' className='form-control' value={cliente.senha} onChange={(event) => setCliente({...cliente, senha: event.target.value})}></input>
                         <label>Confirme a nova senha:</label>
-                        <input type={"password"}  name='confimarSenha' className='form-control' value={senhaConfirmacao} onChange={(event) => setSenhaConfirmacao(event.target.value)}></input>
+                        <input type={"password"}  name='confimar_senha_input' className='form-control' value={senhaConfirmacao} onChange={(event) => setSenhaConfirmacao(event.target.value)}></input>
                     </div>
                     <div className="row justify-content-md-center" style={{margin:20}}>
                         <div className='col-2'>
-                            <button className='btn btn-outline-dark' onClick={() => save()}>Confirmar</button>
+                            <button className='btn btn-outline-dark' name='confimar_button' onClick={() => save()}>Confirmar</button>
                         </div>
                     </div>
                 </div>  
