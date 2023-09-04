@@ -8,16 +8,16 @@ function AreaGerenteMenu(){
             <h3 style={{textAlign:"center"}}>Menu</h3>
             <div className='card-body '>
                 <div className='row'>
-                    <Link to="clientes" className='btn btn-outline-dark'>Clientes</Link>
+                    <Link to="clientes" name="clientes_menu_button" className='btn btn-outline-dark'>Clientes</Link>
                 </div>
                 <div className='row'>
-                    <Link to="pedidos" className='btn btn-outline-dark'>Pedidos</Link>
+                    <Link to="pedidos" name="pedidos_menu_button" className='btn btn-outline-dark'>Pedidos</Link>
                 </div>
                 <div className='row'>
-                    <Link to="produtos" className='btn btn-outline-dark'>Produtos</Link>
+                    <Link to="produtos" name="produtos_menu_button" className='btn btn-outline-dark'>Produtos</Link>
                 </div>
                 <div className='row'>
-                    <Link to="configuracaoes"className='btn btn-outline-dark'>Configuracao</Link>
+                    <Link to="configuracaoes" name="configuracoes_menu_button" className='btn btn-outline-dark'>Configuracao</Link>
                 </div>
             </div>
         </div>

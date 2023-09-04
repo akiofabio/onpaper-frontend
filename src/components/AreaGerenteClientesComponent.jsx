@@ -92,13 +92,13 @@ function AreaGerenteClientesComponent(){
                     </div>
                     <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => mostrarDetalhesbutton(cliente)}>Mostrar Detalhes</button>
+                            <button name={"mostrar_detalhes_button" + (clientes.indexOf(cliente)+1)} className='btn btn-dark' onClick={() => mostrarDetalhesbutton(cliente)}>Mostrar Detalhes</button>
                         </div>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                            <button name={"editar_button" + (clientes.indexOf(cliente)+1)} className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
                         </div>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => deletar(cliente)}>Deletar</button>
+                            <button name={"deletar_button" + (clientes.indexOf(cliente)+1)} className='btn btn-dark' onClick={() => deletar(cliente)}>Deletar</button>
                         </div>
                     </div>
                 </div>
@@ -210,10 +210,13 @@ function AreaGerenteClientesComponent(){
                         
                         <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
                             <div className='col-auto'>
-                                <button className='btn btn-dark' onClick={() => esconderDetalhesbutton(cliente)}>Esconder Detalhes</button>
+                                <button name={"esconder_detalhes_button" + (clientes.indexOf(cliente)+1)} className='btn btn-dark' onClick={() => esconderDetalhesbutton(cliente)}>Esconder Detalhes</button>
                             </div>
                             <div className='col-auto'>
-                                <button className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                                <button name={"editar_button" + (clientes.indexOf(cliente)+1)} className='btn btn-dark' onClick={() => editar(cliente)}>Editar</button>
+                            </div>
+                            <div className='col-auto'>
+                                <button name={"deletar_button" + (clientes.indexOf(cliente)+1)} className='btn btn-dark' onClick={() => deletar(cliente)}>Deletar</button>
                             </div>
                         </div>
                     </div>
@@ -249,10 +252,10 @@ function AreaGerenteClientesComponent(){
                 {pesquisas.map( pesquisa => 
                     <div className='row'>
                         <div className='col'>
-                            <input className="form-control me-2" type="search" placeholder="Quem que você procura?" aria-label="Search" value={pesquisa.conteudo} onKeyDown={(event)=> pressEnter(event)} onChange={(event)=>setPesquisas(pesquisas.map(pes => pesquisas.indexOf(pes)===pesquisas.indexOf(pesquisa)? {...pes, conteudo: event.target.value}:pes))}></input>
+                            <input name={"pesquisa_input" + (pesquisas.indexOf(pesquisa)+1)} className="form-control me-2" type="search" placeholder="Quem que você procura?" aria-label="Search" value={pesquisa.conteudo} onKeyDown={(event)=> pressEnter(event)} onChange={(event)=>setPesquisas(pesquisas.map(pes => pesquisas.indexOf(pes)===pesquisas.indexOf(pesquisa)? {...pes, conteudo: event.target.value}:pes))}></input>
                         </div>
                         <div className='col-auto'>
-                            <select className='form-select'  onChange={(event)=>setParametro(event , pesquisa)} style={{}}>
+                            <select name={"parametro_select" + (pesquisas.indexOf(pesquisa)+1)} className='form-select'  onChange={(event)=>setParametro(event , pesquisa)} style={{}}>
                                 <option value={"nome"}>Nome</option>
                                 <option value={"cpf"}>CPF</option>
                                 <option value={"dataNascimento"}>Data de Nascimento</option>
@@ -262,7 +265,7 @@ function AreaGerenteClientesComponent(){
                 )}
                 <div className='row' style={{ margin:15}}>
                     <div className='col-auto'>
-                        <button className="btn btn-dark" type="submit" onClick={()=> pesquisar()}>Pesquisar</button>
+                        <button name="pesquisar_button" className="btn btn-dark" type="submit" onClick={()=> pesquisar()}>Pesquisar</button>
                     </div>
                     <div className='col-auto'>
                         <button className="btn btn-outline-dark" onClick={()=> addPesquisa()}>+ Adicionar Pesquisa</button>
