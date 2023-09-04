@@ -135,22 +135,8 @@ function CadastrarClienteComponent(){
                 cartao.validade = new Date(cartao.validade)
             })
             ClienteService.createCliente(clienteTemp).then(res => {
-                if(!localStorage.getItem("isLogged")){
-                        var usuario = res.data
-                    localStorage.setItem( "id" , usuario.id )
-                    localStorage.setItem( "tipo" , usuario.tipo )
-                    localStorage.setItem( "isLogged" , true )
-                    if(usuario.tipo == "CLIENTE"){
-                        if(localStorage.getItem("carrinhoId")){
-
-                        }
-                        localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
-                    }
-                    
-                }
                 alert("Cliente Cadastrado com sucesso")
                 navegate(-1)
-                
             }).catch(error => {
                 alert(JSON.stringify(error.response.data))
             })
@@ -210,7 +196,7 @@ function CadastrarClienteComponent(){
                                 <div className='card-body'>
                                     <div className='form-group'>
                                         <label>Email:</label>
-                                        <input type={"text"} placeholder='email' name='email' className='form-control' value={cliente.email} onChange={(event) => setCliente({...cliente, email : event.target.value})}></input>
+                                        <input type={"text"} placeholder='email' name='email_input' className='form-control' value={cliente.email} onChange={(event) => setCliente({...cliente, email : event.target.value})}></input>
                                     </div>
                                     {cliente.telefones.map(telefone => 
                                         <div className='form-group card'  style={{marginTop:10}}>
@@ -219,20 +205,20 @@ function CadastrarClienteComponent(){
                                             </div>
                                             <div className='card-body'>
                                                 <label>Tipo</label>
-                                                <input type={"text"} placeholder='Ex. Celular' name='tipo' className='form-control' value={telefone.tipo} onChange={(event) => setCliente({...cliente, telefones : cliente.telefones.map(tel => cliente.telefones.indexOf(tel) === cliente.telefones.indexOf(telefone) ? {...tel, tipo : event.target.value} : tel)})}></input>
+                                                <input type={"text"} placeholder='Ex. Celular' name= {"tipo_tel_input" + (cliente.telefones.indexOf(telefone) +1)} className='form-control' value={telefone.tipo} onChange={(event) => setCliente({...cliente, telefones : cliente.telefones.map(tel => cliente.telefones.indexOf(tel) === cliente.telefones.indexOf(telefone) ? {...tel, tipo : event.target.value} : tel)})}></input>
                                                 <label>DDD</label>
-                                                <input type={"text"} placeholder='(xxx)' name='ddd' className='form-control' value={telefone.ddd} onChange={(event) => setCliente({...cliente, telefones : cliente.telefones.map(tel => cliente.telefones.indexOf(tel) === cliente.telefones.indexOf(telefone) ? {...tel, ddd : event.target.value} : tel)})}></input>
+                                                <input type={"text"} placeholder='(xxx)' name={"ddd_tel_input" + (cliente.telefones.indexOf(telefone) +1)} className='form-control' value={telefone.ddd} onChange={(event) => setCliente({...cliente, telefones : cliente.telefones.map(tel => cliente.telefones.indexOf(tel) === cliente.telefones.indexOf(telefone) ? {...tel, ddd : event.target.value} : tel)})}></input>
                                                 <label>Numero</label>
-                                                <input type={"text"} placeholder='xxxxx-xxxx' name='tipo' className='form-control' value={telefone.numero} onChange={(event) => setCliente({...cliente, telefones : cliente.telefones.map(tel => cliente.telefones.indexOf(tel) === cliente.telefones.indexOf(telefone) ? {...tel, numero : event.target.value}:tel)})}></input>
+                                                <input type={"text"} placeholder='xxxxx-xxxx' name={"numero_tel_input" + (cliente.telefones.indexOf(telefone) +1)} className='form-control' value={telefone.numero} onChange={(event) => setCliente({...cliente, telefones : cliente.telefones.map(tel => cliente.telefones.indexOf(tel) === cliente.telefones.indexOf(telefone) ? {...tel, numero : event.target.value}:tel)})}></input>
                                             </div>
                                         </div>
                                     )}
                                     <div className='row justify-content-center' style={{ marginTop:10, marginBottom:10 }}>
                                         <div className="col-auto">
-                                            <button className='btn btn-dark' onClick={()=>addTelefone()} >Adicionar Telefone</button>
+                                            <button className='btn btn-dark' name='adiconar_tel_button' onClick={()=>addTelefone()} >Adicionar Telefone</button>
                                         </div>
                                         <div className="col-auto">
-                                            <button className='btn btn-dark' onClick={()=>removerTelefone()} >Remover Telefone</button>
+                                            <button className='btn btn-dark' name='remover_tel_button' onClick={()=>removerTelefone()} >Remover Telefone</button>
                                         </div>
                                     </div>
                                 </div>
@@ -245,40 +231,40 @@ function CadastrarClienteComponent(){
                                             </div>
                                                 <div className='card-body'>
                                                 <label>Nome</label>
-                                                <input type={"text"} placeholder='Nome do endereço, exp. "Casa" , "Trabalho"' className='form-control' value={endereco.nome} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, nome : event.target.value} : end)})}></input>
+                                                <input type={"text"} placeholder='Nome do endereço, exp. "Casa" , "Trabalho"' name={"nome_end_input" + (cliente.enderecos.indexOf(endereco) +1)} className='form-control' value={endereco.nome} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, nome : event.target.value} : end)})}></input>
                                                 <label>CEP</label>
-                                                <input type={"text"} placeholder='CEP' className='form-control' value={cepMask(endereco.cep)} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cep : event.target.value.replace(/\D/g, "")} : end)})}></input>
+                                                <input type={"text"} placeholder='CEP' className='form-control'  name={"cep_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={cepMask(endereco.cep)} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cep : event.target.value.replace(/\D/g, "")} : end)})}></input>
                                                 <label>País</label>
-                                                <input type={"text"} placeholder='Pais' className='form-control' value={endereco.pais} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, pais : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Pais' className='form-control'  name={"pais_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.pais} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, pais : event.target.value}:end)})}></input>
                                                 <label>Estado</label>
-                                                <input type={"text"} placeholder='Estado' className='form-control' value={endereco.estado} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, estado : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Estado' className='form-control'  name={"estado_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.estado} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, estado : event.target.value}:end)})}></input>
                                                 <label>Cidadde</label>
-                                                <input type={"text"} placeholder='Cidadde' className='form-control' value={endereco.cidade} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cidade : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Cidadde' className='form-control'  name={"cidade_end_input" + (cliente.enderecos.indexOf(endereco) +1)}value={endereco.cidade} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cidade : event.target.value}:end)})}></input>
                                                 <label>Bairro</label>
-                                                <input type={"text"} placeholder='Bairro' className='form-control' value={endereco.bairro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, bairro : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Bairro' className='form-control' name={"bairro_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.bairro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, bairro : event.target.value}:end)})}></input>
                                                 <label>Tipo de Logradouro</label>
-                                                <input type={"text"} placeholder='Tipo de Logradouro' className='form-control' value={endereco.tipoLogradouro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, tipoLogradouro : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Tipo de Logradouro' className='form-control' name={"tipo_logradouro_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.tipoLogradouro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, tipoLogradouro : event.target.value}:end)})}></input>
                                                 <label>Logradouro</label>
-                                                <input type={"text"} placeholder='Logradouro'  className='form-control' value={endereco.logradouro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, logradouro : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Logradouro'  className='form-control'  name={"logradouro_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.logradouro} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, logradouro : event.target.value}:end)})}></input>
                                                 <label>Numero</label>
-                                                <input type={"text"} placeholder='Numero' className='form-control' value={endereco.numero} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, numero : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Numero' className='form-control' name={"numero_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.numero} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, numero : event.target.value}:end)})}></input>
                                                 <label>Tipo</label>
-                                                <input type={"text"} placeholder='Tipo do endereço, Ex. Casa, Predio, etc.' className='form-control' value={endereco.tipo} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, tipo : event.target.value}:end)})}></input>
+                                                <input type={"text"} placeholder='Tipo do endereço, Ex. Casa, Predio, etc.' className='form-control'  name={"tipo_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.tipo} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, tipo : event.target.value}:end)})}></input>
                                                 <label>Observacao</label>
-                                                <input type={"text"} placeholder='Observacao' className='form-control' value={endereco.observacao} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, observacao : event.target.value}:end)})}></input>
-                                                <input type={"checkbox"} name='Entrega' onClick={() => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, entrega : !endereco.entrega}:end)})} checked={endereco.entrega}></input>Endereço de Entrega
+                                                <input type={"text"} placeholder='Observacao' className='form-control' name={"observacao_end_input" + (cliente.enderecos.indexOf(endereco) +1)} value={endereco.observacao} onChange={(event) => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, observacao : event.target.value}:end)})}></input>
+                                                <input type={"checkbox"} name={"entrega_end_input" + (cliente.enderecos.indexOf(endereco) +1)} onClick={() => setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, entrega : !endereco.entrega}:end)})} checked={endereco.entrega}></input>Endereço de Entrega
                                                 <br></br>
-                                                <input type={"checkbox"} name='Cobranca' onClick={()=>setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cobranca : !endereco.cobranca}:end)})} checked={endereco.cobranca}></input>Endereço de Cobrança
+                                                <input type={"checkbox"} name={"cobranca_end_input" + (cliente.enderecos.indexOf(endereco) +1)} onClick={()=>setCliente({...cliente, enderecos : cliente.enderecos.map(end => cliente.enderecos.indexOf(end) === cliente.enderecos.indexOf(endereco) ? {...end, cobranca : !endereco.cobranca}:end)})} checked={endereco.cobranca}></input>Endereço de Cobrança
                                                 
                                             </div>
                                         </div>
                                     )}
                                     <div className='row justify-content-center' style={{ marginTop:10, marginBottom:10 }}>
                                         <div className="col-auto">
-                                            <button className='btn btn-dark' onClick={()=>addEndereco()} >Adicionar Endereco</button>
+                                            <button className='btn btn-dark' name='adicionar_end_button' onClick={()=>addEndereco()} >Adicionar Endereco</button>
                                         </div>
                                         <div className="col-auto">
-                                            <button className='btn btn-dark' onClick={()=>removerEndereco()} >Remover Endereco</button>
+                                            <button className='btn btn-dark'  name='romover_end_button' onClick={()=>removerEndereco()} >Remover Endereco</button>
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +277,7 @@ function CadastrarClienteComponent(){
                                             </div>
                                             <div className='card-body'>
                                                 <label>Bandeira:</label>
-                                                <select name="bandeira" onSelect={(event)=>{setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
+                                                <select name={"bandeira_car_select" + (cliente.cartoes.indexOf(cartao) +1)} onSelect={(event)=>{setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, bandeira : {id:event.target.value} } : cart)})}} >
                                                     {bandeiras.map(bandeira => 
                                                         <option value={bandeira.id}> {bandeira.nome} </option>
                                                     )}
@@ -299,24 +285,24 @@ function CadastrarClienteComponent(){
                                                 </select>
                                                 <br></br>
                                                 <label>Nome:</label>
-                                                <input type={"text"} placeholder='Nome' name='tipo' className='form-control' value={cartao.nome} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, nome : event.target.value} : cart)})}></input>
+                                                <input type={"text"} placeholder='Nome' name={"nome_car_input" + (cliente.cartoes.indexOf(cartao) +1)} className='form-control' value={cartao.nome} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, nome : event.target.value} : cart)})}></input>
                                                 <label>Numero:</label>
-                                                <input type={"text"} placeholder='Numero' name='tipo' className='form-control' value={cartao.numero} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, numero : event.target.value} : cart)})}></input>
+                                                <input type={"text"} placeholder='Numero' name={"numero_car_input" + (cliente.cartoes.indexOf(cartao) +1)} className='form-control' value={cartao.numero} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, numero : event.target.value} : cart)})}></input>
                                                 <label>Data de Vencimento:</label>
-                                                <input type={"month"} name='tipo' className='form-control' value={cartao.validade} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, validade : event.target.value} : cart)})}></input>
+                                                <input type={"month"} name={"data_vencimento_car_input" + (cliente.cartoes.indexOf(cartao) +1)} className='form-control' value={cartao.validade} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, validade : event.target.value} : cart)})}></input>
                                                 <label>Codigo de Seguranca:</label>
-                                                <input type={"text"} placeholder='Codigo de Seguanca' name='tipo' className='form-control' value={cartao.codigoSeguranca} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, codigoSeguranca : event.target.value} : cart)})}></input>
-                                                <input type={"checkbox"} name='tipo' onClick={()=>setCartaoPreferecial(cartao)} checked={cartao.preferencial}></input>Preferencial
+                                                <input type={"text"} placeholder='Codigo de Seguanca' name={"codigo_seguranca_car_input" + (cliente.cartoes.indexOf(cartao) +1)} className='form-control' value={cartao.codigoSeguranca} onChange={(event) => setCliente({...cliente, cartoes : cliente.cartoes.map(cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, codigoSeguranca : event.target.value} : cart)})}></input>
+                                                <input type={"checkbox"} name={"preferencial_car_input" + (cliente.cartoes.indexOf(cartao) +1)} onClick={()=>setCartaoPreferecial(cartao)} checked={cartao.preferencial}></input>Preferencial
                                                 
                                             </div>
                                         </div>
                                     )}
                                     <div className='row justify-content-center' style={{ marginTop:10, marginBottom:10 }}>
                                         <div className="col-auto">
-                                            <button className='btn btn-dark' onClick={()=>addCartao()} >Adicionar Cartao</button>
+                                            <button className='btn btn-dark' name="adicionar_car_button" onClick={()=>addCartao()} >Adicionar Cartao</button>
                                         </div>
                                         <div className="col-auto">
-                                            <button className='btn btn-dark' onClick={()=>removerCartao()} >Remover Cartao</button>
+                                            <button className='btn btn-dark' name="remover_car_button" onClick={()=>removerCartao()} >Remover Cartao</button>
                                         </div>
                                     </div>
                                 </div>
@@ -324,19 +310,19 @@ function CadastrarClienteComponent(){
                                 <div className='card-body'>
                                     <div className='form-group'>
                                         <label>Digite sua senha:</label>
-                                        <input type={"password"}  name='senha' className='form-control' value={cliente.senha} onChange={(event) => setCliente({...cliente, senha: event.target.value})}></input>
+                                        <input type={"password"}  name='senha_input' className='form-control' value={cliente.senha} onChange={(event) => setCliente({...cliente, senha: event.target.value})}></input>
                                         <label>Confirme sua senha:</label>
-                                        <input type={"password"}  name='confimarSenha' className='form-control' value={senhaConfirmacao} onChange={(event) => setSenhaConfirmacao(event.target.value)}></input>
+                                        <input type={"password"}  name='confimar_senha_input' className='form-control' value={senhaConfirmacao} onChange={(event) => setSenhaConfirmacao(event.target.value)}></input>
                                     </div>
                                 </div>    
                             </div>
                         </div>
                         <div className='row justify-content-center'>
                             <div className="col-auto">
-                                <button className='btn btn-dark' onClick={()=>cadastrar()} >Cadastrar</button>
+                                <button className='btn btn-dark' name='cadastrar_button' onClick={()=>cadastrar()} >Cadastrar</button>
                             </div>
                             <div className="col-auto">
-                                <button className='btn btn-secondary' onClick={()=>navegate(-1)}>Cancelar</button>
+                                <button className='btn btn-secondary' name='cancelar_button' onClick={()=>navegate(-1)}>Cancelar</button>
                             </div>
                         </div>
                     </div>
