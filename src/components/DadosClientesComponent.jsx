@@ -229,7 +229,7 @@ function DadosClientesComponent (props){
                                         <label>Nome:</label>
                                         <input type={"text"} placeholder='Nome Completo' name='nome_input' className='form-control' value={clienteTemp.nome} onChange={(event) => setClienteTemp({...clienteTemp, nome : event.target.value})}  size="50"></input>
                                         <label>CPF:</label>
-                                        <input type={"text"} placeholder='CPF' name='cpf_input' className='form-control' value={cpfMask(clienteTemp.cpf)} onChange={(event) => setClienteTemp({...clienteTemp, cpf : event.target.value})}></input>
+                                        <input type={"text"} placeholder='CPF' name='cpf_input' className='form-control' value={cpfMask(clienteTemp.cpf)} onChange={(event) => setClienteTemp({...clienteTemp, cpf : event.target.value.replace(/\D/g, "")})}></input>
                                         <label>Genero:</label>
                                         <input type={"text"} placeholder='Genero' name='genero_input' className='form-control' value={clienteTemp.genero} onChange={(event) => setClienteTemp({...clienteTemp, genero : event.target.value})}></input>
                                         <label>Data de Nascimento:</label>
