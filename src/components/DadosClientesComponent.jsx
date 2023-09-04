@@ -233,7 +233,7 @@ function DadosClientesComponent (props){
                                         <label>Genero:</label>
                                         <input type={"text"} placeholder='Genero' name='genero_input' className='form-control' value={clienteTemp.genero} onChange={(event) => setClienteTemp({...clienteTemp, genero : event.target.value})}></input>
                                         <label>Data de Nascimento:</label>
-                                        <input type={"date"} name='genero_input' className='form-control' value={dataToInputDataMask(clienteTemp.dataNascimento)} onChange={(event) => setClienteTemp({...clienteTemp, dataNascimento : event.target.value})}></input>
+                                        <input type={"date"} name='data_nascimento_input' className='form-control' value={dataToInputDataMask(clienteTemp.dataNascimento)} onChange={(event) => setClienteTemp({...clienteTemp, dataNascimento : event.target.value})}></input>
                                     </div>
                                 </div>
                                 <div className='row justify-content-md-center'>
@@ -418,7 +418,7 @@ function DadosClientesComponent (props){
                                 <div className='card-body'>
                                     <div className='form-group'>
                                         <label>Bandeira:</label>
-                                        <select  name="bandeira_car_select" defaultValue={clienteTemp.cartoes[cartaoIndexTemp].bandeira? bandeiras.findIndex(ban => clienteTemp.cartoes[cartaoIndexTemp].bandeira.id === ban.id):0} name="bandeira" onChange={(event)=>{setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(cart => clienteTemp.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : bandeiras[event.target.value] } : cart)})}} >
+                                        <select  name="bandeira_car_select" defaultValue={clienteTemp.cartoes[cartaoIndexTemp].bandeira? bandeiras.findIndex(ban => clienteTemp.cartoes[cartaoIndexTemp].bandeira.id === ban.id):0} onChange={(event)=>{setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(cart => clienteTemp.cartoes.indexOf(cart) === cartaoIndexTemp ? {...cart, bandeira : bandeiras[event.target.value] } : cart)})}} >
                                             {bandeiras.map(bandeira => 
                                                 <option value={bandeiras.indexOf(bandeira)}> {bandeira.nome} </option>
                                             )}
