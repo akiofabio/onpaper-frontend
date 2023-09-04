@@ -21,6 +21,7 @@ function LoginComponent(){
 
                 }
                 localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
+
                 navegate(-1)
             }
             else{
@@ -44,25 +45,25 @@ function LoginComponent(){
                             <div className='card-body'>
                                 <div className='form-group'>
                                     <label>Email:</label>
-                                    <input type={"email"} placeholder='Email' name='email' className='form-control' value={email} onChange={ (event) => setEmail(event.target.value)}></input>
+                                    <input type={"email"} placeholder='Email' name='email_input' className='form-control' value={email} onChange={ (event) => setEmail(event.target.value)}></input>
                                 </div>
                                 <div className='form-group'>
                                     <label>Senha:</label>
-                                    <input type={"password"} placeholder='Senha' name='senha' className='form-control' value={senha} onChange={(event) => setSenha(event.target.value)}></input>
+                                    <input type={"password"} placeholder='Senha' name='senha_input' className='form-control' value={senha} onChange={(event) => setSenha(event.target.value)}></input>
                                 </div>
                             </div>
                         </div>
                         <div className='row justify-content-center'>
                             <div className="col-auto">
-                                <button className='btn btn-dark' onClick={()=>confimarLogin()} >Entrar</button>
+                                <button className='btn btn-dark' name='entrar_button' onClick={()=>confimarLogin()} >Entrar</button>
                             </div>
                             <div className="col-auto">
-                                <button className='btn btn-secondary' onClick={()=>navegate(-1)}>Cancelar</button>
+                                <button className='btn btn-secondary' name='cancelar_button' onClick={()=>navegate(-1)}>Cancelar</button>
                             </div>
                         </div>
-                        <div className='row justify-content-center' style={{ marginBottom:15 ,marginTop:15}}>
+                        <div className='row justify-content-center'  style={{ marginBottom:15 ,marginTop:15}}>
                             <div className="col-auto">
-                                <button className='btn btn-secondary' onClick={()=>cadastrar()}>Cadastrar</button>
+                                <button className='btn btn-secondary' name='cadastrar_button' onClick={()=>cadastrar()}>Cadastrar</button>
                             </div>
                         </div>
                     </div>

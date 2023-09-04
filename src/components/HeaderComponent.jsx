@@ -24,7 +24,7 @@ function LoginImage (props){
     }
     if( !isLogged ){
         return (
-            <button className='btn btn-dark' onClick={()=>navigate("/login")}>
+            <button className='btn btn-dark' name='login_button' onClick={()=>navigate("/login")}>
                 <img src='/imagens/icones/login.png'></img>
             </button>
         );
@@ -32,7 +32,7 @@ function LoginImage (props){
     else{
         return (
             <div>
-                <button className='btn btn-dark' ref={target} onClick={()=>setShow(!show)}>
+                <button className='btn btn-dark' name='login_button' ref={target} onClick={()=>setShow(!show)}>
                     <img src='/imagens/icones/login.png'></img>
                 </button>
                 
@@ -50,8 +50,8 @@ function LoginImage (props){
                         ...props.style,
                         }}
                     >
-                        <button className='btn btn-dark' style={{marginBottom: 5 , marginTop: 5 } } onClick={() => menu()}>Menu</button>
-                        <button className='btn btn-dark' style={{marginBottom: 5}} onClick={() => sair()}>Sair</button>
+                        <button className='btn btn-dark' name='menu_login_button' style={{marginBottom: 5 , marginTop: 5 } } onClick={() => menu()}>Menu</button>
+                        <button className='btn btn-dark' name='sair_login_button' style={{marginBottom: 5}} onClick={() => sair()}>Sair</button>
                     </div>
                     )}
                 </Overlay>

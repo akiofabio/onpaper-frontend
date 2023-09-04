@@ -136,7 +136,7 @@ function CadastrarClienteComponent(){
             })
             ClienteService.createCliente(clienteTemp).then(res => {
                 alert("Cliente Cadastrado com sucesso")
-                navegate(-1)
+                navegate(-1,{replace: true})
             }).catch(error => {
                 alert(JSON.stringify(error.response.data))
             })
