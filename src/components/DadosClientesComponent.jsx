@@ -109,95 +109,10 @@ function DadosClientesComponent (props){
     
     const [bandeiras, setBandeiras] = useState([]);
     
+    //Dados Pessoal
     function editarDadosPessoal(){
         setClienteTemp(cliente)
         setMostrarEditarDadosPessoal(true)
-    }
-
-    function editarTelefone(tel){
-        setClienteTemp(cliente)
-        setTelefoneIndexTemp(tel)
-        setMostrarEditarTelefone(true)
-    }
-
-    function addTelefone(){
-        setClienteTemp({...cliente , telefones : [...cliente.telefones,{tipo:"", ddd:"", numero:""}]})
-        setTelefoneIndexTemp(cliente.telefones.length)
-        setMostrarEditarTelefone(true)
-    }
-    
-    function removerTelefone(telIndex){     
-        if(cliente.telefones.length>1){
-            var telefonesTemp = cliente.telefones.filter(tel => cliente.telefones.indexOf(tel) !== telIndex)
-            salvar({...cliente, telefones: telefonesTemp})
-        }
-        
-    }
-
-    function editarEndereco(end){
-        setClienteTemp(cliente)
-        setEnderecoIndexTemp(end)
-        setMostrarEditarEndereco(true)
-    }
-
-    function addEndereco(){
-        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"",pais:"", estado:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:""}]})
-        setEnderecoIndexTemp(cliente.enderecos.length)
-        setMostrarEditarEndereco(true)
-    }
-    
-    function removerEndereco(endIndex){     
-        if(cliente.enderecos.length>1){
-            var enderecosTemp = cliente.enderecos.filter(end => cliente.enderecos.indexOf(end) !== endIndex)
-            salvar({...cliente, enderecos: enderecosTemp})
-        }
-    }
-
-    function editarCartao(car){
-        setClienteTemp(cliente)
-        setCartaoIndexTemp(car)
-        setMostrarEditarCartao(true)
-    }
-
-    function addCartao(){
-        setClienteTemp({...cliente , cartoes : [...cliente.cartoes,{nome:"", numero:"",validade:"",bandeira:{id:0,nome:""}}]})
-        setCartaoIndexTemp(cliente.cartoes.length)
-        setMostrarEditarCartao(true)
-    }
-    
-    function removerCartao(carIndex){     
-        if(cliente.cartoes.length>1){
-            var cartoesTemp = cliente.cartoes.filter(car => cliente.cartoes.indexOf(car) !== carIndex)
-            if(cliente.cartoes[carIndex].preferencial)
-                cartoesTemp = cartoesTemp.map(car => cartoesTemp.indexOf(car)===0? {...car, preferencial:true}:{...car, preferencial:false})
-            salvar({...cliente, cartoes: cartoesTemp})
-        }
-    }
-
-    function salvar(cli){
-        cli.cartoes.forEach( cartao =>{
-            cartao.validade = new Date(cartao.validade)
-        })
-        ClienteService.updateCliente(cli, cliente.id).then(res => {
-            var usuario = res.data
-            localStorage.setItem( "id" , usuario.id )
-            localStorage.setItem( "tipo" , usuario.tipo )
-            localStorage.setItem( "isLogged" , true )
-            if(usuario.tipo == "CLIENTE"){
-                if(localStorage.getItem("carrinhoId")){
-
-                }
-                localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
-            }
-            alert("Cliente Alterado com sucesso")
-            setCliente(usuario)
-            setMostrarEditarDadosPessoal(false)
-            setMostrarEditarTelefone(false)
-            setMostrarEditarEndereco(false)
-            setMostrarEditarCartao(false)
-        }).catch(error => {
-            alert(JSON.stringify(error.response.data))
-        })
     }
 
     function editarDadosPessoalOverlay(){
@@ -252,6 +167,27 @@ function DadosClientesComponent (props){
         )
     }
 
+    //Telefone
+    function editarTelefone(tel){
+        setClienteTemp(cliente)
+        setTelefoneIndexTemp(tel)
+        setMostrarEditarTelefone(true)
+    }
+
+    function addTelefone(){
+        setClienteTemp({...cliente , telefones : [...cliente.telefones,{tipo:"", ddd:"", numero:""}]})
+        setTelefoneIndexTemp(cliente.telefones.length)
+        setMostrarEditarTelefone(true)
+    }
+    
+    function removerTelefone(telIndex){     
+        if(cliente.telefones.length>1){
+            var telefonesTemp = cliente.telefones.filter(tel => cliente.telefones.indexOf(tel) !== telIndex)
+            salvar({...cliente, telefones: telefonesTemp})
+        }
+        
+    }
+
     function editarTelefoneOverlay(){
         return(
             <div>
@@ -300,6 +236,26 @@ function DadosClientesComponent (props){
                 </Overlay>
             </div>
         )
+    }
+
+    //Endereço
+    function editarEndereco(end){
+        setClienteTemp(cliente)
+        setEnderecoIndexTemp(end)
+        setMostrarEditarEndereco(true)
+    }
+
+    function addEndereco(){
+        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"",pais:"", estado:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:""}]})
+        setEnderecoIndexTemp(cliente.enderecos.length)
+        setMostrarEditarEndereco(true)
+    }
+    
+    function removerEndereco(endIndex){     
+        if(cliente.enderecos.length>1){
+            var enderecosTemp = cliente.enderecos.filter(end => cliente.enderecos.indexOf(end) !== endIndex)
+            salvar({...cliente, enderecos: enderecosTemp})
+        }
     }
 
     function editarEnderecoOverlay(){
@@ -390,6 +346,28 @@ function DadosClientesComponent (props){
         )
     }
 
+    //Cartão
+    function editarCartao(car){
+        setClienteTemp(cliente)
+        setCartaoIndexTemp(car)
+        setMostrarEditarCartao(true)
+    }
+
+    function addCartao(){
+        setClienteTemp({...cliente , cartoes : [...cliente.cartoes,{nome:"", numero:"",validade:"",bandeira:{id:0,nome:""}}]})
+        setCartaoIndexTemp(cliente.cartoes.length)
+        setMostrarEditarCartao(true)
+    }
+    
+    function removerCartao(carIndex){     
+        if(cliente.cartoes.length>1){
+            var cartoesTemp = cliente.cartoes.filter(car => cliente.cartoes.indexOf(car) !== carIndex)
+            if(cliente.cartoes[carIndex].preferencial)
+                cartoesTemp = cartoesTemp.map(car => cartoesTemp.indexOf(car)===0? {...car, preferencial:true}:{...car, preferencial:false})
+            salvar({...cliente, cartoes: cartoesTemp})
+        }
+    }
+    
     function editarCartaoOverlay(){
 
         return(
@@ -460,7 +438,6 @@ function DadosClientesComponent (props){
             </div>
         )
     }
-
     function setCartaoPreferecial(cartao){
         setCliente({...cliente, cartoes: cliente.cartoes.map( cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, preferencial:true}: {...cart,preferencial:false})})
     }
@@ -477,6 +454,33 @@ function DadosClientesComponent (props){
         }
     }
 
+
+    function salvar(cli){
+        cli.cartoes.forEach( cartao =>{
+            cartao.validade = new Date(cartao.validade)
+        })
+        ClienteService.updateCliente(cli, cliente.id).then(res => {
+            var usuario = res.data
+            localStorage.setItem( "id" , usuario.id )
+            localStorage.setItem( "tipo" , usuario.tipo )
+            localStorage.setItem( "isLogged" , true )
+            if(usuario.tipo == "CLIENTE"){
+                if(localStorage.getItem("carrinhoId")){
+
+                }
+                localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
+            }
+            alert("Cliente Alterado com sucesso")
+            setCliente(usuario)
+            setMostrarEditarDadosPessoal(false)
+            setMostrarEditarTelefone(false)
+            setMostrarEditarEndereco(false)
+            setMostrarEditarCartao(false)
+        }).catch(error => {
+            alert(JSON.stringify(error.response.data))
+        })
+    }
+    
     useEffect(() => {
         if(!cliente.id){
             if( id !== undefined){

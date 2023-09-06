@@ -7,6 +7,7 @@ import PedidoService from '../services/PedidoService';
 import {cepMask,moedaRealMask,dataToInputMesEAnoDataMask} from '../etc/Mask';
 import Overlay from 'react-bootstrap/Overlay';
 import {separarParagrafo, separarParagrafoSemMargem,cartaoToString,enderecoToString, separarParagrafoSemMargemFonte} from '../etc/Funcoes'
+import BandeiraService from '../services/BandeiraService'
 
 function FianlizarCompraComponent2 (){
     const navigate = useNavigate()
@@ -47,8 +48,8 @@ function FianlizarCompraComponent2 (){
         codigoSeguranca:""
     })
 
-    const [bandeiras,setBandeiras] = useEffect([])
-    const [ pedido , setPedido ] = useState({
+    const [bandeiras, setBandeiras] = useState([])
+    const [pedido, setPedido] = useState({
         itens : [], 
         endereco : " ",
         cep : " ",
@@ -212,7 +213,6 @@ function FianlizarCompraComponent2 (){
     function salvarEnderecoNovo(){
         var clienteTenp = cliente
         clienteTenp.enderecos.push(novoEndereco)
-
         ClienteService.updateCliente(clienteTenp).then(res => {
             setCliente(res.data)
             setNovoEndereco(0)
@@ -586,7 +586,11 @@ function FianlizarCompraComponent2 (){
     }
 
     useEffect(() => {
-        
+        if(bandeiras.length){
+            BandeiraService.getBandeiras.then(res => {
+                setBandeiras(res.data)
+            })
+        }
         if(totalPagar===0){
 
         }
