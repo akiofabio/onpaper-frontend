@@ -33,8 +33,8 @@ function DadosClientesComponent (props){
             logradouro:"",
             numero:"",
             tipo:"",
-            entrega:false,
-            cobranca:false,
+            entrega:true,
+            cobranca:true,
             observacao:""
         }],
         cartoes: [{
@@ -79,8 +79,8 @@ function DadosClientesComponent (props){
             logradouro:"",
             numero:"",
             tipo:"",
-            entrega:false,
-            cobranca:false,
+            entrega:true,
+            cobranca:true,
             observacao:""
         }],
         cartoes: [{
@@ -246,7 +246,7 @@ function DadosClientesComponent (props){
     }
 
     function addEndereco(){
-        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"",pais:"", estado:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:""}]})
+        setClienteTemp({...cliente , enderecos : [...cliente.enderecos,{nome:"", cep:"",pais:"", estado:"", cidade:"", bairro:"", tipoLogradouro:"", logradouro:"", numero:"",tipo:"",cobranca:true,entrega:true}]})
         setEnderecoIndexTemp(cliente.enderecos.length)
         setMostrarEditarEndereco(true)
     }
@@ -438,6 +438,7 @@ function DadosClientesComponent (props){
             </div>
         )
     }
+
     function setCartaoPreferecial(cartao){
         setCliente({...cliente, cartoes: cliente.cartoes.map( cart => cliente.cartoes.indexOf(cart) === cliente.cartoes.indexOf(cartao) ? {...cart, preferencial:true}: {...cart,preferencial:false})})
     }
@@ -480,7 +481,7 @@ function DadosClientesComponent (props){
             alert(JSON.stringify(error.response.data))
         })
     }
-    
+
     useEffect(() => {
         if(!cliente.id){
             if( id !== undefined){

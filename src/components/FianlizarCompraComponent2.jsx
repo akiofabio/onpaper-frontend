@@ -27,6 +27,7 @@ function FianlizarCompraComponent2 (){
     const [mostrarNovoEndereco, setMostrarNovoEndereco] = useState(0)
     const [novoEndereco, setNovoEndereco] = useState({
         nome:"",
+        pais:"",
         cep:"",
         estado:"",
         cidade:"",
@@ -173,24 +174,49 @@ function FianlizarCompraComponent2 (){
                                 </div>
                                 <div className='card-body' >
                                     <div className='form-group'>
-                                        <label>Nome:</label>
-                                        <input type={"text"} placeholder='Nome' name='tipo_input' className='form-control' value={novoEndereco.nome} onChange={(event) => setNovoEndereco({...novoEndereco, nome : event.target.value})} size="50"></input>
+                                    <label>Nome:</label>
+                                        <input type={"text"} placeholder='Nome' name='nome_end_input' className='form-control' value={novoEndereco.nome} onChange={(event) => setNovoEndereco({...novoEndereco, nome : event.target.value})} size="80"></input>
                                         <label>CEP:</label>
-                                        <input type={"text"} placeholder='CEP' name='tipo_input' className='form-control' value={cepMask(novoEndereco.cep)} onChange={(event) => setNovoEndereco({...novoEndereco, cep : event.target.value})}></input>
-                                        <label>Estado:</label>
-                                        <input type={"text"} placeholder='Estado' name='tipo_input' className='form-control' value={novoEndereco.estado} onChange={(event) => setNovoEndereco({...novoEndereco, estado : event.target.value})}></input>
+                                        <input type={"text"} placeholder='CEP' name='cep_end_input' className='form-control' value={cepMask(novoEndereco.cep)} onChange={(event) => setNovoEndereco({...novoEndereco, cep : event.target.value.replace(/\D/g, "")})}></input>
+                                        <div className='row'>
+                                            <div className='col'>
+                                                <label>País:</label>
+                                                <input type={"text"} placeholder='País' name='pais_end_input' className='form-control' value={novoEndereco.pais} onChange={(event) => setNovoEndereco({...novoEndereco, pais : event.target.value})}></input>
+                                            </div>
+                                            <div className='col'>
+                                                <label>Estado:</label>
+                                                <input type={"text"} placeholder='Estado' name='estado_end_input' className='form-control' value={novoEndereco.estado} onChange={(event) => setNovoEndereco({...novoEndereco, estado : event.target.value})}></input>
+                                            </div>
+                                        </div>
                                         <label>Cidade:</label>
-                                        <input type={"text"} placeholder='Cidade' name='tipo_input' className='form-control' value={novoEndereco.cidade} onChange={(event) => setNovoEndereco({...novoEndereco, cidade : event.target.value})}></input>
+                                        <input type={"text"} placeholder='Cidade' name='cidade_end_input' className='form-control' value={novoEndereco.cidade} onChange={(event) => setNovoEndereco({...novoEndereco, cidade : event.target.value})}></input>
                                         <label>Bairro:</label>
-                                        <input type={"text"} placeholder='Tipo' name='tipo_input' className='form-control' value={novoEndereco.bairro} onChange={(event) => setNovoEndereco({...novoEndereco, bairro : event.target.value})}></input>
-                                        <label>Tipo de Logradouro:</label>
-                                        <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_input' className='form-control' value={novoEndereco.tipoLogradouro} onChange={(event) => setNovoEndereco({...novoEndereco, tipoLogradouro : event.target.value})}></input>
-                                        <label>Logradouro:</label>
-                                        <input type={"text"} placeholder='Logradouro' name='tipo_input' className='form-control' value={novoEndereco.logradouro} onChange={(event) => setNovoEndereco({...novoEndereco, logradouro : event.target.value})}></input>
-                                        <label>Numero:</label>
-                                        <input type={"text"} placeholder='Numero' name='tipo_input' className='form-control' value={novoEndereco.numero} onChange={(event) => setNovoEndereco({...novoEndereco, numero : event.target.value})}></input>
+                                        <input type={"text"} placeholder='Tipo' name='bairro_end_input' className='form-control' value={novoEndereco.bairro} onChange={(event) => setNovoEndereco({...novoEndereco, bairro : event.target.value})}></input>
+                                        <div className='row'>
+                                            <div className='col col-sm-5'>
+                                                <label>Tipo de Logradouro:</label>
+                                                <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_logradouro_end_input' className='form-control' value={novoEndereco.tipoLogradouro} onChange={(event) => setNovoEndereco({...novoEndereco, tipoLogradouro : event.target.value})}></input>
+                                            </div>
+                                            <div className='col'>
+                                                <label>Logradouro:</label>
+                                                <input type={"text"} placeholder='Logradouro' name='logradouro_end_input' className='form-control' value={novoEndereco.logradouro} onChange={(event) => setNovoEndereco({...novoEndereco, logradouro : event.target.value})}></input>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col col-sm-5'>
+                                                <label>Numero:</label>
+                                                <input type={"text"} placeholder='Numero' name='numero_end_input' className='form-control' value={novoEndereco.numero} onChange={(event) => setNovoEndereco({...novoEndereco, numero : event.target.value})}></input>
+                                            </div>
+                                            <div className='col col-sm-5'>
+                                                <label>Tipo:</label>
+                                                <input type={"text"} placeholder='Tipo do endereço, Ex. Casa, Predio, etc.' name='tipo_end_input' className='form-control' value={novoEndereco.tipo} onChange={(event) => setNovoEndereco({...novoEndereco, tipo : event.target.value})}></input>
+                                            </div>
+                                        </div>
                                         <label>Observacao:</label>
-                                        <input type={"text"} placeholder='Observacao' name='tipo_input' className='form-control' value={novoEndereco.observacao} onChange={(event) => setNovoEndereco({...novoEndereco, observacao : event.target.value})}></input>
+                                        <input type={"text"} placeholder='Observacao' name='observacao_end_input' className='form-control' value={novoEndereco.observacao} onChange={(event) => setNovoEndereco({...novoEndereco, observacao : event.target.value})}></input>
+                                        <input type={"checkbox"} name='entrega_end_input' onClick={(event) => setNovoEndereco({...novoEndereco, entrega : !novoEndereco.entrega})} checked={novoEndereco.entrega}></input>Endereço de Entrega
+                                        <br></br>
+                                        <input type={"checkbox"} name='cobranca_end_input' onClick={(event) => setNovoEndereco({...novoEndereco, cobranca : !novoEndereco.cobranca})} checked={novoEndereco.cobranca}></input>Endereço de Cobrança
                                     </div>
                                 </div>
                                 <div className='row justify-content-md-center'>
@@ -213,6 +239,7 @@ function FianlizarCompraComponent2 (){
     function salvarEnderecoNovo(){
         var clienteTenp = cliente
         clienteTenp.enderecos.push(novoEndereco)
+        alert(JSON.stringify(novoEndereco))
         ClienteService.updateCliente(clienteTenp).then(res => {
             setCliente(res.data)
             setNovoEndereco(0)
@@ -574,9 +601,8 @@ function FianlizarCompraComponent2 (){
             }
             ClienteService.updateCliente(clienteTemp,clienteTemp.id).then(res => {
                 alert("Pedido Realizado Com Sucesso!")
-
+                setCliente(res.data)
                 navigate("/")
-                
             }).catch(error =>{
                 alert("Cliente save erro" + error.response.data)
             })
