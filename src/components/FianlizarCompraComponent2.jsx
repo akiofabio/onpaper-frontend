@@ -287,7 +287,7 @@ function FianlizarCompraComponent2 (){
     function novoCartaoOverlay(){
         return(
             <div>
-                <Overlay show={setMostrarNovoCartao} placement="auto" >
+                <Overlay show={mostrarNovoCartao} placement="auto" >
                     {({ placement, arrowProps, show: _show, popper, ...props }) => (
                         <div
                             {...props}
