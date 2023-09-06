@@ -14,10 +14,10 @@ function LoginImage (props){
     }
     function menu(){
         setShow(!show)
-        if(localStorage.getItem( "tipo" )=="CLIENTE"){
+        if(localStorage.getItem( "tipo" )==="CLIENTE"){
             navigate("/areaCliente")
         }
-        else if(localStorage.getItem( "tipo" )=="ADMIN"){
+        else if(localStorage.getItem( "tipo" )==="ADMIN"){
             navigate("/areaGerente")
         }
         
@@ -25,7 +25,7 @@ function LoginImage (props){
     if( !isLogged ){
         return (
             <button className='btn btn-dark' name='login_button' onClick={()=>navigate("/login")}>
-                <img src='/imagens/icones/login.png'></img>
+                <img src='/imagens/icones/login.png' alt=''></img>
             </button>
         );
     }
@@ -33,7 +33,7 @@ function LoginImage (props){
         return (
             <div>
                 <button className='btn btn-dark' name='login_button' ref={target} onClick={()=>setShow(!show)}>
-                    <img src='/imagens/icones/login.png'></img>
+                    <img src='/imagens/icones/login.png' alt=''></img>
                 </button>
                 
                 <Overlay target={target.current} show={show} placement="bottom" rootClose='true' onHide={()=>setShow(!show)}>
@@ -83,7 +83,7 @@ function HeaderComponent (){
                             <button className="btn btn-success" type="submit" onClick={()=>pesquisar()}>Search</button>
                         </form>
                         <a href="http://localhost:3000/carrinho" className='nav-item' style={{marginLeft:200}}>
-                            <img src='/imagens/icones/carrinho.png' width={30} height='auto'></img>
+                            <img src='/imagens/icones/carrinho.png' width={30} height='auto' alt=''></img>
                         </a>
                         <LoginImage />
                     </div>

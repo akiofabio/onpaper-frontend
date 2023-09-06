@@ -1,8 +1,6 @@
-import React, { useEffect , useState } from 'react';
-import { useNavigate , useParams} from 'react-router-dom';
-import CarrinhoService from '../services/CarrinhoService';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserService from '../services/UserService';
-import ClienteService from '../services/ClienteService';
 
 function LoginComponent(){
     const navegate = useNavigate()
@@ -16,7 +14,7 @@ function LoginComponent(){
             localStorage.setItem( "id" , usuario.id )
             localStorage.setItem( "tipo" , usuario.tipo )
             localStorage.setItem( "isLogged" , true )
-            if(usuario.tipo == "CLIENTE"){
+            if(usuario.tipo === "CLIENTE"){
                 if(localStorage.getItem("carrinhoId")){
 
                 }
