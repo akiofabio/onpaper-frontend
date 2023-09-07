@@ -123,10 +123,12 @@ function FianlizarCompraComponent2 (){
     }
 
     function interarValor(cartao){
-        setCartoes(cartoes.map(meioTemp => 
-            cartoes.indexOf(meioTemp) === cartoes.indexOf(cartao) ? {...meioTemp, valor:(total-totalPagar+cartao.valor)} : meioTemp
+        alert(JSON.stringify(cartao))
+        if(total>totalPagar)
+            setCartoes(cartoes.map(meioTemp => 
+                cartoes.indexOf(meioTemp) === cartoes.indexOf(cartao) ? {...meioTemp, valor:(total-totalPagar+cartao.valor)} : meioTemp
+                )
             )
-        )
     }
     
     //Endereço
@@ -446,6 +448,7 @@ function FianlizarCompraComponent2 (){
         var meioDePagamentoTemp={
             detalhes: "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira.nome,
             tipo: "Cartão de Credito",
+            valor: 0
         }
         setCartoes(cartoes.map(meio => 
             cartoes.indexOf(meio) === cartoes.indexOf(meioPagamento) ? meioDePagamentoTemp : meio
@@ -482,6 +485,8 @@ function FianlizarCompraComponent2 (){
         }
     }
 
+
+    //Cupons
     function MostrarCupomPromocinais(props){
         if( mostrarCupomPromocionais===true ){
             var cupomPromocionais = cliente.cupons.filter(cupom => cupom.tipo === "Promocional")
@@ -667,7 +672,7 @@ function FianlizarCompraComponent2 (){
                                     meioPag = {
                                         tipo: "Cartão de Credito",
                                         detalhes: cartaoToString(cartao),
-                                        valor: subtotal + freteTotal
+                                        valor: 0
                                     }
                                     setCartoes((car) => [...car,meioPag])
                                 }
