@@ -115,7 +115,6 @@ function CuponsClientesComponent (props){
                                 <div  className="card-header border-dark bg-dark text-white" style={{borderRadius: 5}}>
                                     <h3 className='text-center'>Alterar Cupom</h3>
                                 </div>
-                                
                                 <div className='card-body' >
                                     <div className='form-group'>
                                         <label>Tipo:</label>
@@ -166,6 +165,7 @@ function CuponsClientesComponent (props){
             <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                 <h4>Cupons</h4>
                 <div className="card-body">
+                    {editarCupomOverlay()}
                     {cliente.cupons.map( cupom => 
                         <div className="card border-dark" style={{ marginTop:10 , marginBottom:10}}>
                             <div className="card-header">
@@ -190,7 +190,6 @@ function CuponsClientesComponent (props){
                                     </div>
                                 </div>
                             </div>
-                            {editarCupomOverlay()}
                         </div>
                     )}
                     <button className='btn btn-dark' onClick={()=>addCupom()}>Adicionar Cupom</button>
