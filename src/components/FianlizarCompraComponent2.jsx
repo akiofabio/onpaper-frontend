@@ -122,6 +122,13 @@ function FianlizarCompraComponent2 (){
         setTotalPagar(resultado)
     }
 
+    function interarValor(cartao){
+        setCartoes(cartoes.map(meioTemp => 
+            cartoes.indexOf(meioTemp) === cartoes.indexOf(cartao) ? {...meioTemp, valor:(total-totalPagar+cartao.valor)} : meioTemp
+            )
+        )
+    }
+    
     //Endereço
     function MostrarEndereco(){
         if( !mostrarEnderecos ){
@@ -294,7 +301,6 @@ function FianlizarCompraComponent2 (){
 
     //Cartão
     function MostrarCartao(props){
-        
         if( mostrarCartoes === cartoes.indexOf(props.meio)){
             var cartoesTemp = cliente.cartoes
             cartoes.forEach(pag => {
@@ -477,7 +483,7 @@ function FianlizarCompraComponent2 (){
     }
 
     function MostrarCupomPromocinais(props){
-        if( mostrarCupomPromocionais===1 ){
+        if( mostrarCupomPromocionais===true ){
             var cupomPromocionais = cliente.cupons.filter(cupom => cupom.tipo === "Promocional")
             
             return (
@@ -523,7 +529,7 @@ function FianlizarCompraComponent2 (){
                 valor: 0
             }
             setCuponsPromocionais([...cuponsPromocionais, meio])
-            setMostrarCupomPromocionais(1)
+            setMostrarCupomPromocionais(true)
         }
         else if(mostrarCupomPromocionais === 1){
             alert("Escolha/Remova o Cupom primeiro")
@@ -535,7 +541,7 @@ function FianlizarCompraComponent2 (){
     
     function removerCupomPromocional(meioDePagamento){
         if(mostrarCupomPromocionais===0 || mostrarCupomPromocionais === 1){
-            setCuponsPromocionais(cuponsPromocionais.filter(meio => cartoes.indexOf(meio) !== cartoes.indexOf(meioDePagamento) )
+            setCuponsPromocionais(cuponsPromocionais.filter(meio => cuponsPromocionais.indexOf(meio) !== cuponsPromocionais.indexOf(meioDePagamento) )
             )
             setMostrarCupomPromocionais(0)
         }
@@ -770,11 +776,14 @@ function FianlizarCompraComponent2 (){
                                                 <MostrarCartao meio={cartao}></MostrarCartao>
                                             </div>
                                             <div className='row' >
-                                                <div className="col-sm-4 text-end">
+                                                <div className="col text-end">
                                                     <label>Valor:</label>
                                                 </div>
                                                 <div className="col">
                                                     <input className='form-control' value={ moedaRealMask(cartao.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, cartao ) } ></input>
+                                                </div>
+                                                <div className='col-auto'>
+                                                    <button name='interar_valor_button' className='btn btn-outline-success' onClick={() => interarValor(cartao)}>interar valor</button>
                                                 </div>
                                             </div>
                                             <button className='btn ' onClick={() => removerCartao(cartao)}> - Remover</button>
@@ -795,6 +804,7 @@ function FianlizarCompraComponent2 (){
                                         <div className="col-auto">
                                             <label>Valor: { moedaRealMask(meioDePagamento.valor) } </label>
                                         </div>
+                        
                                     </div>
                                     <button className='btn ' onClick={() => removerCupomPromocional(meioDePagamento)}> - Remover</button>
 
