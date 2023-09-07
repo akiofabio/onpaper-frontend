@@ -123,7 +123,6 @@ function FianlizarCompraComponent2 (){
     }
 
     function interarValor(cartao){
-        alert(JSON.stringify(cartao))
         if(total>totalPagar)
             setCartoes(cartoes.map(meioTemp => 
                 cartoes.indexOf(meioTemp) === cartoes.indexOf(cartao) ? {...meioTemp, valor:(total-totalPagar+cartao.valor)} : meioTemp
