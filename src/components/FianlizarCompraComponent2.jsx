@@ -27,17 +27,18 @@ function FianlizarCompraComponent2 (){
     const [mostrarNovoEndereco, setMostrarNovoEndereco] = useState(0)
     const [novoEndereco, setNovoEndereco] = useState({
         nome:"",
-        pais:"",
         cep:"",
+        pais:"",
         estado:"",
         cidade:"",
         bairro:"",
         tipoLogradouro:"",
         logradouro:"",
         numero:"",
-        observacao:"",
-        cobranca: true,
-        entrega:true
+        tipo:"",
+        entrega:true,
+        cobranca:true,
+        observacao:""
     })
 
     const [mostrarNovoCartao, setMostrarNovoCartao] = useState(0)
@@ -237,14 +238,28 @@ function FianlizarCompraComponent2 (){
     }
 
     function salvarEnderecoNovo(){
-        var clienteTenp = cliente
-        clienteTenp.enderecos.push(novoEndereco)
-        alert(JSON.stringify(novoEndereco))
-        ClienteService.updateCliente(clienteTenp).then(res => {
+        var clienteTemp = cliente
+        clienteTemp.enderecos.push(novoEndereco)
+        ClienteService.updateCliente(clienteTemp,clienteTemp.id).then(res => {
             setCliente(res.data)
-            setNovoEndereco(0)
+            alert("Cliente Alterado com sucesso")
+            setMostrarNovoEndereco(0)
+            setNovoEndereco({
+                nome:"",
+                cep:"",
+                estado:"",
+                cidade:"",
+                bairro:"",
+                tipoLogradouro:"",
+                logradouro:"",
+                numero:"",
+                observacao:"",
+                cobranca: true,
+                entrega: true
+            })
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
+            clienteTemp.enderecos.pop()
         })
     }
 
@@ -350,7 +365,7 @@ function FianlizarCompraComponent2 (){
                                     </div>
                                     <div className='form-group'>
                                         <label>Numero:</label>
-                                        <input type={"text"} placeholder='xxx.xxx.xxx.xxx.xxx.xxx' name='numero_car_input' className='form-control' value={novoCartao.numero} onChange={(event) => setNovoCartao({...novoCartao, numero : event.target.value})} size="50"></input>
+                                        <input type={"text"} placeholder='xxx.xxx.xxx.xxx.xxx.xxx' name='numero_car_input' className='form-control' value={novoCartao.numero} onChange={(event) => setNovoCartao({...novoCartao, numero : event.target.value.replace(/\D/g, "")})} size="50"></input>
                                     </div>
                                     <div className='form-group'>
                                         <label>Data de Validade:</label>
@@ -358,7 +373,7 @@ function FianlizarCompraComponent2 (){
                                     </div>
                                     <div className='form-group'>
                                         <label>Codigo de Seguranca:</label>
-                                        <input type={"text"} placeholder='CVV' name='codigo_seguranca_car_input' className='form-control' value={novoCartao.codigoSeguranca} onChange={(event) => setNovoCartao({...novoCartao, codigoSeguranca : event.target.value})} size="50"></input>
+                                        <input type={"text"} placeholder='CVV' name='codigo_seguranca_car_input' className='form-control' value={novoCartao.codigoSeguranca} onChange={(event) => setNovoCartao({...novoCartao, codigoSeguranca : event.target.value.replace(/\D/g, "")})} size="50"></input>
                                     </div>
                                     <div className='form'>
                                         <input type={"checkbox"} name='preferencial_car_input' onClick={()=>setNovoCartao({...novoCartao, preferencial: novoCartao.preferencial})} checked={novoCartao.preferencial}></input>Preferencial
@@ -381,20 +396,30 @@ function FianlizarCompraComponent2 (){
     }
 
     function salvarNovoCartao(){
-        var clienteTenp = cliente
+        var clienteTemp = cliente
+        
         if(novoCartao.preferencial){
-            clienteTenp.cartoes.forEach(cartao => {
+            clienteTemp.cartoes.forEach(cartao => {
                 if(cartao.preferencial){
                     cartao.preferencial = false
                 }
             })
         }
-        clienteTenp.cartoes.push(novoCartao)
-        ClienteService.updateCliente(clienteTenp).then(res => {
+        clienteTemp.cartoes.push({...novoCartao, validade: new Date(novoCartao.validade)})
+        ClienteService.updateCliente(clienteTemp,clienteTemp.id).then(res => {
             setCliente(res.data)
             setMostrarNovoCartao(false)
+            setNovoCartao({
+                nome:"",
+                numero:"",
+                validade:"",
+                preferencial:false,
+                codigoSeguranca:"",
+                bandeira: bandeiras[0],
+            })
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
+            clienteTemp.cartoes.pop()
         })
     }
 
@@ -403,8 +428,9 @@ function FianlizarCompraComponent2 (){
             nome:"",
             numero:"",
             validade:"",
-            preferencial:"",
-            codigoSeguranca:""
+            preferencial:false,
+            codigoSeguranca:"",
+            bandeira: bandeiras[0],
         })
         setMostrarNovoCartao(false)
     }
@@ -612,9 +638,12 @@ function FianlizarCompraComponent2 (){
     }
 
     useEffect(() => {
-        if(bandeiras.length){
-            BandeiraService.getBandeiras.then(res => {
+        if(bandeiras.length<1){
+            BandeiraService.getBandeiras().then(res => {
                 setBandeiras(res.data)
+                setNovoCartao({...novoCartao, bandeira: res.data[0]})
+            }).catch(error => {
+                alert(JSON.stringify(error.response.data))
             })
         }
         if(totalPagar===0){
@@ -731,7 +760,7 @@ function FianlizarCompraComponent2 (){
                 
                     <div className='card'>
                         <h4>Cartao de Credito: </h4>
-
+                        {novoCartaoOverlay()}
                         <div className='row row-cols-3'>
                             {cartoes.map( cartao =>
                                 <div className='col'>

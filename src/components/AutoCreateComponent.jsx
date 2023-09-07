@@ -467,7 +467,7 @@ function AutoCreateComponent(){
                     numero: "2",
                     tipo: "Casa",
                     entrega: false,
-                    cobranca: false,
+                    cobranca: true,
                     observacao: null
                 }
             ],
