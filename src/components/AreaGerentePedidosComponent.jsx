@@ -208,6 +208,15 @@ function AreaGerentePedidodComponent(){
                 </div>
             )
         }
+        else if(status.status == "Em Cancelamento"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelada",pedido)}}>Cancelar Troca</button>
+                    </div>
+                </div>
+            )
+        }
     }
 
     function mudarStatus(status,pedido){
