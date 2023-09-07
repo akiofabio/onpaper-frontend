@@ -172,6 +172,18 @@ function AreaGerentePedidodComponent(){
                 </div>
             )
         }
+        else if(status.status == "Enviado"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Entregue",pedido)}}>Confimar Entrega do Pedido</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado",pedido)}}>Cancelar Pedido</button>
+                    </div>
+                </div>
+            )
+        }
         else if(status.status == "Em Troca"){
             return(
                 <div className='row'>
@@ -188,7 +200,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Enviada",pedido)}}>Troca Enviada</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Trocado",pedido)}}>Troca Enviada</button>
                     </div>
                     <div className='col'>
                         <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Cancelada",pedido)}}>Cancelar Troca</button>
@@ -196,31 +208,6 @@ function AreaGerentePedidodComponent(){
                 </div>
             )
         }
-        else if(status.status == "Em Devolução"){
-            return(
-                <div className='row'>
-                    <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Devolução Aprovada",pedido)}}>Aceitar Devolução</button>
-                    </div>
-                    <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Devolução Recusada",pedido)}}>Recusar Devolução</button>
-                    </div>
-                </div>
-            )
-        }
-        else if(status.status == "Devolução Aprovada"){
-            return(
-                <div className='row'>
-                    <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Devolução Realizada",pedido)}}>Aceitar Devolução</button>
-                    </div>
-                    <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Devolução Cancelada",pedido)}}>Cancelar Devolução</button>
-                    </div>
-                </div>
-            )
-        }
-
     }
 
     function mudarStatus(status,pedido){
