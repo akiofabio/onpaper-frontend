@@ -99,11 +99,12 @@ function CuponsClientesComponent (props){
                         <div
                             {...props}
                             style={{
-                            position: 'fixed',
-                            width: '100%',
-                            height: '100%',
-                            background: 'rgba(0, 0, 0, 0.4)',
-                            ...props.style,
+                                ...props.style,
+                                position: 'fixed',
+                                width: '100%',
+                                height: '100%',
+                                background: 'rgba(0, 0, 0, 0.4)',
+                                transform: 'translate(0%,0%)',
                             }}
                         >
                             <div className='card border-dark' style={{
