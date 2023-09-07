@@ -1,19 +1,38 @@
-export　function cpfMask(cpfNumero) {
-    if(cpfNumero){
-        if(Number.isInteger(cpfNumero) ){
-            cpfNumero = cpfNumero.toString()
+export　function numeroCartaoMask(numero) {
+    if(numero){
+        if(Number.isInteger(numero) ){
+            numero = numero.toString()
         }
-        cpfNumero = cpfNumero.replace(/\D/g, "");
-        if(cpfNumero.length >11){
-            cpfNumero = cpfNumero.slice(0, 11);
+        numero = numero.replace(/\D/g, "");
+        if(numero.length > 16){
+            numero = numero.slice(0, 16);
         }
-        if(cpfNumero.length > 8)
-            cpfNumero = cpfNumero.replace(/(\d{1,3})(\d{3})(\d{3})(\d\d)/, "$1.$2.$3-$4");
-        else if(cpfNumero.length > 5)
-            cpfNumero = cpfNumero.replace(/(\d{1,3})(\d{3})(\d\d)/, "$1.$2-$3");
-        else if(cpfNumero.length > 2)
-            cpfNumero = cpfNumero.replace(/(\d{1,3})(\d\d)/, "$1-$2");
-        return cpfNumero
+        if(numero.length > 12)
+            numero = numero.replace(/(\d{1,4})(\d{4})(\d{4})(\d{4})/, "$1.$2.$3.$4");
+        else if(numero.length > 8)
+            numero = numero.replace(/(\d{1,4})(\d{4})(\d{4})/, "$1.$2.$3");
+        else if(numero.length > 4)
+            numero = numero.replace(/(\d{1,4})(\d{4})/, "$1.$2");
+        return numero
+    }
+}
+
+export　function cpfMask(numero) {
+    if(numero){
+        if(Number.isInteger(numero) ){
+            numero = numero.toString()
+        }
+        numero = numero.replace(/\D/g, "");
+        if(numero.length > 12){
+            numero = numero.slice(0, 16);
+        }
+        if(numero.length > 8)
+            numero = numero.replace(/(\d{1,3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        else if(numero.length > 5)
+            numero = numero.replace(/(\d{1,3})(\d{3})(\d{2})/, "$1.$2-$3");
+        else if(numero.length > 2)
+            numero = numero.replace(/(\d{1,3})(\d{2})/, "$1-$2");
+        return numero
     }
 }
 
@@ -47,6 +66,7 @@ export　function moedaRealMask(valor) {
         return valorMask
     }
 }
+
 export　function moedaRealToFloatMask(valor) {
     if(valor){
         var valorMask = valor
@@ -111,3 +131,4 @@ export　function dataToStringMesEAnoDataMask(data) {
         return data
     }
 }
+

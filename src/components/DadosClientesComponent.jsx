@@ -1,7 +1,7 @@
 import React, { useEffect , useState , useRef } from 'react';
 import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
-import {cepMask, stringDataMask, dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask} from '../etc/Mask'
+import {cepMask, stringDataMask, dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask,numeroCartaoMask} from '../etc/Mask'
 import {separarParagrafoSemMargem,enderecoToString,enderecoToUmaLinhaSemCEP} from '../etc/Funcoes'
 import ClienteService from '../services/ClienteService';
 import BandeiraService from '../services/BandeiraService';
@@ -369,7 +369,6 @@ function DadosClientesComponent (props){
     }
     
     function editarCartaoOverlay(){
-
         return(
             <div>
                 <Overlay show={mostrarEditarCartao} placement="auto" >
@@ -409,7 +408,7 @@ function DadosClientesComponent (props){
                                     </div>
                                     <div className='form-group'>
                                         <label>Numero:</label>
-                                        <input type={"text"} placeholder='xxx.xxx.xxx.xxx.xxx.xxx' name='numero_car_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, numero : event.target.value} : car)})} size="50"></input>
+                                        <input type={"text"} placeholder='xxx.xxx.xxx.xxx.xxx.xxx' name='numero_car_input' className='form-control' value={numeroCartaoMask(clienteTemp.cartoes[cartaoIndexTemp].numero)} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, numero : event.target.value.replace(/\D/g, "")} : car)})} size="50"></input>
                                     </div>
                                     <div className='form-group'>
                                         <label>Data de Validade:</label>
@@ -417,7 +416,7 @@ function DadosClientesComponent (props){
                                     </div>
                                     <div className='form-group'>
                                         <label>Codigo de Seguranca:</label>
-                                        <input type={"text"} placeholder='CVV' name='codigo_seguranca_car_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].codigoSeguranca} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, codigoSeguranca : event.target.value} : car)})} size="50"></input>
+                                        <input type={"text"} placeholder='CVV' name='codigo_seguranca_car_input' className='form-control' value={clienteTemp.cartoes[cartaoIndexTemp].codigoSeguranca} onChange={(event) => setClienteTemp({...clienteTemp, cartoes : clienteTemp.cartoes.map(car => clienteTemp.cartoes.indexOf(car) === cartaoIndexTemp ? {...car, codigoSeguranca : event.target.value.replace(/\D/g, "")} : car)})} size="50"></input>
                                     </div>
                                     <div className='form'>
                                         <input type={"checkbox"} name='preferencial_car_input' onClick={()=>setCartaoPreferecialTemp()} checked={clienteTemp.cartoes[cartaoIndexTemp].preferencial}></input>Preferencial
