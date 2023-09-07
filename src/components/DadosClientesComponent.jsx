@@ -123,17 +123,18 @@ function DadosClientesComponent (props){
                         <div
                             {...props}
                             style={{
+                            ...props.style,
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
                             background: 'rgba(0, 0, 0, 0.4)',
-                            ...props.style,
+                            transform: 'translate(0%,0%)',
                             }}
                         >
-                            <div className='card border-dark' style={{
+                            <div  name='teste' className='card border-dark' style={{
                                 position: 'absolute',
                                 left: '50%',
-                                transform: 'translate(-50%)',
+                                transform: 'translate(-50%,0%)',
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white" style={{borderRadius: 5}}>
                                     <h3 className='text-center'>Alterar Dados Pessoal</h3>
@@ -196,11 +197,12 @@ function DadosClientesComponent (props){
                         <div
                             {...props}
                             style={{
-                            position: 'fixed',
-                            width: '100%',
-                            height: '100%',
-                            background: 'rgba(0, 0, 0, 0.4)',
-                            ...props.style,
+                                ...props.style,
+                                position: 'fixed',
+                                width: '100%',
+                                height: '100%',
+                                background: 'rgba(0, 0, 0, 0.4)',
+                                transform: 'translate(0%,0%)',
                             }}
                         >
                             <div className='card border-dark' style={{
@@ -266,11 +268,12 @@ function DadosClientesComponent (props){
                         <div
                             {...props}
                             style={{
-                            position: 'fixed',
-                            width: '100%',
-                            height: '100%',
-                            background: 'rgba(0, 0, 0, 0.4)',
-                            ...props.style,
+                                ...props.style,
+                                position: 'fixed',
+                                width: '100%',
+                                height: '100%',
+                                background: 'rgba(0, 0, 0, 0.4)',
+                                transform: 'translate(0%,0%)',
                             }}
                         >
                             <div className='card border-dark' style={{
@@ -376,11 +379,12 @@ function DadosClientesComponent (props){
                         <div
                             {...props}
                             style={{
-                            position: 'fixed',
-                            width: '100%',
-                            height: '100%',
-                            background: 'rgba(0, 0, 0, 0.4)',
-                            ...props.style,
+                                ...props.style,
+                                position: 'fixed',
+                                width: '100%',
+                                height: '100%',
+                                background: 'rgba(0, 0, 0, 0.4)',
+                                transform: 'translate(0%,0%)',
                             }}
                         >
                             <div className='card border-dark' style={{
@@ -503,6 +507,7 @@ function DadosClientesComponent (props){
 
     return(
         <div>
+            {editarDadosPessoalOverlay()}
             <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                 <h4>Dados Pessoais</h4>
                 <div className="card-body">
@@ -523,7 +528,7 @@ function DadosClientesComponent (props){
                             <button className='btn btn-dark' name='editar_dados_pessoal_button' onClick={()=>editarDadosPessoal()}>editar</button>
                         </div>
                     </div>
-                    {editarDadosPessoalOverlay()}
+                    
                 </div>
             </div>
             <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
@@ -532,6 +537,7 @@ function DadosClientesComponent (props){
                     <div className="row">
                         <label>Email: {cliente.email}</label>
                     </div>
+                    {editarTelefoneOverlay()}
                     {cliente.telefones.map( telefone => 
                         <div className="row">
                             <div className='col-8'>
@@ -543,7 +549,6 @@ function DadosClientesComponent (props){
                             <div className='col'>
                                 <button className='btn btn-outline-dark' name={'editar_tel_button' + (cliente.telefones.indexOf(telefone) +1)} onClick={()=>editarTelefone(cliente.telefones.indexOf(telefone))}>editar</button>
                             </div>
-                            {editarTelefoneOverlay()}
                         </div>
                     )}
                     <button className='btn btn-dark' name='adicionar_tel_button' onClick={()=>addTelefone()}>Adicionar Telefone</button>
@@ -552,7 +557,8 @@ function DadosClientesComponent (props){
             <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                 <h4>Endereco</h4>
                 <div className="card-body">
-                        {cliente.enderecos.map( endereco =>
+                    {editarEnderecoOverlay()}
+                    {cliente.enderecos.map( endereco =>
                         <div>
                             <div className="card border-dark" style={{ marginTop:10 , marginBottom:10}}>
                                 <div className="card-header">
@@ -580,7 +586,7 @@ function DadosClientesComponent (props){
                                         </div>
                                     </div>        
                                 </div>
-                                {editarEnderecoOverlay()}
+                                
                             </div>
                             
                         </div>
@@ -591,7 +597,8 @@ function DadosClientesComponent (props){
             <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
                 <h4>Cartao de Credito</h4>
                 <div className="card-body">
-                        {cliente.cartoes.map( cartao =>
+                    {editarCartaoOverlay()}
+                    {cliente.cartoes.map( cartao =>
                         <div>
                             <div className="card border-dark" style={{ marginTop:10 , marginBottom:10}}>
                                 <div className="card-header">
@@ -605,7 +612,7 @@ function DadosClientesComponent (props){
                                         <label>Nome: {cartao.nome} </label>
                                     </div>
                                     <div className="row">
-                                        <label>Numero: {cartao.numero} </label>
+                                        <label>Numero: {numeroCartaoMask(cartao.numero)} </label>
                                     </div>
                                     <div className="row">
                                         <label>Data de Vencimento: {dataToStringMesEAnoDataMask(cartao.validade)} </label>
@@ -625,9 +632,7 @@ function DadosClientesComponent (props){
                                         </div>
                                     </div>  
                                 </div>
-                                {editarCartaoOverlay()}
                             </div>
-                            
                         </div>
                     )}
                     <button className='btn btn-dark' name="adicionar_car_button" onClick={()=>addCartao()}>Adicionar Cartao</button>
