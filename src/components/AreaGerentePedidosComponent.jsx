@@ -140,10 +140,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Aprovado",pedido)}}>Aprovar Transação</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Aprovado", pedido)}}>Aprovar Transação</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Recusado",pedido)}}>Recusar Transação</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Recusado", pedido)}}>Recusar Transação</button>
                     </div>
                 </div>
             )
@@ -152,10 +152,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Em Preparo",pedido)}}>Separar Pedido</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Em Preparo", pedido)}}>Separar Pedido</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado",pedido)}}>Cancelar Pedido</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado", pedido)}}>Cancelar Pedido</button>
                     </div>
                 </div>
             )
@@ -164,10 +164,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Enviado",pedido)}}>Pedido Enviado</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Enviado", pedido)}}>Pedido Enviado</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado",pedido)}}>Cancelar Pedido</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado", pedido)}}>Cancelar Pedido</button>
                     </div>
                 </div>
             )
@@ -176,10 +176,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Entregue",pedido)}}>Confimar Entrega do Pedido</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Entregue", pedido)}}>Confimar Entrega do Pedido</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado",pedido)}}>Cancelar Pedido</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado", pedido)}}>Cancelar Pedido</button>
                     </div>
                 </div>
             )
@@ -188,10 +188,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Aprovada",pedido)}}>Aceitar Troca</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Troca Aprovada", pedido)}}>Aceitar Troca</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Recusada",pedido)}}>Recusar Troca</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Recusada", pedido)}}>Recusar Troca</button>
                     </div>
                 </div>
             )
@@ -200,10 +200,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatus("Trocado",pedido)}}>Troca Enviada</button>
+                        <button className='btn btn-success' onClick={()=>{mudarStatus("Trocado", pedido)}}>Troca Recebida</button>
                     </div>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Cancelada",pedido)}}>Cancelar Troca</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Cancelada", pedido)}}>Cancelar Troca</button>
                     </div>
                 </div>
             )
@@ -212,7 +212,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelada",pedido)}}>Cancelar Troca</button>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatus("Cancelada", pedido)}}>Cancelar Troca</button>
                     </div>
                 </div>
             )

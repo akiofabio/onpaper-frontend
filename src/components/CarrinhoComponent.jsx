@@ -41,8 +41,8 @@ function CarrinhoComponent() {
     }
 
     function quantideHandler (event , id)  {
-        var carrinhoTemp ={...carrinho,itens : carrinho.itens.map(item => 
-            item.id === id ? { ...item, quantidade:event.target.value} : item
+        var carrinhoTemp = {...carrinho, itens : carrinho.itens.map(item => 
+            item.id === id ? { ...item, quantidade: event.target.value} : item
         )}
         CarrinhoService.updateCarrinho(carrinhoTemp,carrinhoTemp.id).then( res => {
             CarrinhoService.getCarrinhoById(res.data.id).then( res2 => {

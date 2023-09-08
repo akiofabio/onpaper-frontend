@@ -59,15 +59,13 @@ function AreaClientePedidosComponent (props){
             return(
                 <div>
                     <button className="btn" onClick={() => mudarStatusItem(props.item)}>Trocar</button>
-                    <button className="btn" onClick={() => mudarStatusItem(props.item)}>Devolver</button>
                 </div>
             )
         }
-        else{
+        else if(props.status=="Em Processamento" || props.status=="Aprovado" || props.status=="Em Preparo" ){
             return(
                 <div>
-                    <button className="btn" onClick={() => mudarStatusItem(props.item)} disabled>Trocar</button>
-                    <button className="btn" onClick={() => mudarStatusItem(props.item)} disabled>Devolver</button>
+                    <button className="btn" onClick={() => mudarStatusItem(props.item)} >Cancelar</button>
                 </div>
             )
         }
@@ -78,7 +76,6 @@ function AreaClientePedidosComponent (props){
             return(
                 <div>
                     <button className="btn btn-dark" onClick={() => mudarStatus("Em Troca",props.pedido)}>Trocar Pedido</button>
-                    <button className="btn btn-dark" onClick={() => mudarStatus("Em Devolução",props.pedido)}>Devolver Pedido</button>
                 </div>
             )
         }
@@ -89,40 +86,11 @@ function AreaClientePedidosComponent (props){
                 </div>
             )
         }
-        else if(props.status=="Enviado" ){
-            return(
-                <div>
-                    <button className="btn btn-dark" onClick={() => mudarStatus("Entregue",props.pedido)}>Confimar Entrega</button>
-                </div>
-            )
-        }
-        else if(props.status=="Troca Enviada" ){
-            return(
-                <div>
-                    <button className="btn btn-dark" onClick={() => mudarStatus("Entregue",props.pedido)}>Confimar Entrega</button>
-                </div>
-            )
-        }
-        else{
-            return(
-                <div>
-                    <button className="btn btn-dark" disabled>Trocar Pedido</button>
-                    <button className="btn btn-dark" disabled>Devolver Pedido</button>
-                </div>
-            )
-        }
     }
 
     function mudarStatus(status,pedido){
         PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
             navegation(0)
-            
-            /*
-            setPedidos(pedidos.map( pedidoTemp =>{
-                if(pedidos.indexOf(pedidoTemp) === pedidos.indexOf(pedido))
-                    pedidoTemp = res.data
-            }))
-            */ 
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
         })
@@ -159,14 +127,14 @@ function AreaClientePedidosComponent (props){
                         Itens:
                         {pedido.itens.map( item =>
                             <div key={item.id} className="card border-dark">
-                                <div key={item.id} className="card-body">
+                                <div className="card-body">
                                     <div className='row no-gutters'>
                                         <div className='col-sm-2'  style={{textAlign:'center', width: 90, height:90}}>
                                             <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto}  className="img-fluid" style={{maxHeight:"100%"}}></img>
                                         </div>
                                         <div className='col-sm-8'>
                                             <div className="row">
-                                                
+                                                <label>Status: {getUltimoStatus(pedido.status).status}</label>
                                             </div>
                                             <div className="row g-3 align-items-center">
                                                 <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
