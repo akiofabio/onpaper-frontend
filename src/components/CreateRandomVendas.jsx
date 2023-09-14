@@ -1,6 +1,7 @@
 import React from 'react';
 import PedidoService from '../services/PedidoService';
 import ProdutoService from '../services/ProdutoService';
+import ItemService from '../services/ItemService';
     
 
 function CreateRandomVendas(){
@@ -10,46 +11,51 @@ function CreateRandomVendas(){
 
     async function gerarPedidoAleatorio(quantidade){
         for(var j = 0; j<quantidade; j++){
-            var total = 0
             var pedidoRandom = {
                 itens: [],
                 frete: 0,
                 meioDePagamentos: [{
                     tipo: "Cartão de Credito",
                     detalhes: "Nome:Anonimo \nNumero:00000 \nVisa",
-                    valor: 0
+                    valor: 0,
+                    idTipo: 1
                 }],
                 status: [{
-                    status: "ENTREGUE",
-                    data: randomDate( new Date(2022,1,1) , new Date() )
-                }]
+                    status: "Entregue",
+                    data: randomDate( new Date(2023,3,1) , new Date() )
+                }],
+                cep: 11111111,
+                endereco: "Nome: Casa \nRua 1, nº 1\n01111-111 - Bairro1 - Cidade1 - SP"
             }
             var nItens = 1 + Math.round(Math.random()*3)
             for(var i = 0; i < nItens; i++){
                 var quantidadeRandom = 1 + Math.round(Math.random()*3)
                 var porodutoIdRandom = 1 + Math.round(Math.random()*14)
                 var produtoRandom
+                var itemRandom
                 await ProdutoService.getProdutoById(porodutoIdRandom).then(res => {
                     produtoRandom = res.data
-                    var itemRandom = {
+                    itemRandom = {
                         idProduto : produtoRandom.id,
                         nomeProduto : produtoRandom.nome,
-                        imagenProduto : produtoRandom.imagens,
+                        imagemProduto : produtoRandom.imagens,
                         preco : produtoRandom.preco,
                         quantidade : quantidadeRandom,
                         status : pedidoRandom.status,
                     }
-                    pedidoRandom.itens.push(itemRandom)
-                    pedidoRandom.meioDePagamentos[0].valor += ( produtoRandom.preco * quantidadeRandom )
                     
                 }).catch(error => {
                     alert(error.response.data)
+                })
+                await ItemService.createItem(itemRandom).then(res =>{
+                    pedidoRandom.itens.push(res.data)
+                    pedidoRandom.meioDePagamentos[0].valor += ( res.data.preco * res.data.quantidade )
                 })
             }
             await PedidoService.createPedido(pedidoRandom).then( res => {
                 //alert("res: " + new Date(res.data.status[0].data))
             }).catch(error => {
-                alert("Save erro: " + error.response.data)
+                alert(JSON.stringify(error.response.data))
             })
         }
     }

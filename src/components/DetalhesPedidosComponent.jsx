@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { moedaRealMask , stringDataMask } from "../etc/Mask";
+import { moedaRealMask , stringDataMask , dataToStringDataHoraMask} from "../etc/Mask";
+import { separarParagrafoSemMargem } from "../etc/Funcoes"
 import ClienteService from "../services/ClienteService";
 import PedidoService from "../services/PedidoService";
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
@@ -111,7 +112,7 @@ function DetalhesPedidosComponent (props){
                             Status: {getUltimoStatus(pedido.status).status}
                         </div>
                         <div className="col">
-                            data: {stringDataMask(getUltimoStatus(pedido.status).data)}
+                            data: {dataToStringDataHoraMask(getUltimoStatus(pedido.status).data)}
                         </div>
                     </div>
                 </div>
@@ -124,7 +125,7 @@ function DetalhesPedidosComponent (props){
                                     Status: {pStatus.status}
                                 </div>
                                 <div className="col">
-                                    data: {(pStatus.data)}
+                                    data: {(dataToStringDataHoraMask(pStatus.data))}
                                 </div>
                             </div>  
                         )}
@@ -135,7 +136,7 @@ function DetalhesPedidosComponent (props){
                     <div className="card border-dark">
                         <div className="row">
                             <div className="col">
-                                {pedido.endereco}
+                                {separarParagrafoSemMargem(pedido.endereco)}
                             </div>
                         </div>  
                     </div>

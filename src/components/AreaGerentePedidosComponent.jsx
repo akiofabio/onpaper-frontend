@@ -1,12 +1,14 @@
 import React, { useEffect , useState } from 'react';
-import { moedaRealMask , stringDataMask , cepMask , cpfMask} from "../etc/Mask";
-import { getUltimoStatus } from '../etc/Funcoes';
+import { moedaRealMask , stringDataMask , cepMask , cpfMask, dataToStringDataHoraMask} from "../etc/Mask";
+import { getUltimoStatus,separarParagrafo,separarParagrafoSemMargem } from '../etc/Funcoes';
 import AreaGerenteMenu from "./AreaGerenteMenu";
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 import PesquisarComponent from './PesquisarComponet';
 import ClienteService from '../services/ClienteService';
+import ItemService from '../services/ItemService';
 import PedidoService from '../services/PedidoService'
 function AreaGerentePedidodComponent(){
+    const [clientes, setClientes] = useState([])
     const [pedidos, setPedidos] = useState([])
     const [pesquisas , setPesquisas] = useState([{
         conteudo:"",
@@ -43,9 +45,12 @@ function AreaGerentePedidodComponent(){
 
     function mostrarDetalhesDisplay(pedido){    
         var clienteTeste ={
-            nome:"Teste1",
-            cpf:1111111
-        }    
+            nome:"",
+            cpf:0
+        }
+        if(clientes.length === pedidos.length){
+            clienteTeste = clientes[pedidos.indexOf(pedido)]
+        }
         if( !mostrarDetalhes[pedidos.indexOf(pedido)]){
             return(
                 <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
@@ -55,7 +60,7 @@ function AreaGerentePedidodComponent(){
                                 <label>Status: {getUltimoStatus(pedido.status).status}</label>
                             </div>
                             <div className="col">
-                                <label>Data: {getUltimoStatus(pedido.status).data}</label>
+                                <label>Data: {dataToStringDataHoraMask(getUltimoStatus(pedido.status).data)}</label>
                             </div>
                         </div>
                         <div className="row">
@@ -64,19 +69,31 @@ function AreaGerentePedidodComponent(){
                         <div className="row">
                             <label>CPF: {cpfMask(clienteTeste.cpf)}</label>
                         </div>
+                        <div className="row">
+                            <label>Endereço de Entrega:</label>
+                                <div className="card">
+                                    {separarParagrafoSemMargem(pedido.endereco)}
+                                </div>
+                        </div>
                         <div className="card-body">
                             Itens:
                             {pedido.itens.map( item =>
                                 <div key={item.id} className="card border-dark">
-                                    <div key={item.id} className="card-body">
+                                    <div className="card-body">
                                         <div className='row no-gutters'>
                                             <div className='col-sm-2'  style={{textAlign:'center', width: 90, height:90}}>
                                                 <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto}  className="img-fluid" style={{maxHeight:"100%"}}></img>
                                             </div>
                                             <div className='col-sm-8'>
                                                 <div className="row">
-                                                
+                                                    <div className="col">
+                                                        <label>Status: {getUltimoStatus(item.status).status}</label>
+                                                    </div>
+                                                    <div className="col">
+                                                        <label>Data: {dataToStringDataHoraMask(getUltimoStatus(item.status).data)}</label>
+                                                    </div>
                                                 </div>
+
                                                 <div className="row g-3 align-items-center">
                                                     <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
                                                 </div>
@@ -88,6 +105,7 @@ function AreaGerentePedidodComponent(){
                                                         <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
                                                     </div>
                                                 </div>
+                                                <MostrarBotataoDevolverItem item={item} status={getUltimoStatus(item.status).status}/>
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +142,7 @@ function AreaGerentePedidodComponent(){
                     </div>
                     <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
                         <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == pedidos.indexOf(pedido)? false: mosDel))}>Esconder Detalhes</button>
+                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) === pedidos.indexOf(pedido)? false: mosDel))}>Esconder Detalhes</button>
                         </div>
                         <div className='col-auto'>
                             <button className='btn btn-dark' >Editar</button>
@@ -234,6 +252,41 @@ function AreaGerentePedidodComponent(){
         })
     }
 
+    function MostrarBotataoDevolverItem(props){
+     if(props.status == "Em Troca"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatusItem("Troca Aprovada", props.item)}}>Aceitar Troca</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatusItem("Troca Recusada", props.item)}}>Recusar Troca</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(props.status == "Troca Aprovada"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatusItem("Trocado", props.item)}}>Troca Recebida</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatusItem("Troca Cancelada", props.item)}}>Cancelar Troca</button>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    function mudarStatusItem(status, item){
+        ItemService.updateItemStatus(status,item.id).then(res => {
+            navegation(0)
+        }).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
+    }
+    
     function addPesquisa(){
         var pes ={
             conteudo:"",
@@ -255,13 +308,12 @@ function AreaGerentePedidodComponent(){
     }
 
     function getPendentes(){
-        if(pedidos.length==0){
-            PedidoService.getPedidoByPendente().then(res => {
-                setPedidos(res.data)
-            }).catch( erro => {
-                alert(JSON.stringify(erro.response.data))
-            })
-        }
+        PedidoService.getPedidoByPendente().then(res => {
+            setPedidos(res.data)
+            alert(JSON.stringify(res.data))
+        }).catch( erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
     }
 
 
@@ -272,14 +324,13 @@ function AreaGerentePedidodComponent(){
             }).catch( erro => {
                 alert(JSON.stringify(erro.response.data))
             })
-            
-            /*
-            PedidoService.getPedidoByPendente().then(res => {
-                setPedidos(res.data)
+        }
+        if(clientes.length < pedidos.length){
+            ClienteService.getClienteByPedidoId(pedidos[pedidos.length-1].id).then(res => {
+                setClientes([...clientes,res.data])
             }).catch( erro => {
                 alert(JSON.stringify(erro.response.data))
             })
-            */
         }
     });
 
@@ -314,7 +365,7 @@ function AreaGerentePedidodComponent(){
                         <button className="btn btn-outline-dark" type="button" onClick={()=> removerPesquisa()}>- Remover Pesquisa</button>
                     </div>
                     <div className='col-auto'>
-                        <button className="btn btn-success" type="button" onClick={()=> navegation(0)}>Pedidos Pendentes</button>
+                        <button className="btn btn-success" type="button" onClick={()=> getPendentes()}>Pedidos Pendentes</button>
                     </div>
                 </div>
             </div>

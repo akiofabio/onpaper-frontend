@@ -15,6 +15,11 @@ class ClienteService{
     updateCliente( cliente, clienteId ){
         return axios.put( CLIENTE_API_BASE_URL + "/" + clienteId , cliente );
     }
+
+    getClienteByPedidoId( clienteId){
+        return axios.get(CLIENTE_API_BASE_URL + "/pedido/" + clienteId);
+    }
+
     getClientesByParametros( pesquisas ){
         var params = new URLSearchParams();
         pesquisas.map(pesquisa => {

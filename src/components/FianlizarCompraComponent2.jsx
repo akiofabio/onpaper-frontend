@@ -447,7 +447,8 @@ function FianlizarCompraComponent2 (){
         var meioDePagamentoTemp={
             detalhes: "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira.nome,
             tipo: "Cartão de Credito",
-            valor: 0
+            valor: 0,
+            idTipo: cartao.id,
         }
         setCartoes(cartoes.map(meio => 
             cartoes.indexOf(meio) === cartoes.indexOf(meioPagamento) ? meioDePagamentoTemp : meio
@@ -518,7 +519,8 @@ function FianlizarCompraComponent2 (){
         var meioDePagamentoTemp={
             detalhes: "Numero: " + cupom.id + "\n" + cupom.descricao,
             tipo: "Cupom Promocional",
-            valor: cupom.valor
+            valor: cupom.valor,
+            idTipo: cupom.id,
         }
         setCuponsPromocionais( cuponsPromocionais.map(meio => 
             cuponsPromocionais.indexOf(meio) === cuponsPromocionais.indexOf(meioPagamento) ? meioDePagamentoTemp : meio
@@ -586,7 +588,8 @@ function FianlizarCompraComponent2 (){
             index:meioPagamento.index,
             detalhes: "Numero: " + cupom.id + "\n" + cupom.descricao,
             tipo: "Cupom de Troca",
-            valor: cupom.valor
+            valor: cupom.valor,
+            idTipo: cupom.id,
         }
         setCuponsTroca(cuponsTroca.map(meio => 
             cuponsTroca.indexOf(meio) ===  cuponsTroca.indexOf(meioPagamento) ? meioDePagamentoTemp : meio
@@ -627,23 +630,27 @@ function FianlizarCompraComponent2 (){
             frete: freteTotal
         }
         //alert("pedido: " + JSON.stringify(pedidoTemp))
-        PedidoService.createPedido(pedidoTemp).then(res => {
-            var clienteTemp = cliente
-            clienteTemp.pedidos.push(res.data)
-            clienteTemp.carrinho={
-                ...clienteTemp.carrinho,
-                itens: [],
-                frete: 0
-            }
-            ClienteService.updateCliente(clienteTemp,clienteTemp.id).then(res => {
-                alert("Pedido Realizado Com Sucesso!")
-                setCliente(res.data)
-                navigate("/")
+        PedidoService.createPedido(pedidoTemp).then(pedifoRes => {
+            ClienteService.getClienteById(cliente.id).then(cliRes => {
+                var clienteTemp = cliRes.data;
+                clienteTemp.pedidos.push(pedifoRes.data)
+                clienteTemp.carrinho={
+                    ...clienteTemp.carrinho,
+                    itens: [],
+                    frete: 0
+                }
+                ClienteService.updateCliente(clienteTemp,clienteTemp.id).then(res => {
+                    alert("Pedido Realizado Com Sucesso!")
+                    setCliente(res.data)
+                    navigate("/")
+                }).catch(error =>{
+                    alert("Cliente save erro" + JSON.stringify(error.response.data))
+                })
             }).catch(error =>{
-                alert("Cliente save erro" + error.response.data)
+                alert(JSON.stringify("getCliente: "+ error.response.data))
             })
         }).catch(error =>{
-            alert(error.response.data)
+            alert(JSON.stringify(error.response.data))
         })
     }
 
@@ -780,14 +787,16 @@ function FianlizarCompraComponent2 (){
                                                 <MostrarCartao meio={cartao}></MostrarCartao>
                                             </div>
                                             <div className='row' >
-                                                <div className="col text-end">
+                                                <div className="col-sm-2">
                                                     <label>Valor:</label>
                                                 </div>
-                                                <div className="col">
+                                                <div className="col-sm-6">
                                                     <input className='form-control' value={ moedaRealMask(cartao.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, cartao ) } ></input>
                                                 </div>
-                                                <div className='col-auto'>
-                                                    <button name='interar_valor_button' className='btn btn-outline-success' onClick={() => interarValor(cartao)}>interar valor</button>
+                                            </div>
+                                            <div className='row'>
+                                                <div className='col-auto text-center' style={{margin:4}}>
+                                                    <button name='interar_valor_button' className='btn btn-success' onClick={() => interarValor(cartao)}>Interar valor</button>
                                                 </div>
                                             </div>
                                             <button className='btn ' onClick={() => removerCartao(cartao)}> - Remover</button>

@@ -88,8 +88,26 @@ export　function stringDataMask(data) {
         }
         if(data.search("T"))
             data = data.split('T')[0]
-        data = data.replace(/\D/g, "");
-        data = data.replace(/(\d\d\d\d)(\d\d)(\d\d)/, "$3/$2/$1");
+            data = data.replace(/\D/g, "");
+            data = data.replace(/(\d\d\d\d)(\d\d)(\d\d)/, "$3/$2/$1");
+        return data
+    }
+}
+
+export　function dataToStringDataHoraMask(data) {
+    if(data){
+        if(data instanceof Date){
+            data = data.toDateString()
+        }
+        if(data.search("T")){
+            var dataHora = data.split('T')[1]
+            dataHora = dataHora.split('.')[0]
+
+            data = data.split('T')[0]
+            data = data.replace(/\D/g, "");
+            data = data.replace(/(\d\d\d\d)(\d\d)(\d\d)/, "$3/$2/$1");
+            data += " as " + dataHora
+        }
         return data
     }
 }

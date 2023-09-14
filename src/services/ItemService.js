@@ -6,9 +6,17 @@ class ItemService{
     getItens(){
         return axios.get( API_BASE_URL );
     }
+
+    createItem(item){
+        return axios.post( API_BASE_URL, item);
+    }
+
     getDados( dataInicio, dataFinal , tipo, escala){
         return axios.get( API_BASE_URL + "/dados/dataInicio=" + dataInicio + "&dataFinal=" + dataFinal + "&tipo=" + tipo + "&escala=" + escala );
     }
+    updateItemStatus( status, id ){
+        return axios.put( API_BASE_URL + "/" + status + "/" + id);
+    }
 }
 
-export default new ItemService
+export default new ItemService()

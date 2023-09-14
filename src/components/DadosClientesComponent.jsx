@@ -1,7 +1,7 @@
 import React, { useEffect , useState , useRef } from 'react';
 import Overlay from 'react-bootstrap/Overlay';
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
-import {cepMask, stringDataMask, dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask,numeroCartaoMask} from '../etc/Mask'
+import {cepMask, dataToStringDataHoraMask , stringDataMask , dataToInputDataMask , cpfMask, dataToInputMesEAnoDataMask, dataToStringMesEAnoDataMask,numeroCartaoMask} from '../etc/Mask'
 import {separarParagrafoSemMargem,enderecoToString,enderecoToUmaLinhaSemCEP} from '../etc/Funcoes'
 import ClienteService from '../services/ClienteService';
 import BandeiraService from '../services/BandeiraService';
@@ -135,6 +135,8 @@ function DadosClientesComponent (props){
                                 position: 'absolute',
                                 left: '50%',
                                 transform: 'translate(-50%,0%)',
+                                maxHeight: '100%',
+                                overflowY: 'scroll',
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white" style={{borderRadius: 5}}>
                                     <h3 className='text-center'>Alterar Dados Pessoal</h3>
@@ -209,6 +211,8 @@ function DadosClientesComponent (props){
                                 position: 'absolute',
                                 left: '50%',
                                 transform: 'translate(-50%)',
+                                maxHeight: '100%',
+                                overflowY: 'scroll'
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white" style={{borderRadius: 5}}>
                                     <h3 className='text-center'>Alterar Telefone</h3>
@@ -274,12 +278,15 @@ function DadosClientesComponent (props){
                                 height: '100%',
                                 background: 'rgba(0, 0, 0, 0.4)',
                                 transform: 'translate(0%,0%)',
+                               
                             }}
                         >
                             <div className='card border-dark' style={{
                                 position: 'absolute',
                                 left: '50%',
                                 transform: 'translate(-50%)',
+                                maxHeight: '100%',
+                                overflowY: 'scroll'
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white">
                                     <h3 className='text-center'>Alterar Endereço</h3>
@@ -391,7 +398,8 @@ function DadosClientesComponent (props){
                                 position: 'absolute',
                                 left: '50%',
                                 transform: 'translate(-50%)',
-                                opacity: 1,
+                                maxHeight: '100%',
+                                overflowY: 'scroll'
                             }}>
                                 <div className="card-header border-dark bg-dark text-white">
                                     <h3 className='text-center'>Alterar Cartão de Credito</h3>

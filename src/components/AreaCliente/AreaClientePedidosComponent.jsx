@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { moedaRealMask , stringDataMask } from "../../etc/Mask";
+import { moedaRealMask , stringDataMask , dataToStringDataHoraMask} from "../../etc/Mask";
 import { useNavigate , useParams , Routes , Route, Outlet} from 'react-router-dom';
 
 import ClienteService from "../../services/ClienteService";
 import PedidoService from "../../services/PedidoService";
 import { getUltimoStatus } from "../../etc/Funcoes";
+import ItemService from "../../services/ItemService";
 function AreaClientePedidosComponent (props){
     const [cliente, setCliente] = useState({
         email: "",
@@ -58,14 +59,7 @@ function AreaClientePedidosComponent (props){
         if( props.status=="Entregue"){
             return(
                 <div>
-                    <button className="btn" onClick={() => mudarStatusItem(props.item)}>Trocar</button>
-                </div>
-            )
-        }
-        else if(props.status=="Em Processamento" || props.status=="Aprovado" || props.status=="Em Preparo" ){
-            return(
-                <div>
-                    <button className="btn" onClick={() => mudarStatusItem(props.item)} >Cancelar</button>
+                    <button className="btn btn-dark" onClick={() => mudarStatusItem("Em Troca", props.item)}>Trocar Item</button>
                 </div>
             )
         }
@@ -88,7 +82,7 @@ function AreaClientePedidosComponent (props){
         }
     }
 
-    function mudarStatus(status,pedido){
+    function mudarStatus(status, pedido){
         PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
             navegation(0)
         }).catch(erro => {
@@ -96,8 +90,12 @@ function AreaClientePedidosComponent (props){
         })
     }
 
-    function mudarStatusItem(status,item){
-        alert("nao implementado")
+    function mudarStatusItem(status, item){
+        ItemService.updateItemStatus(status,item.id).then(res => {
+            navegation(0)
+        }).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
     }
 
     useEffect(() => {
@@ -119,7 +117,7 @@ function AreaClientePedidosComponent (props){
                                 Status: {getUltimoStatus(pedido.status).status}
                             </div>
                             <div className="col">
-                                data: {stringDataMask(getUltimoStatus(pedido.status).data)}
+                                data: {(getUltimoStatus(pedido.status).data)}
                             </div>
                         </div>
                     </div>
@@ -134,7 +132,7 @@ function AreaClientePedidosComponent (props){
                                         </div>
                                         <div className='col-sm-8'>
                                             <div className="row">
-                                                <label>Status: {getUltimoStatus(pedido.status).status}</label>
+                                                <label>Status: {getUltimoStatus(item.status).status}</label>
                                             </div>
                                             <div className="row g-3 align-items-center">
                                                 <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
@@ -147,7 +145,7 @@ function AreaClientePedidosComponent (props){
                                                     <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
                                                 </div>
                                             </div>
-                                            <MostrarBotataoDevolverItem pedido={pedido} status={getUltimoStatus(pedido.status).status}/> 
+                                            <MostrarBotataoDevolverItem item={item} status={getUltimoStatus(item.status).status}/> 
                                         </div>
                                     </div>
                                 </div>

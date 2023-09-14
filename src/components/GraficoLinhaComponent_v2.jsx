@@ -24,7 +24,15 @@ function GraficoComponent_v2(){
                 display: true,
                 position: 'right'
             }
-        }
+        },
+        scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                callback: function(value) {if (value % 1 === 0) {return value;}}
+              }
+            }]
+          }
     });
 
     useEffect(() => {
@@ -53,7 +61,9 @@ function GraficoComponent_v2(){
         await ItemService.getDados( dateToUTC(dataInicioTemp), dateToUTC(dataFinalTemp), tipoDado, escala ).then( res => {
             dados = res.data
             
-        } )
+        } ).catch(erro => {
+            alert(JSON.stringify(erro.response.data))
+        })
         for(var i=0; i<dados.categoriaLabel.length; i++){
             var dataset = {
                 label: dados.categoriaLabel[i],

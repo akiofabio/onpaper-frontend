@@ -11,7 +11,7 @@ export function separarParagrafoSemMargemFonte(texto,tamnhoFonte){
     return texto.split("\n").map(txt => <p style={{ margin:0, padding:0, fontSize:tamnhoFonte}}>{txt}</p>)
 }
 export function cartaoToString(cartao){
-    return "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira
+    return "Nome: " + cartao.nome + "\nNumero: " + cartao.numero + "\n" + cartao.bandeira.nome
 }
 
 export function enderecoToString(endereco){
