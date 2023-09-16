@@ -13,47 +13,44 @@ function HomeComponent() {
     const navigate = useNavigate();
    
     async function addItem( produtoId ){
-        var carrinho;
-        if( !localStorage.getItem( "isLogged" ) ) {
-            if( !localStorage.getItem( "carrinhoId" ) ) {
-                console.log("Não possue carrinho") 
-                
-                const carrinhoNovo = { 
-                    itens : [], 
-                    endereco : null
-                }
-                carrinho = await CarrinhoService.createCarrinho( carrinhoNovo ).then( res => {
-                    return res.data
-                });
-                localStorage.setItem( "carrinhoId" , carrinho.id )
-            }
-            else {
-                console.log("Possue carrinho") 
-                carrinho = await CarrinhoService.getCarrinhoById( localStorage.getItem( "carrinhoId" ) ).then( res => {
-                    return res.data
-                })
-            }
-        } 
-        else{
-            if( localStorage.getItem( "tipo" ) === "CLIENTE" )
-            var cliente = await ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
-                return res.data
-            })
-            carrinho = cliente.carrinho
-            console.log("cliente.carrinho" + JSON.stringify(cliente.carrinho))
-        }        
-        var porduto = await ProdutoService.getProdutoById( produtoId ).then( res => {
+        //localStorage.clear()
+        var produto = await ProdutoService.getProdutoById( produtoId ).then( res => {
             return res.data
         })
         var item =  {
-            idProduto: porduto.id, 
-            nomeProduto : porduto.nome,
-            imagemProduto : porduto.imagens, 
+            idProduto: produto.id, 
+            nomeProduto : produto.nome,
+            imagemProduto : produto.imagens, 
             quantidade : 1,
-            preco : porduto.preco,
-        }        
-                
-        await CarrinhoService.addItemCarrinho( item , localStorage.getItem( "carrinhoId" ) )
+            preco : produto.preco,
+        } 
+        
+        if( !localStorage.getItem( "isLogged" ) ) {
+            var carrinhoTemp
+            if( !localStorage.getItem( "carrinhoTemp" ) ) {
+                carrinhoTemp = { 
+                    itens : [], 
+                    endereco : " ",
+                    cep: "0",
+                };
+            }
+            else{
+                carrinhoTemp = JSON.parse(localStorage.getItem( "carrinhoTemp" ))
+            }
+            carrinhoTemp.itens.push(item)
+            localStorage.setItem( "carrinhoTemp" , JSON.stringify(carrinhoTemp))
+        } 
+        else{
+            if( localStorage.getItem( "tipo" ) === "CLIENTE" ){
+                var cliente = await ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
+                    return res.data
+                })
+                if( !localStorage.getItem( "carrinhoId" ) ) {
+                    localStorage.setItem( "carrinhoId", cliente.carrinho.id)
+                }
+            }
+            await CarrinhoService.addItemCarrinho( item , localStorage.getItem( "carrinhoId" ) )
+        }
         navigate( "/carrinho" )
     }
 

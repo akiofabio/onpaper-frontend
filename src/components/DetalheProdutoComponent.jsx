@@ -8,14 +8,11 @@ import {cepMask,moedaRealMask} from '../etc/Mask'
 import {separarParagrafoSemMargemFonte,enderecoToString} from '../etc/Funcoes'
 
 function DetalheProdutoComponent() {
-    const navegate = useNavigate()
+    const navigate = useNavigate()
     const parametros = useParams()
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
-    const [ mostrarNovoEndereco , setMostrarNovoEndereco ] = useState(false)
-    const [ enderecoIndexTemp , setEnderecoIndexTemp ] = useState()
-    const [ clienteTemp , setClienteTemp ] = useState()
     const [ cliente , setCliente ] = useState( {
         id: null,
         enderecos : []
@@ -116,48 +113,47 @@ function DetalheProdutoComponent() {
         setCep(endereco.cep)
     }
 
+    
     async function addItem( produtoId ){
-        var carrinho;
-        if( !localStorage.getItem( "isLogged" ) ) {
-            if( !localStorage.getItem( "carrinhoId" ) ) {
-                console.log("Não possue carrinho") 
-                
-                const carrinhoNovo = { 
-                    itens : [], 
-                    endereco : null
-                }
-                carrinho = await CarrinhoService.createCarrinho( carrinhoNovo ).then( res => {
-                    return res.data
-                });
-                localStorage.setItem( "carrinhoId" , carrinho.id )
-            }
-            else {
-                console.log("Possue carrinho") 
-                carrinho = await CarrinhoService.getCarrinhoById( localStorage.getItem( "carrinhoId" ) ).then( res => {
-                    return res.data
-                })
-            }
-        } 
-        else{
-            if( localStorage.getItem( "tipo" ) === "CLIENTE" )
-            var cliente = await ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
-                return res.data
-            })
-            carrinho = cliente.carrinho
-        }        
-        var porduto = await ProdutoService.getProdutoById( produtoId ).then( res => {
+        localStorage.clear()
+        var produto = await ProdutoService.getProdutoById( produtoId ).then( res => {
             return res.data
         })
         var item =  {
-            idProduto: porduto.id, 
-            nomeProduto : porduto.nome,
-            imagemProduto : porduto.imagens, 
+            idProduto: produto.id, 
+            nomeProduto : produto.nome,
+            imagemProduto : produto.imagens, 
             quantidade : quantidade,
-            preco : porduto.preco,
-        }        
-                
-        await CarrinhoService.addItemCarrinho( item , localStorage.getItem( "carrinhoId" ) )
-        navegate( "/carrinho" )
+            preco : produto.preco,
+        } 
+        
+        if( !localStorage.getItem( "isLogged" ) ) {
+            var carrinhoTemp
+            if( !localStorage.getItem( "carrinhoTemp" ) ) {
+                carrinhoTemp = { 
+                    itens : [], 
+                    endereco : " ",
+                    cep: cep,
+                };
+            }
+            else{
+                carrinhoTemp = JSON.parse(localStorage.getItem( "carrinhoTemp" ))
+            }
+            carrinhoTemp.itens.push(item)
+            localStorage.setItem( "carrinhoTemp" , JSON.stringify(carrinhoTemp))
+        } 
+        else{
+            if( localStorage.getItem( "tipo" ) === "CLIENTE" ){
+                var cliente = await ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
+                    return res.data
+                })
+                if( !localStorage.getItem( "carrinhoId" ) ) {
+                    localStorage.setItem( "carrinhoId", cliente.carrinho.id)
+                }
+            }
+            await CarrinhoService.addItemCarrinho( item , localStorage.getItem( "carrinhoId" ) )
+        }
+        navigate( "/carrinho" )
     }
 
     function pesquisarCategoria(categoria){

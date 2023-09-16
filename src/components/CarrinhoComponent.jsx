@@ -8,7 +8,7 @@ import {cepMask} from '../etc/Mask'
 import {separarParagrafoSemMargemFonte,enderecoToString} from '../etc/Funcoes'
 
 function CarrinhoComponent() {
-    const navegate = useNavigate()
+    const navigate = useNavigate()
     const [ subtotal , setSubtotal ] = useState(0)
     const [ freteTotal , setFreteTotal ] = useState(0)
     const [ mostrarEnderecos , setMostrarEnderecos ] = useState(false)
@@ -44,13 +44,19 @@ function CarrinhoComponent() {
         var carrinhoTemp = {...carrinho, itens : carrinho.itens.map(item => 
             item.id === id ? { ...item, quantidade: event.target.value} : item
         )}
-        CarrinhoService.updateCarrinho(carrinhoTemp,carrinhoTemp.id).then( res => {
-            CarrinhoService.getCarrinhoById(res.data.id).then( res2 => {
-                setCarrinho(res2.data)
+        if( localStorage.getItem( "isLogged" ) ){
+            CarrinhoService.updateCarrinho(carrinhoTemp,carrinhoTemp.id).then( res => {
+                CarrinhoService.getCarrinhoById(res.data.id).then( res2 => {
+                    setCarrinho(res2.data)
+                })
+            }).catch( error => {
+                alert(error.response.data)
             })
-        }).catch( error => {
-            alert(error.response.data)
-        })
+        }
+        else{
+            localStorage.setItem("carrinhoTemp",JSON.stringify(carrinhoTemp))
+            setCarrinho(carrinhoTemp)
+        }
     }
 
     function cepHandler ( event )  {
@@ -141,53 +147,89 @@ function CarrinhoComponent() {
     function novoEnderecoOverlay(){
         return(
             <div>
-                <Overlay show={mostrarNovoEndereco} placement="auto" target={target.current}>
+                <Overlay show={mostrarNovoEndereco} placement="auto">
                     {({ placement, arrowProps, show: _show, popper, ...props }) => (
-                        <div className='card'
+                        <div
                             {...props}
-                            
                             style={{
-                            backgroundColor: 'white',
-                            borderRadius: 5,
-                            borderBlockColor: 'black',
-                            
-                            ...props.style,
+                                ...props.style,
+                                position: 'fixed',
+                                width: '100%',
+                                height: '100%',
+                                background: 'rgba(0, 0, 0, 0.4)',
+                                transform: 'translate(0%,0%)',
+                               
                             }}
                         >
-                            <div  className="card-header border-dark bg-dark text-white">
-                                <h3 className='text-center'>Novo Endereco</h3>
-                            </div>
-                            <div className='card-body' >
-                                <div className='form-group'>
-                                    <label>Nome:</label>
-                                    <input type={"text"} placeholder='Nome' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].nome} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, nome : event.target.value} : end)})} size="50"></input>
-                                    <label>CEP:</label>
-                                    <input type={"text"} placeholder='CEP' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cep} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cep : event.target.value} : end)})}></input>
-                                    <label>Estado:</label>
-                                    <input type={"text"} placeholder='Estado' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].estado} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, estado : event.target.value} : end)})}></input>
-                                    <label>Cidade:</label>
-                                    <input type={"text"} placeholder='Cidade' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cidade} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cidade : event.target.value} : end)})}></input>
-                                    <label>Bairro:</label>
-                                    <input type={"text"} placeholder='Tipo' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].bairro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, bairro : event.target.value} : end)})}></input>
-                                    <label>Tipo de Logradouro:</label>
-                                    <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipoLogradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipoLogradouro : event.target.value} : end)})}></input>
-                                    <label>Logradouro:</label>
-                                    <input type={"text"} placeholder='Logradouro' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].logradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, logradouro : event.target.value} : end)})}></input>
-                                    <label>Numero:</label>
-                                    <input type={"text"} placeholder='Numero' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, numero : event.target.value} : end)})}></input>
-                                    <label>Observacao:</label>
-                                    <input type={"text"} placeholder='Observacao' name='tipo_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].observacao} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, observacao : event.target.value} : end)})}></input>
+                            <div className='card border-dark' style={{
+                                position: 'absolute',
+                                left: '50%',
+                                transform: 'translate(-50%)',
+                                maxHeight: '100%',
+                                overflowY: 'scroll'
+                            }}>
+                                <div  className="card-header border-dark bg-dark text-white">
+                                    <h3 className='text-center'>Alterar Endereço</h3>
                                 </div>
-                            </div>
-                            <div className='row justify-content-md-center'>
-                                <div className='col-auto'>
-                                    <button className='btn btn-dark' style={{marginBottom: 5} } onClick={() => salvar(clienteTemp)}>Salvar</button>
+                                <div className='card-body' >
+                                    <div className='form-group'>
+                                        <label>Nome:</label>
+                                        <input type={"text"} placeholder='Nome' name='nome_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].nome} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, nome : event.target.value} : end)})} size="80"></input>
+                                        <label>CEP:</label>
+                                        <input type={"text"} placeholder='CEP' name='cep_end_input' className='form-control' value={cepMask(clienteTemp.enderecos[enderecoIndexTemp].cep)} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cep : event.target.value.replace(/\D/g, "")} : end)})}></input>
+                                        <div className='row'>
+                                            <div className='col'>
+                                                <label>País:</label>
+                                                <input type={"text"} placeholder='País' name='pais_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].pais} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, pais : event.target.value} : end)})}></input>
+                                            </div>
+                                            <div className='col'>
+                                                <label>Estado:</label>
+                                                <input type={"text"} placeholder='Estado' name='estado_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].estado} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, estado : event.target.value} : end)})}></input>
+                                            </div>
+                                        </div>
+                                        <label>Cidade:</label>
+                                        <input type={"text"} placeholder='Cidade' name='cidade_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].cidade} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cidade : event.target.value} : end)})}></input>
+                                        <label>Bairro:</label>
+                                        <input type={"text"} placeholder='Tipo' name='bairro_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].bairro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, bairro : event.target.value} : end)})}></input>
+                                        <div className='row'>
+                                            <div className='col col-sm-5'>
+                                                <label>Tipo de Logradouro:</label>
+                                                <input type={"text"} placeholder='Tipo de Logradouro' name='tipo_logradouro_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipoLogradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipoLogradouro : event.target.value} : end)})}></input>
+                                            </div>
+                                            <div className='col'>
+                                                <label>Logradouro:</label>
+                                                <input type={"text"} placeholder='Logradouro' name='logradouro_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].logradouro} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, logradouro : event.target.value} : end)})}></input>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className='col col-sm-5'>
+                                                <label>Numero:</label>
+                                                <input type={"text"} placeholder='Numero' name='numero_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].numero} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, numero : event.target.value} : end)})}></input>
+                                            </div>
+                                            <div className='col col-sm-5'>
+                                                <label>Tipo:</label>
+                                                <input type={"text"} placeholder='Tipo do endereço, Ex. Casa, Predio, etc.' name='tipo_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].tipo} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, tipo : event.target.value} : end)})}></input>
+                                            </div>
+                                        </div>
+                                        <label>Observacao:</label>
+                                        <input type={"text"} placeholder='Observacao' name='observacao_end_input' className='form-control' value={clienteTemp.enderecos[enderecoIndexTemp].observacao} onChange={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, observacao : event.target.value} : end)})}></input>
+                                        <input type={"checkbox"} name='entrega_end_input' onClick={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, entrega : !clienteTemp.enderecos[enderecoIndexTemp].entrega} : end)})} checked={clienteTemp.enderecos[enderecoIndexTemp].entrega}></input>Endereço de Entrega
+                                        <br></br>
+                                        <input type={"checkbox"} name='cobranca_end_input' onClick={(event) => setClienteTemp({...clienteTemp, enderecos : clienteTemp.enderecos.map(end => clienteTemp.enderecos.indexOf(end) === enderecoIndexTemp ? {...end, cobranca : !clienteTemp.enderecos[enderecoIndexTemp].cobranca} : end)})} checked={clienteTemp.enderecos[enderecoIndexTemp].cobranca}></input>Endereço de Cobrança
+                                        
+                                    </div>
                                 </div>
-                                <div className='col-auto'>
-                                    <button className='btn btn-dark' style={{marginBottom: 5}} onClick={() => setMostrarNovoEndereco(!mostrarNovoEndereco)}>Cancelar</button>
+                                <div className='row justify-content-md-center'>
+                                    <div className='col-auto'>
+                                        <button className='btn btn-dark' name='salvar_end_button' style={{marginBottom: 5} } onClick={() => salvar(clienteTemp)}>Salvar</button>
+                                    </div>
+                                    <div className='col-auto'>
+                                        <button className='btn btn-dark' name='cancelar_end_button' style={{marginBottom: 5}} onClick={() => setMostrarNovoEndereco(!mostrarNovoEndereco)}>Cancelar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        
                     )}
                 </Overlay>
             </div>
@@ -229,17 +271,28 @@ function CarrinhoComponent() {
 
     function finalizarCompra(){
         if( localStorage.getItem( "isLogged" ) ){
-            navegate("/finalizar_compra")
+            navigate("/finalizar_compra")
         }
         else{
-            navegate("/login")
+            navigate("/login")
         }
     }
 
     function removeItem( item ){
-        CarrinhoService.removeItemCarrinho( item , carrinho.id ).then( res => {
-            setCarrinho(res.data)
-        })
+        if( localStorage.getItem( "isLogged" )){
+            CarrinhoService.removeItemCarrinho( item , carrinho.id ).then( res => {
+                setCarrinho(res.data)
+            })
+        }
+        else{
+            var car = carrinho
+            car.itens = car.itens.filter(itemTemp =>
+                car.itens.indexOf(itemTemp) !== car.itens.indexOf(item)
+            )
+            localStorage.setItem("carrinhoTemp", JSON.stringify(car))
+            setCarrinho(car)
+            navigate(0)
+        }
     }
 
     useEffect(() => {
@@ -259,28 +312,18 @@ function CarrinhoComponent() {
             })
         }
         else{
-            if( !localStorage.getItem( "carrinhoId" ) ){
-            
-                CarrinhoService.createCarrinho( carrinho ).then( res => {
-                    setCarrinho( res.data );
-                    localStorage.setItem( "carrinhoId" , res.data.id )
-                })
+            if( localStorage.getItem( "carrinhoTemp" ) ){
+                setCarrinho(JSON.parse(localStorage.getItem( "carrinhoTemp" )))
             }
             else{
-                CarrinhoService.getCarrinhoById( localStorage.getItem( "carrinhoId" ) ).then( ( res ) => {
-                    var carrinhoTemp =  res.data
-                    
-                    if(res.data.endereco==null){
-                        carrinhoTemp.cep = " "
-                    }
-                    setCarrinho( res.data );
-                    CarrinhoService.updateCarrinho(res.data)
-                    //console.log( "carrinhoLoad = " + JSON.stringify(res.data) )
-                })
+                var carrinhoTemp = { 
+                    itens : [], 
+                    endereco : null,
+                    cep: '',
+                };
+                setCarrinho(carrinhoTemp)
             }
         }
-        
-        
     }, []);
 
     useEffect(() => {
