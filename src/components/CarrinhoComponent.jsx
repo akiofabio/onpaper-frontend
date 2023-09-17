@@ -361,13 +361,13 @@ function CarrinhoComponent() {
                                                     <label>Quantidade:</label>
                                                 </div>
                                                 <div className="col-auto">
-                                                    <input className='form-control' value={ item.quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item.id ) } type={"number"} min="1"></input>
+                                                    <input name={'quantidade_input'+ carrinho.itens.indexOf(item)} className='form-control' value={ item.quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item.id ) } type={"number"} min="1"></input>
                                                 </div>
                                                 <div className="col-auto">
                                                     <label>{ item.status }</label>
                                                 </div>
                                                 <div className="col-auto">
-                                                    <button className='btn' onClick={() => removeItem( item )}> - Remover</button>
+                                                    <button name={'remover_button'+ carrinho.itens.indexOf(item)} className='btn' onClick={() => removeItem( item )}> - Remover</button>
                                                 </div>
                                             </div>
                                             
