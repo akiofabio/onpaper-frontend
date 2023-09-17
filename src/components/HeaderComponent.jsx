@@ -82,7 +82,7 @@ function HeaderComponent (){
                             <input name="pesquisa_input" className="form-control me-2" type="search" placeholder="O que você procura?" aria-label="Search" style={{width:300, marginLeft:200}} value={pesquisa} onChange={(event)=>setPesquisa(event.target.value)}></input>
                             <button name="pesquisa_button" className="btn btn-success" type="submit" onClick={()=>pesquisar()}>Search</button>
                         </form>
-                        <a href="http://localhost:3000/carrinho" className='nav-item' style={{marginLeft:200}}>
+                        <a name="carrinho_button" href="http://localhost:3000/carrinho" className='nav-item' style={{marginLeft:200}}>
                             <img src='/imagens/icones/carrinho.png' width={30} height='auto' alt=''></img>
                         </a>
                         <LoginImage />
