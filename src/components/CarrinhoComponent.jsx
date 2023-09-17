@@ -111,13 +111,13 @@ function CarrinhoComponent() {
                 return (
                     <div>
                         {cliente.enderecos.map(endereco => 
-                            <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)}>
+                            <button name={"end_tbn"+cliente.enderecos.indexOf(endereco)} key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)}>
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.nome}</p>
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
                                 <p style={{ margin:0, padding:0, fontSize:10}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
                             </button>
                         )}
-                        <button className='btn btn-outline-dark' style={{ margin:2}} onClick={() => novoEndereco()}>
+                        <button name="novoEndButton" className='btn btn-outline-dark' style={{ margin:2}} onClick={() => novoEndereco()}>
                             <p style={{ margin:0, padding:0, fontSize:15}}>Novo Endereco</p>
                         </button>
                     </div>        
