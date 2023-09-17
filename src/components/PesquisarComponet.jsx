@@ -85,7 +85,7 @@ function PesquisarComponent() {
                 <h3>Pesquisar: {pesquisa}</h3>
                 {produtos.map(produto =>
                     <div className='row'>
-                        <button onClick={()=>navigate("/produto/"+ produto.id)}>
+                        <button name={"produto_res" + produtos.indexOf(produto)} onClick={()=>navigate("/produto/"+ produto.id)}>
                             <div key = {produto.id} className='card '>
                                 <div className="container" style={{margin: 0,padding :0}}>
                                     <div className='card-body'>

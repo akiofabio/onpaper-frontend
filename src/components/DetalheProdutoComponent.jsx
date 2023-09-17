@@ -233,7 +233,7 @@ function DetalheProdutoComponent() {
                                         <label>Quantidade:</label>
                                     </div>
                                     <div className="col-auto">
-                                        <input className='form-control' value={ quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event ) } type={"number"} min="1"></input>
+                                        <input name="quantidate_input" className='form-control' value={ quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event ) } type={"number"} min="1"></input>
                                     </div>
                                     <div className="col-auto">
                                         <label>Quantidade Disponivel: { quantidadeDisponivel }</label>
@@ -259,7 +259,7 @@ function DetalheProdutoComponent() {
                 </div>
             </div>
             <h2>Subtotal: R$ {subtotal.toFixed(2)} + {freteTotal.toFixed(2)}</h2>
-            <button type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+            <button name='add_produto_car_button' type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
         </div>
     )
 }
