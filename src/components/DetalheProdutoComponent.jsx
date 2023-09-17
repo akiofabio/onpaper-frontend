@@ -247,7 +247,7 @@ function DetalheProdutoComponent() {
                                         <label>CEP:</label>
                                     </div>
                                     <div className="col-auto">
-                                        <input value={cepMask(cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
+                                        <input name="cep_input" value={cepMask(cep)} onChange={(event) => cepHandler(event) }  className='form-control' style={{width:100}}></input>
                                     </div>
                                     <div className="col-auto">
                                         <MostrarEndereco/>
