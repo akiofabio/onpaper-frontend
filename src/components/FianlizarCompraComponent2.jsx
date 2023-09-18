@@ -134,7 +134,7 @@ function FianlizarCompraComponent2 (){
     function MostrarEndereco(){
         if( !mostrarEnderecos ){
             return (
-                <button className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
+                <button name="mostrar_end_button" className='btn btn-outline-dark' onClick={() => setMostrarEnderecos(true)} style={{ margin:2}}>
                     {separarParagrafoSemMargem(pedido.endereco)}
                 </button>
             )
@@ -143,13 +143,13 @@ function FianlizarCompraComponent2 (){
             return (
                 <div>
                     {cliente.enderecos.map(endereco => 
-                        <button key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
+                        <button name={"escolher_end_button" + cliente.enderecos.indexOf(endereco)} key={endereco.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarEndereco(endereco.id)  }>
                             <p style={{ margin:0, padding:0}}>{endereco.nome}</p>
                             <p style={{ margin:0, padding:0}}>{endereco.tipoLogradouro} {endereco.logradouro}, nº {endereco.numero}</p>
                             <p style={{ margin:0, padding:0}}>{cepMask(endereco.cep)} - {endereco.bairro} - {endereco.cidade} - {endereco.estado}</p>
                         </button>
                     )}
-                    <button className='btn btn-outline-dark' style={{ margin:2}} onClick={() => setMostrarNovoEndereco(1)  }>
+                    <button name="escolher_novo_end_button" className='btn btn-outline-dark' style={{ margin:2}} onClick={() => setMostrarNovoEndereco(1)  }>
                             <p style={{ margin:0, padding:0}}>Novo Endereço</p>
                     </button>
                 </div>
@@ -163,21 +163,24 @@ function FianlizarCompraComponent2 (){
                 <Overlay show={mostrarNovoEndereco} placement="auto">
                     {({ placement, arrowProps, show: _show, popper, ...props }) => (
                         <div
-                            {...props}
-                            style={{
+                        {...props}
+                        style={{
+                            ...props.style,
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
-                            background: 'rgba(0, 0, 0, 0.8)',
-                            maxHeight: '100vh',
-                            ...props.style,
-                            }}
-                        >
-                            <div className='card border-dark' style={{
-                                position: 'absolute',
-                                left: '50%',
-                                transform: 'translate(-50%)',
-                            }}>
+                            background: 'rgba(0, 0, 0, 0.4)',
+                            transform: 'translate(0%,0%)',
+                           
+                        }}
+                    >
+                        <div className='card border-dark' style={{
+                            position: 'absolute',
+                            left: '50%',
+                            transform: 'translate(-50%)',
+                            maxHeight: '100%',
+                            overflowY: 'scroll'
+                        }}>
                                 <div  className="card-header border-dark bg-dark text-white">
                                     <h3 className='text-center'>Alterar Endereco</h3>
                                 </div>
@@ -230,10 +233,10 @@ function FianlizarCompraComponent2 (){
                                 </div>
                                 <div className='row justify-content-md-center'>
                                     <div className='col-auto'>
-                                        <button className='btn btn-dark' style={{marginBottom: 5} } onClick={() => salvarEnderecoNovo()}>Salvar</button>
+                                        <button name='salvar_end_button' className='btn btn-dark' style={{marginBottom: 5} } onClick={() => salvarEnderecoNovo()}>Salvar</button>
                                     </div>
                                     <div className='col-auto'>
-                                        <button className='btn btn-dark' style={{marginBottom: 5}} onClick={() => cancelarEnderecoNovo()}>Cancelar</button>
+                                        <button name='cancelar_end_button' className='btn btn-dark' style={{marginBottom: 5}} onClick={() => cancelarEnderecoNovo()}>Cancelar</button>
                                     </div>
                                 </div>
                             </div>
@@ -310,13 +313,13 @@ function FianlizarCompraComponent2 (){
             return (
                 <div>
                     {cartoesTemp.map(cartao => 
-                        <button key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
+                        <button name={"ecolher_car_button" + cartoesTemp.indexOf(cartao)} key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira.nome}</p>
                         </button>
                     )}
-                    <button className='btn btn-outline-dark' style={{ margin:2}} onClick={()=>setMostrarNovoCartao(true)}>
+                    <button name="ecolher_novo_car_button" className='btn btn-outline-dark' style={{ margin:2}} onClick={()=>setMostrarNovoCartao(true)}>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Novo Cartão</p>
                     </button>
                 </div>          
@@ -325,7 +328,7 @@ function FianlizarCompraComponent2 (){
         else{
             return (
                 <div className='d-grid'>
-                    <button  className='btn btn-outline-dark btn-block' onClick={() => setMostrarCartoes(cartoes.indexOf(props.meio))} style={{ margin:2}}>
+                    <button name="mostrar_car_button" className='btn btn-outline-dark btn-block' onClick={() => setMostrarCartoes(cartoes.indexOf(props.meio))} style={{ margin:2}}>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -339,23 +342,26 @@ function FianlizarCompraComponent2 (){
                 <Overlay show={mostrarNovoCartao} placement="auto" >
                     {({ placement, arrowProps, show: _show, popper, ...props }) => (
                         <div
-                            {...props}
-                            style={{
+                        {...props}
+                        style={{
+                            ...props.style,
                             position: 'fixed',
                             width: '100%',
                             height: '100%',
                             background: 'rgba(0, 0, 0, 0.4)',
-                            ...props.style,
-                            }}
-                        >
-                            <div className='card border-dark' style={{
-                                position: 'absolute',
-                                left: '50%',
-                                transform: 'translate(-50%)',
-                                opacity: 1,
-                            }}>
+                            transform: 'translate(0%,0%)',
+                           
+                        }}
+                    >
+                        <div className='card border-dark' style={{
+                            position: 'absolute',
+                            left: '50%',
+                            transform: 'translate(-50%)',
+                            maxHeight: '100%',
+                            overflowY: 'scroll'
+                        }}>
                                 <div className="card-header border-dark bg-dark text-white">
-                                    <h3 className='text-center'>Alterar Cartão de Credito</h3>
+                                    <h3 className='text-center'>Novo Cartão de Credito</h3>
                                 </div>
                                 <div className='card-body'>
                                     <div className='form-group'>
@@ -494,7 +500,7 @@ function FianlizarCompraComponent2 (){
             return (
                 <div>
                     {cupomPromocionais.map(cupom => 
-                        <button key={cupom.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCupomPromocional(cupom,props.meio)  }>
+                        <button name={"escolher_cupom_promo_button" + cupomPromocionais.indexOf(cupom)} key={cupom.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCupomPromocional(cupom,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cupom.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>{cupom.descricao}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Valor: {moedaRealMask(cupom.valor)}</p>
@@ -506,7 +512,7 @@ function FianlizarCompraComponent2 (){
         else{
             return (
                 <div>
-                    <button  className='btn btn-outline-dark' onClick={() => setMostrarCupomPromocionais(true)} style={{ margin:2}}>
+                    <button name="mostrar_cupom_promo_button" className='btn btn-outline-dark' onClick={() => setMostrarCupomPromocionais(true)} style={{ margin:2}}>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -562,7 +568,7 @@ function FianlizarCompraComponent2 (){
             return (
                 <div>
                     {cupomTroca.map(cupom => 
-                        <button key={cupom.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCupomTroca(cupom,props.meio)  }>
+                        <button  name={"escolher_cupom_troca_button" + cupomTroca.indexOf(cupom)} key={cupom.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCupomTroca(cupom,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cupom.id}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>{cupom.descricao}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Valor: {moedaRealMask(cupom.valor)}</p>
@@ -574,7 +580,7 @@ function FianlizarCompraComponent2 (){
         else{
             return (
                 <div>
-                    <button  className='btn btn-outline-dark' onClick={() => setMostrarCupomTroca(cuponsTroca.indexOf(props.meio))} style={{ margin:2}}>
+                    <button name="mostrar_cupom_troca_button" className='btn btn-outline-dark' onClick={() => setMostrarCupomTroca(cuponsTroca.indexOf(props.meio))} style={{ margin:2}}>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -791,15 +797,15 @@ function FianlizarCompraComponent2 (){
                                                     <label>Valor:</label>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <input className='form-control' value={ moedaRealMask(cartao.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, cartao ) } ></input>
+                                                    <input name={"valor_car_input"+cartoes.indexOf(cartao)} className='form-control' value={ moedaRealMask(cartao.valor) } style={{width:150}} onChange={ ( event ) => valorHandler( event, cartao ) } ></input>
                                                 </div>
                                             </div>
                                             <div className='row'>
                                                 <div className='col-auto text-center' style={{margin:4}}>
-                                                    <button name='interar_valor_button' className='btn btn-success' onClick={() => interarValor(cartao)}>Interar valor</button>
+                                                    <button name={"interar_ valor_car_button"+cartoes.indexOf(cartao)} className='btn btn-success' onClick={() => interarValor(cartao)}>Interar valor</button>
                                                 </div>
                                             </div>
-                                            <button className='btn ' onClick={() => removerCartao(cartao)}> - Remover</button>
+                                            <button name={"remover_car_button"+cartoes.indexOf(cartao)} className='btn ' onClick={() => removerCartao(cartao)}> - Remover</button>
                                         </div>
                                     </div>
                                 </div>
@@ -819,12 +825,12 @@ function FianlizarCompraComponent2 (){
                                         </div>
                         
                                     </div>
-                                    <button className='btn ' onClick={() => removerCupomPromocional(meioDePagamento)}> - Remover</button>
+                                    <button name={'remover_cupom_promo_button'+cuponsPromocionais.indexOf(meioDePagamento)} className='btn ' onClick={() => removerCupomPromocional(meioDePagamento)}> - Remover</button>
 
                                 </div>
                             )}
                         </div>
-                        <button className='btn ' onClick={() => addCupomPromocional()}> + Add Cupom Promocional</button>
+                        <button name='add_cupom_promo_button' className='btn ' onClick={() => addCupomPromocional()}> + Add Cupom Promocional</button>
                     </div>
                     <div className='card'>
                         <h4>Cupons de Troca: </h4>
@@ -837,12 +843,12 @@ function FianlizarCompraComponent2 (){
                                             <label>Valor: { moedaRealMask(meioDePagamento.valor) } </label>
                                         </div>
                                     </div>
-                                    <button className='btn ' onClick={() => removerCupomTroca(meioDePagamento)}> - Remover</button>
+                                    <button name='remover_cupom_troca_button' className='btn ' onClick={() => removerCupomTroca(meioDePagamento)}> - Remover</button>
 
                                 </div>
                             )}
                         </div>
-                        <button className='btn ' onClick={() => addCupomTroca()}> + Add Cupom de Troca</button>
+                        <button name='add_cupom_troca_button' className='btn ' onClick={() => addCupomTroca()}> + Add Cupom de Troca</button>
                     </div>
                     <div className='row' style={{ textAlign:'right'}}>
                         <div className='col-sm-2'>

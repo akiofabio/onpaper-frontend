@@ -341,7 +341,7 @@ function DadosClientesComponent (props){
                                 </div>
                                 <div className='row justify-content-md-center'>
                                     <div className='col-auto'>
-                                        <button className='btn btn-dark' name='salvar_end_button' style={{marginBottom: 5} } onClick={() => salvar(clienteTemp)}>Salvar</button>
+                                        <button name='salvar_end_button' className='btn btn-dark'  style={{marginBottom: 5} } onClick={() => salvar(clienteTemp)}>Salvar</button>
                                     </div>
                                     <div className='col-auto'>
                                         <button className='btn btn-dark' name='cancelar_end_button' style={{marginBottom: 5}} onClick={() => setMostrarEditarEndereco(!mostrarEditarEndereco)}>Cancelar</button>
