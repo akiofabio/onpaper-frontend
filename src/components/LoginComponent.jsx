@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserService from '../services/UserService';
-
+import CarrinhoService from '../services/CarrinhoService';
 function LoginComponent(){
     const navegate = useNavigate()
     const [ email , setEmail ] = useState("")
@@ -15,8 +15,17 @@ function LoginComponent(){
             localStorage.setItem( "tipo" , usuario.tipo )
             localStorage.setItem( "isLogged" , true )
             if(usuario.tipo === "CLIENTE"){
-                if(localStorage.getItem("carrinhoId")){
-
+                if(usuario.carrinho){
+                    if(localStorage.getItem("carrinhoTemp")){
+                        var carrinhoTemp = JSON.parse(localStorage.getItem("carrinhoTemp"))
+                        alert(JSON.stringify(carrinhoTemp))
+                        carrinhoTemp.itens.forEach(item => {
+                            CarrinhoService.addItemCarrinho( item , usuario.carrinho.id ).catch(erro => {
+                                
+                                alert(JSON.stringify(erro.response.data))
+                            })
+                        });
+                    }
                 }
                 localStorage.setItem( "carrinhoId" , usuario.carrinho.id )
 

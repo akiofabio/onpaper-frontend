@@ -27,9 +27,6 @@ function CarrinhoComponent() {
     const target = useRef(null);
 
     function ItensCarrinho(){
-        //console.log("carrinhoID = " + localStorage.getItem("carrinhoId"))
-        //console.log("carrinho = " + JSON.stringify(carrinho))
-
         if( ( !carrinho ) || ( carrinho.itens.length == 0 ) ){
             return(
                 <div>
@@ -40,9 +37,9 @@ function CarrinhoComponent() {
         }
     }
 
-    function quantideHandler (event , id)  {
-        var carrinhoTemp = {...carrinho, itens : carrinho.itens.map(item => 
-            item.id === id ? { ...item, quantidade: event.target.value} : item
+    function quantideHandler (event , item)  {
+        var carrinhoTemp = {...carrinho, itens : carrinho.itens.map(itemTemp => 
+            carrinho.itens.indexOf(itemTemp) === carrinho.itens.indexOf(item) ? { ...item, quantidade: event.target.value} : itemTemp
         )}
         if( localStorage.getItem( "isLogged" ) ){
             CarrinhoService.updateCarrinho(carrinhoTemp,carrinhoTemp.id).then( res => {
@@ -259,12 +256,12 @@ function CarrinhoComponent() {
     function MostrarFinalizarCompra(){
         if( ( carrinho.cep ) && ( carrinho.cep.length == 8 ) && ( carrinho.itens.length!=0 )){
             return(
-                <button type="button" className="btn btn-dark" onClick={() => finalizarCompra()}>Finalizar Compra</button>
+                <button name="finalizar_button" type="button" className="btn btn-dark" onClick={() => finalizarCompra()}>Finalizar Compra</button>
             )
         }
         else{
             return(
-                <button type="button" className="btn btn-dark" disabled>Finalizar Compra</button>
+                <button name="finalizar_button" type="button" className="btn btn-dark" disabled>Finalizar Compra</button>
             )
         }
     }
@@ -361,7 +358,7 @@ function CarrinhoComponent() {
                                                     <label>Quantidade:</label>
                                                 </div>
                                                 <div className="col-auto">
-                                                    <input name={'quantidade_input'+ carrinho.itens.indexOf(item)} className='form-control' value={ item.quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item.id ) } type={"number"} min="1"></input>
+                                                    <input name={'quantidade_input'+ carrinho.itens.indexOf(item)} className='form-control' value={ item.quantidade } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item ) } type={"number"} min="1"></input>
                                                 </div>
                                                 <div className="col-auto">
                                                     <label>{ item.status }</label>

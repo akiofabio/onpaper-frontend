@@ -81,13 +81,13 @@ function HomeComponent() {
                     {produtos.map(produto => 
                         <div key = {produto.id} className="col text-center" style={{marginTop:20}}> 
                             <div className='card-body' >
-                                <button style={{paddingBottom:20, width:300, height:300}} type="button"  onClick={()=>navigate("/produto/"+ produto.id)} >
+                                <button name={"produto_des_detalhe_button" + produtos.indexOf(produto)} style={{paddingBottom:20, width:300, height:300}} type="button"  onClick={()=>navigate("/produto/"+ produto.id)} >
                                     <div className='text-center' style={{ height:150 ,width:150 ,marginLeft:70 , border:0}}>
                                         <img  className="rounded" src={'imagens/produtos/' + produto.imagens} alt="Imagem do Produto"  style={{maxHeight:"100%",maxWidth:"100%"}} ></img>
                                     </div>
                                     <p>Nome: {produto.nome}</p>
                                     <p>Descrição: {produto.descricao}</p>
-                                    <button  type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
+                                    <button name={"add_produto_des_car_button" + produtos.indexOf(produto)} type="button" className='btn btn-dark' onClick={()=>addItem(produto.id)}>Adicionar ao Carrinho</button>
                                 </button>
                             </div>
                         </div>

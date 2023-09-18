@@ -77,7 +77,7 @@ function HeaderComponent (){
             <header>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark nav-pills nav-fill">
                     <div className="container-fluid">
-                        <a href="http://localhost:3000/" className='navbar-brand'>OnPaper</a>
+                        <a name="home_button" href="http://localhost:3000/" className='navbar-brand'>OnPaper</a>
                         <form className="nav-item d-flex">
                             <input name="pesquisa_input" className="form-control me-2" type="search" placeholder="O que você procura?" aria-label="Search" style={{width:300, marginLeft:200}} value={pesquisa} onChange={(event)=>setPesquisa(event.target.value)}></input>
                             <button name="pesquisa_button" className="btn btn-success" type="submit" onClick={()=>pesquisar()}>Search</button>
