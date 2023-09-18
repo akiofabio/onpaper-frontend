@@ -313,13 +313,13 @@ function FianlizarCompraComponent2 (){
             return (
                 <div>
                     {cartoesTemp.map(cartao => 
-                        <button name={"ecolher_car_button" + cartoesTemp.indexOf(cartao)} key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
+                        <button name={"escolher_car_button" + cartoesTemp.indexOf(cartao)} key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira.nome}</p>
                         </button>
                     )}
-                    <button name="ecolher_novo_car_button" className='btn btn-outline-dark' style={{ margin:2}} onClick={()=>setMostrarNovoCartao(true)}>
+                    <button name="escolher_novo_car_button" className='btn btn-outline-dark' style={{ margin:2}} onClick={()=>setMostrarNovoCartao(true)}>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Novo Cartão</p>
                     </button>
                 </div>          
@@ -328,7 +328,7 @@ function FianlizarCompraComponent2 (){
         else{
             return (
                 <div className='d-grid'>
-                    <button name="mostrar_car_button" className='btn btn-outline-dark btn-block' onClick={() => setMostrarCartoes(cartoes.indexOf(props.meio))} style={{ margin:2}}>
+                    <button name={"mostrar_car_button"+cartoes.indexOf(props.meio)} className='btn btn-outline-dark btn-block' onClick={() => setMostrarCartoes(cartoes.indexOf(props.meio))} style={{ margin:2}}>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -802,7 +802,7 @@ function FianlizarCompraComponent2 (){
                                             </div>
                                             <div className='row'>
                                                 <div className='col-auto text-center' style={{margin:4}}>
-                                                    <button name={"interar_ valor_car_button"+cartoes.indexOf(cartao)} className='btn btn-success' onClick={() => interarValor(cartao)}>Interar valor</button>
+                                                    <button name={"interar_valor_car_button"+cartoes.indexOf(cartao)} className='btn btn-success' onClick={() => interarValor(cartao)}>Interar valor</button>
                                                 </div>
                                             </div>
                                             <button name={"remover_car_button"+cartoes.indexOf(cartao)} className='btn ' onClick={() => removerCartao(cartao)}> - Remover</button>
@@ -812,7 +812,7 @@ function FianlizarCompraComponent2 (){
                             )}
                         </div>
                     </div>
-                    <button className='btn ' onClick={() => addCartao()}> + Add Cartão de credito</button>
+                    <button name="add_car_button" className='btn ' onClick={() => addCartao()}> + Add Cartão de credito</button>
                     <div className='card'>
                         <h4>Cupons Promocionais: </h4>
                         <div className='card'>
@@ -883,7 +883,7 @@ function FianlizarCompraComponent2 (){
                     </div>
                 </div>
                 <div>
-                    <button className='btn btn-dark' onClick={() => finalizar()}>Finalizar</button>
+                    <button name='finalizar_button' className='btn btn-dark' onClick={() => finalizar()}>Finalizar</button>
                 </div>
             </div>
         </div>
