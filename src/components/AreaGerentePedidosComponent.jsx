@@ -17,17 +17,29 @@ function AreaGerentePedidodComponent(){
     const [ mostrarDetalhes , setMostrarDetalhes ] = useState([])
     const navegation = useNavigate()
     
-    function pesquisar(){
-        PedidoService.getPedidoByParametros(pesquisas).then(res => {
-            setPedidos(res.data)
-            var mosDel = []
-            for( var i=0 ; i<res.data.length ; i++){
-                mosDel.push(false)
-            }
-            setMostrarDetalhes(mosDel)
+    async function pesquisar(){
+        var pedidosTemp = []
+        var mosDel = []
+        var clientesTemp = []
+        await PedidoService.getPedidoByParametros(pesquisas).then(res => {
+            pedidosTemp = res.data
+            setPedidos(pedidosTemp)
+            
+            
+            
         }).catch(error => {
             alert(JSON.stringify(error.response.data))
         })
+        pedidosTemp.forEach(pedido => {
+            mosDel.push(false)
+            ClienteService.getClienteByPedidoId(pedidosTemp[pedidosTemp.indexOf(pedido)].id).then(res2 => {
+                clientesTemp.push(res2.data)
+                setClientes(clientesTemp)
+            }).catch( erro => {
+                alert(JSON.stringify(erro.response.data))
+            })
+        })
+        setMostrarDetalhes(mosDel)
     }
     
     function setParametro(event , pesquisa){
@@ -310,7 +322,6 @@ function AreaGerentePedidodComponent(){
     function getPendentes(){
         PedidoService.getPedidoByPendente().then(res => {
             setPedidos(res.data)
-            alert(JSON.stringify(res.data))
         }).catch( erro => {
             alert(JSON.stringify(erro.response.data))
         })
@@ -325,15 +336,9 @@ function AreaGerentePedidodComponent(){
                 alert(JSON.stringify(erro.response.data))
             })
         }
-        if(clientes.length < pedidos.length){
-            ClienteService.getClienteByPedidoId(pedidos[pedidos.length-1].id).then(res => {
-                setClientes([...clientes,res.data])
-            }).catch( erro => {
-                alert(JSON.stringify(erro.response.data))
-            })
-        }
-    });
+    },[]);
 
+    
     return(
         <div>
             <h3>Pedidos</h3>
@@ -345,10 +350,10 @@ function AreaGerentePedidodComponent(){
                         </div>
                         <div className='col-auto'>
                             <select className='form-select'  onChange={(event)=>setParametro(event , pesquisa)} style={{}}>
-                                <option value={"nome"}>Nome do Cliente</option>
+                                <option value={"nomeCliente"}>Nome do Cliente</option>
                                 <option value={"cpf"}>CPF do Cliente</option>
                                 <option value={"id"}>ID do Pedido</option>
-                                <option value={"nome "}>Nome do Produto</option>
+                                <option value={"nomeProduto"}>Nome do Produto</option>
                                 <option value={"status"}>Status do Pedido</option>
                             </select>
                         </div>
