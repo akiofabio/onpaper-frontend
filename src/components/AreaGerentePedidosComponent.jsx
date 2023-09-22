@@ -23,10 +23,8 @@ function AreaGerentePedidodComponent(){
         var clientesTemp = []
         await PedidoService.getPedidoByParametros(pesquisas).then(res => {
             pedidosTemp = res.data
+            alert(JSON.stringify(pedidosTemp))
             setPedidos(pedidosTemp)
-            
-            
-            
         }).catch(error => {
             alert(JSON.stringify(error.response.data))
         })
@@ -302,7 +300,7 @@ function AreaGerentePedidodComponent(){
     function addPesquisa(){
         var pes ={
             conteudo:"",
-            parametro:"nome"
+            parametro:"nomeCliente"
         }
         setPesquisas([...pesquisas, pes])
     }
