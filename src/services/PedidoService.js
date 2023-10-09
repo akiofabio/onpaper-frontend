@@ -26,7 +26,7 @@ class PedidoService{
         var request = {
             params: params
         };
-        alert(request.params)
+        //alert(request.params)
         return axios.get( API_BASE_URL + "/pesquisa",request);
     }
     

@@ -314,6 +314,7 @@ function FianlizarCompraComponent2 (){
                 <div>
                     {cartoesTemp.map(cartao => 
                         <button name={"escolher_car_button" + cartoesTemp.indexOf(cartao)} key={cartao.id} className='btn btn-outline-dark' style={{ margin:2}} onClick={() => selecionarCartao(cartao,props.meio)  }>
+                            <p style={{ margin:0, padding:0, fontSize:10}}>ID: {cartao.id}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Nome: {cartao.nome}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}>Numero: {cartao.numero}</p>
                             <p style={{ margin:0, padding:0, fontSize:10}}> {cartao.bandeira.nome}</p>
@@ -329,6 +330,7 @@ function FianlizarCompraComponent2 (){
             return (
                 <div className='d-grid'>
                     <button name={"mostrar_car_button"+cartoes.indexOf(props.meio)} className='btn btn-outline-dark btn-block' onClick={() => setMostrarCartoes(cartoes.indexOf(props.meio))} style={{ margin:2}}>
+                        <p style={{ margin:0, padding:0, fontSize:10}}>ID: {props.meio.idTipo}</p>
                         {separarParagrafo(props.meio.detalhes)}
                     </button>
                 </div>
@@ -684,7 +686,8 @@ function FianlizarCompraComponent2 (){
                                     meioPag = {
                                         tipo: "Cartão de Credito",
                                         detalhes: cartaoToString(cartao),
-                                        valor: 0
+                                        valor: 0,
+                                        idTipo: cartao.id
                                     }
                                     setCartoes((car) => [...car,meioPag])
                                 }

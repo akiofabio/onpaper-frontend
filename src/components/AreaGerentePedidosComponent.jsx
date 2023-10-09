@@ -23,7 +23,7 @@ function AreaGerentePedidodComponent(){
         var clientesTemp = []
         await PedidoService.getPedidoByParametros(pesquisas).then(res => {
             pedidosTemp = res.data
-            alert(JSON.stringify(pedidosTemp))
+            //alert(JSON.stringify(pedidosTemp))
             setPedidos(pedidosTemp)
         }).catch(error => {
             alert(JSON.stringify(error.response.data))
@@ -353,6 +353,7 @@ function AreaGerentePedidodComponent(){
                                 <option value={"id"}>ID do Pedido</option>
                                 <option value={"nomeProduto"}>Nome do Produto</option>
                                 <option value={"status"}>Status do Pedido</option>
+                                <option value={"dataStatus"}>Data do Ultimo Status do Pedido</option>
                             </select>
                         </div>
                     </div>
