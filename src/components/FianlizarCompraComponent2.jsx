@@ -128,6 +128,12 @@ function FianlizarCompraComponent2 (){
                 cartoes.indexOf(meioTemp) === cartoes.indexOf(cartao) ? {...meioTemp, valor:(total-totalPagar+cartao.valor)} : meioTemp
                 )
             )
+        else{
+            setCartoes(cartoes.map(meioTemp => 
+                cartoes.indexOf(meioTemp) === cartoes.indexOf(cartao) ? {...meioTemp, valor:((totalPagar-total))} : meioTemp
+                )
+            )
+        }
     }
     
     //Endereço
