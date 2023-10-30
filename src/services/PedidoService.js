@@ -41,5 +41,9 @@ class PedidoService{
     updatePedidoStatus( status, pedidoId ){
         return axios.put( API_BASE_URL + "/" + status + "/" + pedidoId);
     }
+
+    trocaParcialPedido( pedido ){
+        return axios.put( API_BASE_URL + "/trocaParcial", pedido );
+    }
 }
 export default new PedidoService()
