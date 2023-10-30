@@ -26,6 +26,11 @@ class ProdutoService{
         //alert(PRODUTO_API_BASE_URL + "/pesquisa",request)
         return axios.get( PRODUTO_API_BASE_URL + "/pesquisa",request);
     }
+
+    updateQuantidade(id,quantidade){
+        return axios.put( PRODUTO_API_BASE_URL + "/updateQuantidade/" + id + "/" + quantidade);
+    }
+
 }
 
 export default new ProdutoService()

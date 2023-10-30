@@ -168,7 +168,7 @@ function AreaClientePedidosComponent (props){
                                                 </div>
                                                 <div className='col' >
                                                     <label>Quantidade a Trocar:</label>
-                                                    <input name={'quantidade_input'+ pedidoTemp.itens.indexOf(item)} className='form-control' value={ item.quantidadeTrocar } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item ) } type={"number"} min="1" max={item.quantidade}></input>
+                                                    <input name={'quantidade_input'+ pedidoTemp.itens.indexOf(item)} className='form-control' value={ item.quantidadeTrocar } style={{width:80}} onChange={ ( event ) => quantideHandler( event, item ) } type={"number"} min="0" max={item.quantidade}></input>
                                                 </div>
                                                 <div className='col' >
                                                     <label>Valor do Item a Trocar: {moedaRealMask(item.preco*item.quantidadeTrocar)}</label>
@@ -219,6 +219,30 @@ function AreaClientePedidosComponent (props){
         })
     }
 
+    function quantidadeDevolvida(pedido,item){
+        if(pedido.ultimoStatus.status === "Em Troca Parcial"){
+            return(
+                <div>
+                    <label>Quantidade a Trocar: {item.quantidadeTrocar}</label>
+                </div>
+            )
+        }
+        else if(pedido.ultimoStatus.status === "Troca Parcial Aprovada"){
+            return(
+                <div>
+                    <label>Quantidade Trocada: {item.quantidadeTrocar}</label>
+                </div>
+            )
+        }
+        else if(pedido.ultimoStatus.status === "Trocado Parcialmente"){
+            return(
+                <div>
+                    <label>Quantidade Trocada: {item.quantidadeTrocada}</label>
+                </div>
+            )
+        }
+    }
+
     useEffect(() => {
         if(!cliente.id){
             ClienteService.getClienteById( localStorage.getItem( "id" ) ).then( res => {
@@ -266,6 +290,7 @@ function AreaClientePedidosComponent (props){
                                                 <div className='col-sm-4' >
                                                     <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
                                                 </div>
+                                                {quantidadeDevolvida(pedido,item)}
                                             </div>
                                             <MostrarBotataoDevolverItem item={item} status={getUltimoStatus(item.status).status}/> 
                                         </div>
