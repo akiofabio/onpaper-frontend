@@ -68,6 +68,7 @@ function AreaClientePedidosComponent (props){
     }
 
     function MostrarBotataoDevolverItem(props){
+        /*
         if( props.status=="Entregue"){
             return(
                 <div>
@@ -75,6 +76,7 @@ function AreaClientePedidosComponent (props){
                 </div>
             )
         }
+        */
     }
     
     function MostrarBotaoDevolverPedido(props){
@@ -106,6 +108,7 @@ function AreaClientePedidosComponent (props){
     function trocaParcial(){
         PedidoService.trocaParcialPedido(pedidoTemp).then(res => {
             setMostrarQuantidadeTroca(false)
+            setCliente({...cliente, pedidos : cliente.pedidos.map( pedido => pedido.id === pedidoTemp.id? res.data : pedido)})
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
         })
@@ -205,7 +208,9 @@ function AreaClientePedidosComponent (props){
 
     function mudarStatus(status, pedido){
         PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
-            navegation(0)
+            //navegation(0)
+            setCliente(cliente.pedidos.map( pedidoTemp => pedido.id === pedidoTemp.id? res.data : pedidoTemp))
+
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
         })
@@ -263,7 +268,7 @@ function AreaClientePedidosComponent (props){
                                 Status: {getUltimoStatus(pedido.status).status}
                             </div>
                             <div className="col">
-                                data: {(getUltimoStatus(pedido.status).data)}
+                                data: {dataToStringDataHoraMask(getUltimoStatus(pedido.status).data)}
                             </div>
                         </div>
                     </div>
@@ -277,9 +282,6 @@ function AreaClientePedidosComponent (props){
                                             <img src={'/imagens/produtos/' + item.imagemProduto} alt={item.imgemProduto}  className="img-fluid" style={{maxHeight:"100%"}}></img>
                                         </div>
                                         <div className='col-sm-8'>
-                                            <div className="row">
-                                                <label>Status: {getUltimoStatus(item.status).status}</label>
-                                            </div>
                                             <div className="row g-3 align-items-center">
                                                 <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
                                             </div>

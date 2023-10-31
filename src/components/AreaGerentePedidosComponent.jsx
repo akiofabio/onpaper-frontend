@@ -22,6 +22,35 @@ function AreaGerentePedidodComponent(){
     const [mostrarQuantidadeTroca, setMostrarQuantidadeTroca] = useState(false);
     const navegation = useNavigate()
     
+    function MostrarBotataoDevolverItem(props){
+        /*
+        if(props.status == "Em Troca"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatusItem("Troca Aprovada", props.item)}}>Aceitar Troca</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatusItem("Troca Recusada", props.item)}}>Recusar Troca</button>
+                    </div>
+                </div>
+            )
+        }
+        else if(props.status == "Troca Aprovada"){
+            return(
+                <div className='row'>
+                    <div className='col'>
+                        <button className='btn btn-success' onClick={()=>{mudarStatusItem("Trocado", props.item)}}>Troca Recebida</button>
+                    </div>
+                    <div className='col'>
+                        <button className='btn btn-danger' onClick={()=>{mudarStatusItem("Troca Cancelada", props.item)}}>Cancelar Troca</button>
+                    </div>
+                </div>
+            )
+        }
+        */
+    }
+
     async function pesquisar(){
         var pedidosTemp = []
         var mosDel = []
@@ -280,7 +309,7 @@ function AreaGerentePedidodComponent(){
                             <button className='btn btn-success' onClick={()=>{confimarQuantidadeTrocaTotal(pedido)}}>Adicionar Todos os Itens Trocados ao Estoque</button>
                         </div>
                         <div className='col'>
-                            <button className='btn btn-dark' onClick={()=>{mostrarQuantidadeTroca()}}>Adicionar Alguns Itens Trocados ao Estoque</button>
+                            <button className='btn btn-dark' onClick={()=>{quantidadeTrocaButton(pedido)}}>Adicionar Alguns Itens Trocados ao Estoque</button>
                         </div>
                         <div className='col'>
                             <button className='btn btn-danger' onClick={()=>{cancelarQuantidadeTrocaTotal(pedido)}}>Não Adicionar os Itens ao Estoque</button>
@@ -293,47 +322,14 @@ function AreaGerentePedidodComponent(){
     
     function mudarStatus(status,pedido){
         PedidoService.updatePedidoStatus(status,pedido.id).then(res => {
-            navegation(0)
-            
-            /*
-            setPedidos(pedidos.map( pedidoTemp =>{
-                if(pedidos.indexOf(pedidoTemp) === pedidos.indexOf(pedido))
-                    pedidoTemp = res.data
-            }))
-            */ 
+            setPedidos(pedidos.map( pedidoTemp => pedido.id === pedidoTemp.id? res.data : pedidoTemp
+            )) 
         }).catch(erro => {
             alert(JSON.stringify(erro.response.data))
         })
     }
 
-    function MostrarBotataoDevolverItem(props){
-        /*
-        if(props.status == "Em Troca"){
-            return(
-                <div className='row'>
-                    <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatusItem("Troca Aprovada", props.item)}}>Aceitar Troca</button>
-                    </div>
-                    <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatusItem("Troca Recusada", props.item)}}>Recusar Troca</button>
-                    </div>
-                </div>
-            )
-        }
-        else if(props.status == "Troca Aprovada"){
-            return(
-                <div className='row'>
-                    <div className='col'>
-                        <button className='btn btn-success' onClick={()=>{mudarStatusItem("Trocado", props.item)}}>Troca Recebida</button>
-                    </div>
-                    <div className='col'>
-                        <button className='btn btn-danger' onClick={()=>{mudarStatusItem("Troca Cancelada", props.item)}}>Cancelar Troca</button>
-                    </div>
-                </div>
-            )
-        }
-        */
-    }
+    
 
     function quantidadeDevolvida(pedido,item){
         if(pedido.ultimoStatus.status === "Em Troca Parcial"){
@@ -410,14 +406,13 @@ function AreaGerentePedidodComponent(){
 
     }
     function confimarQuantidadeTrocaTotal(pedido){
-        alert("AAA")
         pedido.itens.forEach( item => {
-            alert(item.quantidadeTrocada)
-            ProdutoService.updateQuantidade(item.idProduto, item.quantidadeTrocada ).catch( erro => {
-                alert(JSON.stringify(erro.response.data))
+            ProdutoService.updateQuantidade(item.idProduto, item.quantidadeTrocada ).then( res => {
+            }).catch( erro => {
+                alert(JSON.stringify(erro))
             })
         })
-        alert("BBB")
+        setPedidos(pedidos.map( pedidoTemp => pedido.id === pedidoTemp.id? pedido : pedidoTemp))
     }
     function cancelarQuantidadeTrocaTotal(pedido){
         pedido.itens.forEach( item => {
@@ -517,6 +512,7 @@ function AreaGerentePedidodComponent(){
         <div>
             <h3>Pedidos</h3>
             <div style={{margin:10}}>
+                {quantidadeTrocaOverlay()}
                 {pesquisas.map( pesquisa => 
                     <div className='row'>
                         <div className='col'>
