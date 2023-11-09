@@ -17,6 +17,9 @@ class ItemService{
     updateItemStatus( status, id ){
         return axios.put( API_BASE_URL + "/" + status + "/" + id);
     }
+    updateQuantidade(id,quantidade){
+        return axios.put( API_BASE_URL + "/updateQuantidade/" + id + "/" + quantidade);
+    }
 }
 
 export default new ItemService()
