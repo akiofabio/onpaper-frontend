@@ -342,13 +342,15 @@ function AreaGerentePedidodComponent(){
         else if(pedido.ultimoStatus.status === "Troca Parcial Aprovada"){
             return(
                 <div>
-                    <label>Quantidade Trocada: {item.quantidadeTrocar}</label>
+                    <label>Quantidade a Trocar: {item.quantidadeTrocar}</label>
                 </div>
             )
         }
         else if(pedido.ultimoStatus.status === "Trocado Parcialmente"){
             return(
                 <div>
+                    <label>Quantidade a Trocar: {item.quantidadeTrocar}</label>
+
                     <label>Quantidade Trocada: {item.quantidadeTrocada}</label>
                 </div>
             )
@@ -408,11 +410,14 @@ function AreaGerentePedidodComponent(){
     function confimarQuantidadeTrocaTotal(pedido){
         pedido.itens.forEach( item => {
             ItemService.updateQuantidade(item.idProduto, item.quantidadeTrocada ).then( res => {
+                setPedidos(pedidos.map( pedidoTempMap => 
+                    pedido.id === pedidoTempMap.id ? {...pedido, itens : pedidoTempMap.itens.map(itemTemp => 
+                    pedidoTempMap.itens.indexOf(itemTemp) === pedidoTempMap.itens.indexOf(item) ? res.data : itemTemp
+                )} : pedidoTempMap))
             }).catch( erro => {
                 alert(JSON.stringify(erro))
             })
         })
-        setPedidos(pedidos.map( pedidoTemp => pedido.id === pedidoTemp.id? pedido : pedidoTemp))
     }
     function cancelarQuantidadeTrocaTotal(pedido){
         pedido.itens.forEach( item => {
