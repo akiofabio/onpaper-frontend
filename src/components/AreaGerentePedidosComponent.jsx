@@ -407,7 +407,7 @@ function AreaGerentePedidodComponent(){
     }
     function confimarQuantidadeTrocaTotal(pedido){
         pedido.itens.forEach( item => {
-            ProdutoService.updateQuantidade(item.idProduto, item.quantidadeTrocada ).then( res => {
+            ItemService.updateQuantidade(item.idProduto, item.quantidadeTrocada ).then( res => {
             }).catch( erro => {
                 alert(JSON.stringify(erro))
             })
