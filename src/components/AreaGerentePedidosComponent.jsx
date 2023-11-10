@@ -306,13 +306,7 @@ function AreaGerentePedidodComponent(){
                 return(
                     <div className='row'>
                         <div className='col'>
-                            <button className='btn btn-success' onClick={()=>{confimarQuantidadeTrocaTotal(pedido)}}>Adicionar Todos os Itens Trocados ao Estoque</button>
-                        </div>
-                        <div className='col'>
                             <button className='btn btn-dark' onClick={()=>{quantidadeTrocaButton(pedido)}}>Adicionar Alguns Itens Trocados ao Estoque</button>
-                        </div>
-                        <div className='col'>
-                            <button className='btn btn-danger' onClick={()=>{cancelarQuantidadeTrocaTotal(pedido)}}>Não Adicionar os Itens ao Estoque</button>
                         </div>
                     </div>
                 )
@@ -349,8 +343,6 @@ function AreaGerentePedidodComponent(){
         else if(pedido.ultimoStatus.status === "Trocado Parcialmente"){
             return(
                 <div>
-                    <label>Quantidade a Trocar: {item.quantidadeTrocar}</label>
-
                     <label>Quantidade Trocada: {item.quantidadeTrocada}</label>
                 </div>
             )
@@ -405,25 +397,19 @@ function AreaGerentePedidodComponent(){
     }
 
     function confimarQuantidadeTroca(){
-
-    }
-    function confimarQuantidadeTrocaTotal(pedido){
+        var pedido = pedidoTemp
         pedido.itens.forEach( item => {
-            ItemService.updateQuantidade(item.idProduto, item.quantidadeTrocada ).then( res => {
-                setPedidos(pedidos.map( pedidoTempMap => 
-                    pedido.id === pedidoTempMap.id ? {...pedido, itens : pedidoTempMap.itens.map(itemTemp => 
-                    pedidoTempMap.itens.indexOf(itemTemp) === pedidoTempMap.itens.indexOf(item) ? res.data : itemTemp
-                )} : pedidoTempMap))
+            ItemService.updateQuantidade(item.idProduto, item.quantidadeTrocar ).then( res => {
+                
             }).catch( erro => {
                 alert(JSON.stringify(erro))
             })
+            item.quantidadeTrocar = 0
         })
+        setPedidos(pedidos.map(pedidoTempMap => pedido.id === pedidoTempMap.id ? pedido : pedidoTempMap))
+        setMostrarQuantidadeTroca(false)
     }
-    function cancelarQuantidadeTrocaTotal(pedido){
-        pedido.itens.forEach( item => {
-            ProdutoService.updateQuantidade(item.idProduto, 0 )
-        })
-    }
+
     function quantidadeTrocaOverlay(){
         return(
             <div>
@@ -449,7 +435,7 @@ function AreaGerentePedidodComponent(){
                                 overflowY: 'scroll'
                             }}>
                                 <div  className="card-header border-dark bg-dark text-white">
-                                    <h3 className='text-center'>Solicitar Troca do Pedido</h3>
+                                    <h3 className='text-center'>Adicionar ao Estoque a Troca do Pedido</h3>
                                 </div>
                                 <div className='card-body' >
                                     <div className='form-group'>
