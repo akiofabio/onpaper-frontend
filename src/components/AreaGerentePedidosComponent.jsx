@@ -113,6 +113,72 @@ function AreaGerentePedidodComponent(){
                         <div className="row">
                             <label>CPF: {cpfMask(clienteTeste.cpf)}</label>
                         </div>
+                        <div className="card-body">
+                            Itens:
+                            {pedido.itens.map( item =>
+                                <div key={item.id} className="card border-dark">
+                                    <div className="card-body">
+                                        <div className='row no-gutters'>
+                                            <div className='col-sm-8'>
+                                                <div className="row g-3 align-items-center">
+                                                    <label style={{ height:60}}>Nome: {item.nomeProduto}</label>
+                                                </div>
+                                                <div className="row g-3 align-items-center">
+                                                    <div className='col-sm-4' >
+                                                        <label>Quantidade: { item.quantidade } </label>
+                                                    </div>
+                                                    <div className='col-sm-4' >
+                                                        <p align="center" style={{ marginBottom:0}}>Preço: {moedaRealMask(item.preco)}</p>
+                                                    </div>
+                                                    {quantidadeDevolvida(pedido,item)}
+                                                </div>
+                                                <MostrarBotataoDevolverItem item={item} status={getUltimoStatus(item.status).status}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="row">
+                                <div className="col-sm-8">
+                                    Total: {moedaRealMask(calculoSubtotal(pedido)+pedido.frete)} ( {moedaRealMask( calculoSubtotal(pedido))} + {moedaRealMask(pedido.frete)} de Frete)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
+                        <div className='col-sm-2'>
+                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) == pedidos.indexOf(pedido)? true: mosDel))}>Mostrar Detalhes</button>
+                        </div>
+                        <div className='col-sm-4'>
+                            <button className='btn btn-dark' >Editar</button>
+                        </div>
+                        <div className='col-sm-4'>
+                            {mostrarAcao(getUltimoStatus(pedido.status),pedido)}
+                        </div>
+                        
+                    </div>
+                </div>
+            )
+        }
+        else{
+            return(
+                
+                <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col">
+                                <label>Status: {getUltimoStatus(pedido.status).status}</label>
+                            </div>
+                            <div className="col">
+                                <label>Data: {dataToStringDataHoraMask(getUltimoStatus(pedido.status).data)}</label>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <label>Nome: {clienteTeste.nome}</label>
+                        </div>
+                        <div className="row">
+                            <label>CPF: {cpfMask(clienteTeste.cpf)}</label>
+                        </div>
                         <div className="row">
                             <label>Endereço de Entrega:</label>
                                 <div className="card">
@@ -165,24 +231,6 @@ function AreaGerentePedidodComponent(){
                             {mostrarAcao(getUltimoStatus(pedido.status),pedido)}
                         </div>
                         
-                    </div>
-                </div>
-            )
-        }
-        else{
-            return(
-                <div className='card border-dark' style={{ padding:10}}>
-                    <div className="card border-dark" style={{ marginTop:10 , paddingTop:5 , paddingLeft:10}}>
-                        <div className="card-body">
-                        </div>
-                    </div>
-                    <div className='row' style={{ margin:10 , paddingTop:5 , paddingLeft:10}}>
-                        <div className='col-auto'>
-                            <button className='btn btn-dark' onClick={() => setMostrarDetalhes(mostrarDetalhes.map(mosDel => mostrarDetalhes.indexOf(mosDel) === pedidos.indexOf(pedido)? false: mosDel))}>Esconder Detalhes</button>
-                        </div>
-                        <div className='col-auto'>
-                            <button className='btn btn-dark' >Editar</button>
-                        </div>
                     </div>
                 </div>
             )

@@ -10,6 +10,50 @@ function CreateRandomVendas(){
     }
 
     async function gerarPedidoAleatorio(quantidade){
+        var clienteRamdon = {
+            score:0,
+            tipo:"CLIENTE",
+            email: "",
+            senha: "",
+            nome: "",
+            cpf: "",
+            genero: "",
+            dataNascimento:"",
+            
+            telefones: [{
+                tipo:"",
+                ddd:"",
+                numero:""
+            }],
+            
+            enderecos: [{
+                nome:"",
+                cep:"",
+                pais:"",
+                estado:"",
+                cidade:"",
+                bairro:"",
+                tipoLogradouro:"",
+                logradouro:"",
+                numero:"",
+                tipo:"",
+                entrega:true,
+                cobranca:true,
+                observacao:""
+            }],
+            cartoes: [{
+                nome:"",
+                numero:"",
+                codigoSeguranca:"",
+                validade:"",
+                preferencial:true,
+                bandeira:{id:""}
+            }],
+            pedidos: [],
+            cupons: [],
+            pedidos: [],
+            carrinho:{},
+        }
         for(var j = 0; j<quantidade; j++){
             var pedidoRandom = {
                 itens: [],
