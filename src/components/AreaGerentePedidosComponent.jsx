@@ -538,7 +538,7 @@ function AreaGerentePedidodComponent(){
 
     useEffect(() => {
         if(pedidos.length==0){
-            PedidoService.getPedidos().then(res => {
+            PedidoService.getPedidoByPendente().then(res => {
                 setPedidos(res.data)
             }).catch( erro => {
                 alert(JSON.stringify(erro.response.data))

@@ -2,6 +2,7 @@ import React from 'react';
 import PedidoService from '../services/PedidoService';
 import ProdutoService from '../services/ProdutoService';
 import ItemService from '../services/ItemService';
+import ClienteService from '../services/ClienteService';
     
 
 function CreateRandomVendas(){
@@ -13,12 +14,12 @@ function CreateRandomVendas(){
         var clienteRamdon = {
             score:0,
             tipo:"CLIENTE",
-            email: "",
-            senha: "",
-            nome: "",
-            cpf: "",
-            genero: "",
-            dataNascimento:"",
+            email: "clienteRandom",
+            senha: "Random123-",
+            nome: "Cliente Random",
+            cpf: "33333333333",
+            genero: "masculino",
+            dataNascimento:new Date("01/01/2000"),
             
             telefones: [{
                 tipo:"",
@@ -27,42 +28,47 @@ function CreateRandomVendas(){
             }],
             
             enderecos: [{
-                nome:"",
-                cep:"",
-                pais:"",
-                estado:"",
-                cidade:"",
-                bairro:"",
-                tipoLogradouro:"",
-                logradouro:"",
-                numero:"",
-                tipo:"",
+                nome:"Casa",
+                cep:"33333333",
+                pais:"Brazil",
+                estado:"SP",
+                cidade:"Mogi",
+                bairro:"Bairro 3",
+                tipoLogradouro:"Av",
+                logradouro:"Tres",
+                numero:"3",
+                tipo:"Casa",
                 entrega:true,
                 cobranca:true,
                 observacao:""
             }],
             cartoes: [{
-                nome:"",
-                numero:"",
-                codigoSeguranca:"",
-                validade:"",
+                nome:"Random",
+                numero:"3333333",
+                codigoSeguranca:"333",
+                validade:new Date("01/01/2025"),
                 preferencial:true,
-                bandeira:{id:""}
+                bandeira:{id:"1"}
             }],
             pedidos: [],
             cupons: [],
-            pedidos: [],
             carrinho:{},
         }
+        await ClienteService.createCliente(clienteRamdon).then(res => {
+            alert(res.data.cartoes[0].id)
+        }).catch(error => {
+            alert(error.response.data)
+        })
         for(var j = 0; j<quantidade; j++){
             var pedidoRandom = {
+                endereco: clienteRamdon.enderecos[0],
                 itens: [],
                 frete: 0,
                 meioDePagamentos: [{
                     tipo: "Cartão de Credito",
                     detalhes: "Nome:Anonimo \nNumero:00000 \nVisa",
                     valor: 0,
-                    idTipo: 1
+                    idTipo: 3
                 }],
                 status: [{
                     status: "Entregue",
@@ -89,7 +95,7 @@ function CreateRandomVendas(){
                     }
                     
                 }).catch(error => {
-                    alert(error.response.data)
+                    alert(JSON.stringify(error.response.data))
                 })
                 await ItemService.createItem(itemRandom).then(res =>{
                     pedidoRandom.itens.push(res.data)
@@ -97,12 +103,21 @@ function CreateRandomVendas(){
                 })
             }
             await PedidoService.createPedido(pedidoRandom).then( res => {
+                var pedidoTemp = res.data
+                //PedidoService.updatePedidoStatus("Entregue", pedidoTemp.id)
+                clienteRamdon.pedidos.push(res.data)
                 //alert("res: " + new Date(res.data.status[0].data))
             }).catch(error => {
-                alert(JSON.stringify(error.response.data))
+                alert("Pedido erro "+JSON.stringify(error.response.data))
             })
         }
+        /*
+        ClienteService.updateCliente(clienteRamdon).then(res => {
+        }).catch(error => {
+            alert("ClienteUpErro:  " + JSON.stringify(error.response.data))
+        })
+        */
     }
-    return <button className='btn btn-dark' onClick={() => gerarPedidoAleatorio(100)}>Gerar Pedidos Aleatorios</button>
+    return <button className='btn btn-dark' onClick={() => gerarPedidoAleatorio(3)}>Gerar Pedidos Aleatorios</button>
 }
 export default CreateRandomVendas
