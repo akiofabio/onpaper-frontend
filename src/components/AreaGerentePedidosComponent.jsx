@@ -242,10 +242,10 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Aprovado", pedido)}}>Aprovar Transação</button>
+                        <button name={"pedido_aprovado_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Aprovado", pedido)}}>Aprovar Transação</button>
                     </div>
                     <div className='col'>
-                        <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Recusado", pedido)}}>Recusar Transação</button>
+                        <button name={"pedido_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Recusado", pedido)}}>Recusar Transação</button>
                     </div>
                 </div>
             )
@@ -254,7 +254,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Em Preparo", pedido)}}>Separar Pedido</button>
+                        <button name={"pedido_em_preparo_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Em Preparo", pedido)}}>Separar Pedido</button>
                     </div>
                     <div className='col'>
                         <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado", pedido)}}>Cancelar Pedido</button>
@@ -266,7 +266,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Enviado", pedido)}}>Pedido Enviado</button>
+                        <button name={"pedido_enviado_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Enviado", pedido)}}>Pedido Enviado</button>
                     </div>
                     <div className='col'>
                         <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado", pedido)}}>Cancelar Pedido</button>
@@ -278,7 +278,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Entregue", pedido)}}>Confimar Entrega do Pedido</button>
+                        <button name={"pedido_entregue_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Entregue", pedido)}}>Confimar Entrega do Pedido</button>
                     </div>
                     <div className='col'>
                         <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Cancelado", pedido)}}>Cancelar Pedido</button>
@@ -290,7 +290,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Troca Aprovada", pedido)}}>Aceitar Troca</button>
+                        <button name={"troca_aprovada_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Troca Aprovada", pedido)}}>Aceitar Troca</button>
                     </div>
                     <div className='col'>
                         <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Troca Recusada", pedido)}}>Recusar Troca</button>
@@ -302,7 +302,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Trocado", pedido)}}>Troca Recebida</button>
+                        <button name={"trocado_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Trocado", pedido)}}>Troca Recebida</button>
                     </div>
                     <div className='col'>
                         <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Troca Cancelada", pedido)}}>Cancelar Troca</button>
@@ -314,7 +314,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Troca Parcial Aprovada", pedido)}}>Aceitar Troca Parcial</button>
+                        <button name={"troca_pacial_aprovada_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Troca Parcial Aprovada", pedido)}}>Aceitar Troca Parcial</button>
                     </div>
                     <div className='col'>
                         <button name={"acao_recusado_button"+pedidos.indexOf(pedido)} className='btn btn-danger' onClick={()=>{mudarStatus("Troca Parcial Recusada", pedido)}}>Recusar Troca Parcial</button>
@@ -326,7 +326,7 @@ function AreaGerentePedidodComponent(){
             return(
                 <div className='row'>
                     <div className='col'>
-                        <button name={"acao_sucesso_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Trocado Parcialmente", pedido)}}>Troca Recebida</button>
+                        <button name={"trocado_parcialmente_button"+pedidos.indexOf(pedido)} className='btn btn-success' onClick={()=>{mudarStatus("Trocado Parcialmente", pedido)}}>Troca Recebida</button>
                     </div>
                     <div className='col'>
                         <button className='btn btn-danger' onClick={()=>{mudarStatus("Troca Parcial Cancelada", pedido)}}>Cancelar Troca</button>
