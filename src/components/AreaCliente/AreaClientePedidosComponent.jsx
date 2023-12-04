@@ -83,8 +83,8 @@ function AreaClientePedidosComponent (props){
         if( props.status=="Entregue"){
             return(
                 <div>
-                    <button className="btn btn-dark" onClick={() => mudarStatus("Em Troca",props.pedido)}>Trocar Pedido</button>
-                    <button className="btn btn-dark" onClick={() => trocaParcialButton(props.pedido)}>Trocar Pedido Parcialmente</button>
+                    <button name={"devolver_pedido_button"+cliente.pedidos.indexOf(props.pedido)} className="btn btn-dark" onClick={() => mudarStatus("Em Troca",props.pedido)}>Trocar Pedido</button>
+                    <button name={"devolver_pedido_parcial_button"+cliente.pedidos.indexOf(props.pedido)}className="btn btn-dark" onClick={() => trocaParcialButton(props.pedido)}>Trocar Pedido Parcialmente</button>
                 </div>
             )
         }
@@ -193,7 +193,7 @@ function AreaClientePedidosComponent (props){
                                         <button name='confimar_button' className='btn btn-dark'  style={{marginBottom: 5} } onClick={() => trocaParcial()}>Confirmar</button>
                                     </div>
                                     <div className='col-auto'>
-                                        <button className='btn btn-dark' name='cancelar_button' style={{marginBottom: 5}} onClick={() => setMostrarQuantidadeTroca(false)}>Cancelar</button>
+                                        <button name='cancelar_button' className='btn btn-dark' style={{marginBottom: 5}} onClick={() => setMostrarQuantidadeTroca(false)}>Cancelar</button>
                                     </div>
                                 </div>
                             </div>
