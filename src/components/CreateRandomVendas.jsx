@@ -118,6 +118,6 @@ function CreateRandomVendas(){
         })
         */
     }
-    return <button className='btn btn-dark' onClick={() => gerarPedidoAleatorio(3)}>Gerar Pedidos Aleatorios</button>
+    return <button className='btn btn-dark' onClick={() => gerarPedidoAleatorio(100)}>Gerar Pedidos Aleatorios</button>
 }
 export default CreateRandomVendas
